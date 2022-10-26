@@ -1,26 +1,24 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+@layer components {
+	.btn-rounded {
+		@apply bg-slate-100 hover:bg-slate-300 text-slate-800 font-semibold py-2 px-6 space-x-1 rounded inline-flex items-center;
+	}
+	.btn-address {
+		@apply bg-slate-700 hover:bg-slate-600 text-slate-100 font-semibold py-2 px-6 rounded;
+	}
+	.mobile-menu {
+		@apply inline-flex p-3 hover:bg-slate-300 rounded lg:hidden ml-auto hover:text-slate-100 outline-none;
+	}
+	.navbar {
+		@apply flex items-center bg-slate-800 text-slate-100 font-semibold p-3 flex-wrap;
+	}
+	.mobile-links {
+		@apply lg:hidden inline-flex w-full space-y-5 lg:space-x-6 items-stretch flex-col;
+	}
+	.desktop-links {
+		@apply hidden lg:inline-flex flex-row ml-auto w-auto items-center space-x-6 h-auto;
+	}
 }
