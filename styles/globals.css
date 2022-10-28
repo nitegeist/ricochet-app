@@ -3,20 +3,32 @@
 @tailwind utilities;
 
 @layer components {
+	.address-link {
+		@apply inline-flex items-center justify-center bg-slate-700 hover:bg-slate-600 text-slate-100 font-semibold py-2 px-6 rounded;
+	}
 	.btn-rounded {
 		@apply bg-slate-100 hover:bg-slate-300 text-slate-800 font-semibold py-2 px-6 space-x-1 rounded inline-flex items-center;
 	}
-	.btn-address {
-		@apply bg-slate-700 hover:bg-slate-600 text-slate-100 font-semibold py-2 px-6 rounded;
+	.btn-mobile-menu {
+		@apply lg:hidden inline-flex items-center justify-center ml-auto rounded bg-slate-800 p-2 text-slate-100 hover:bg-slate-700 hover:text-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-100 focus:ring-offset-2 focus:ring-offset-slate-800;
 	}
-	.mobile-menu {
-		@apply inline-flex p-3 hover:bg-slate-300 rounded lg:hidden ml-auto hover:text-slate-100 outline-none;
+	.card-sm {
+		@apply flex flex-col items-start space-y-2 bg-slate-800 rounded-lg px-10 py-8 my-6 lg:my-0 h-36 w-64;
 	}
+
+	.card {
+		@apply flex flex-col items-start space-y-2 bg-gradient-to-b from-slate-800 to-slate-900 rounded-lg px-10 py-8 my-6 lg:my-0 max-h-80 w-1/3;
+	}
+
+	.container {
+		@apply bg-gradient-to-b from-slate-800 to-slate-900 text-slate-400 px-10 py-8 my-6 lg:my-0 w-2/3 rounded-lg;
+	}
+
 	.navbar {
-		@apply flex items-center bg-slate-800 text-slate-100 font-semibold p-3 flex-wrap;
+		@apply flex items-center bg-slate-900 text-slate-100 font-semibold p-3 flex-wrap;
 	}
 	.mobile-links {
-		@apply lg:hidden inline-flex w-full space-y-5 lg:space-x-6 items-stretch flex-col;
+		@apply lg:hidden inline-flex w-full space-y-4 lg:space-x-6 items-stretch flex-col;
 	}
 	.desktop-links {
 		@apply hidden lg:inline-flex flex-row ml-auto w-auto items-center space-x-6 h-auto;
