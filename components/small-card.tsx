@@ -1,11 +1,11 @@
 import { NextPage } from 'next';
+import { Stat } from 'pages';
 
 interface Props {
-	title?: string;
-	value?: string;
+	stat: Stat;
 }
 
-export const SmallCard: NextPage<Props> = ({ title, value }) => {
+export const SmallCard: NextPage<Props> = ({ stat: { title, value } }) => {
 	return (
 		<div className='card-sm'>
 			<h6 className='font-light uppercase tracking-widest text-slate-400'>{title}</h6>
