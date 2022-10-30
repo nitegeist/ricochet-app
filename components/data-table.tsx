@@ -1,3 +1,5 @@
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import usePagination from 'hooks/usePagination';
 import { NextPage } from 'next';
 import { MarketData, PositionData } from 'pages';
 import { TokenData } from './balances';
@@ -13,6 +15,10 @@ const isMarketData = (data: PositionData | MarketData | TokenData): data is Mark
 const isTokenData = (data: PositionData | MarketData | TokenData): data is TokenData => !!(data as TokenData).token;
 
 export const DataTable: NextPage<Props> = ({ headers, rowData }): JSX.Element => {
+	const { firstContentIndex, lastContentIndex, nextPage, prevPage, page, gaps, setPage, totalPages } = usePagination({
+		contentPerPage: 6,
+		count: rowData.length,
+	});
 	return (
 		<div className='overflow-scroll'>
 			<table className='table-fixed min-w-full text-center'>
@@ -26,7 +32,7 @@ export const DataTable: NextPage<Props> = ({ headers, rowData }): JSX.Element =>
 					</tr>
 				</thead>
 				<tbody>
-					{rowData.map((data, index) => (
+					{rowData.slice(firstContentIndex, lastContentIndex).map((data, index) => (
 						<tr key={index} className='text-slate-200 border-b border-slate-600'>
 							{isPositionData(data) ? (
 								<>
@@ -56,6 +62,35 @@ export const DataTable: NextPage<Props> = ({ headers, rowData }): JSX.Element =>
 					))}
 				</tbody>
 			</table>
+			<div className='flex justify-end text-slate-500 space-x-2 mt-4'>
+				<button
+					onClick={prevPage}
+					className={`${page !== 1 && 'hover:text-slate-300'} ${page === 1 && 'text-slate-600'}`}
+					disabled={page === 1}>
+					<ChevronLeftIcon className='h-4 w-4' />
+				</button>
+				<button onClick={() => setPage(1)} className={`${page === 1 && 'text-slate-100'}`}>
+					1
+				</button>
+				{gaps.before ? '...' : ''}
+				{gaps.paginationGroup.map((num) => (
+					<button onClick={() => setPage(num)} key={num} className={`${page === num ? 'text-slate-100' : ''}`}>
+						{num}
+					</button>
+				))}
+				{gaps.after ? '...' : ''}
+				{totalPages > 1 && (
+					<button onClick={() => setPage(totalPages)} className={`${page === totalPages && 'text-slate-100'}`}>
+						{totalPages}
+					</button>
+				)}
+				<button
+					onClick={nextPage}
+					className={`${page !== totalPages && 'hover:text-slate-300'} ${page === totalPages && 'text-slate-600'}`}
+					disabled={page === totalPages}>
+					<ChevronRightIcon className='h-4 w-4' />
+				</button>
+			</div>
 		</div>
 	);
 };

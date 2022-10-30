@@ -3,7 +3,8 @@
 		"baseUrl": ".",
 		"paths": {
 			"@richochet/components/*": ["components/*"],
-			"@richochet/utils/*": ["utils/*"]
+			"@richochet/utils/*": ["utils/*"],
+			"@richochet/assets/*": ["public/*"]
 		},
 		"target": "es5",
 		"lib": ["dom", "dom.iterable", "esnext"],
