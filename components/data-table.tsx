@@ -1,8 +1,9 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import usePagination from 'hooks/usePagination';
 import { NextPage } from 'next';
-import { MarketData, PositionData } from 'pages';
 import { TokenData } from './balances';
+import { MarketData } from './markets';
+import { PositionData } from './positions';
 
 interface Props {
 	headers: string[];

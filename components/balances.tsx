@@ -1,4 +1,6 @@
 import { formatCurrency } from '@richochet/utils/functions';
+import { useState } from 'react';
+import { BalanceTabs } from './balance-tabs';
 import { OutlineButton, SolidButton } from './button';
 import { DataChart } from './data-chart';
 import { DataTable } from './data-table';
@@ -44,18 +46,46 @@ const tokenData: TokenData[] = [
 ];
 
 export const Balances = (): JSX.Element => {
+	const [action, setAction] = useState(0);
+	const [tabsClosed, setTabsClosed] = useState(true);
 	return (
 		<>
-			<p className='font-light uppercase tracking-widest text-slate-400'> Your Balances</p>
-			<div className='flex flex-wrap items-center justify-evenly space-x-3 space-y-2 lg:space-y-0 my-4'>
-				<OutlineButton type='button' action='withdraw' />
-				<SolidButton type='button' action='deposit' />
-				<OutlineButton type='button' action='swap' />
-			</div>
-			<div className='flex justify-center my-4'>
-				<DataChart />
-			</div>
-			<DataTable headers={headerTitles} rowData={tokenData} />
+			{!tabsClosed && <BalanceTabs close={tabsClosed} setClose={setTabsClosed} action={action} />}
+			{tabsClosed && (
+				<>
+					<p className='font-light uppercase tracking-widest text-slate-400'> Your Balances</p>
+					<div className='flex flex-wrap items-center justify-evenly space-x-3 space-y-2 lg:space-y-0 my-4'>
+						<OutlineButton
+							type='button'
+							action='withdraw'
+							handleClick={() => {
+								setTabsClosed(false);
+								setAction(0);
+							}}
+						/>
+						<SolidButton
+							type='button'
+							action='deposit'
+							handleClick={() => {
+								setTabsClosed(false);
+								setAction(1);
+							}}
+						/>
+						<OutlineButton
+							type='button'
+							action='swap'
+							handleClick={() => {
+								setTabsClosed(false);
+								setAction(2);
+							}}
+						/>
+					</div>
+					<div className='flex justify-center my-4'>
+						<DataChart />
+					</div>
+					<DataTable headers={headerTitles} rowData={tokenData} />
+				</>
+			)}
 		</>
 	);
 };
