@@ -24,6 +24,9 @@ export const CardWithBackground: NextPage<Props> = ({ content }) => {
 				className='object-cover object-bottom absolute inset-0 z-0 rounded-lg'
 				draggable='false'
 				fill={true}
+				sizes='(max-width: 768px) 100vw,
+              (max-width: 1200px) 50vw,
+              33vw'
 				alt='Sample Image'
 				priority={true}
 			/>

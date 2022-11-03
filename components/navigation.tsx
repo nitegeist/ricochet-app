@@ -1,6 +1,7 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { ArrowTopRightOnSquareIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
 import { combineClasses } from '@richochet/utils/functions';
+import { useTranslation } from 'next-i18next';
 import { Fragment, useState } from 'react';
 
 const userNavigation = [
@@ -9,6 +10,7 @@ const userNavigation = [
 ];
 
 export default function Navigation(): JSX.Element {
+	const { t } = useTranslation('home');
 	const [navOpen, setNavOpen] = useState(false);
 	const toggleNav = () => setNavOpen(!navOpen);
 	return (
@@ -54,7 +56,7 @@ export default function Navigation(): JSX.Element {
 								as='a'
 								href={item.href}
 								className='block rounded-md px-3 py-2 text-base font-medium text-slate-400 hover:bg-slate-700 hover:text-slate-100'>
-								{item.name}
+								{t(`${item.name.toLocaleLowerCase().replace(/\s/g, '')}`)}
 							</Disclosure.Button>
 						))}
 					</div>
@@ -68,7 +70,7 @@ export default function Navigation(): JSX.Element {
 					href='http://'
 					target='_blank'
 					rel='noopener noreferrer'>
-					<span className='underline'>support</span>
+					<span className='underline'>{t('support')}</span>
 					<ArrowTopRightOnSquareIcon className='h-4 w-4' />
 				</a>
 				<p>6893 RIC</p>
@@ -100,7 +102,7 @@ export default function Navigation(): JSX.Element {
 												active ? 'bg-slate-100' : '',
 												'block px-4 py-2 text-sm text-slate-600'
 											)}>
-											{item.name}
+											{t(`${item.name.toLocaleLowerCase().replace(/\s/g, '')}`)}
 										</a>
 									)}
 								</Menu.Item>

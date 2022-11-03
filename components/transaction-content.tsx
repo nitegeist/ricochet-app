@@ -20,11 +20,11 @@ export const TransactionContent: NextPage<Props> = ({ type, close, setClose }) =
 	const [amount, setAmount] = useState('');
 	const [slippageTolerance, setSlippageTolerance] = useState(tolerance[0]);
 	const handleSubmit = (event) => {
-		event.preventDefault();
+		event?.preventDefault();
 	};
 	return (
 		<div className='flex flex-col items-start'>
-			<form onSubmit={(e) => handleSubmit(e)} className='flex flex-col items-start w-full space-y-6'>
+			<form onSubmit={handleSubmit} className='flex flex-col items-start w-full space-y-6'>
 				{(type === 'withdraw' || type === 'deposit') && (
 					<>
 						<label className='text-slate-100'>Which token do you wish to {type}?</label>

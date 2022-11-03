@@ -9,6 +9,7 @@ import { Positions } from '@richochet/components/positions';
 import { Refer } from '@richochet/components/refer';
 import { SmallCard } from '@richochet/components/small-card';
 import { formatCurrency } from '@richochet/utils/functions';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 
 export interface Stat {
@@ -35,7 +36,14 @@ const stats: Stat[] = [
 	},
 ];
 
-export default function Home(): JSX.Element {
+export async function getStaticProps({ locale }): Promise<Object> {
+	return {
+		props: {
+			...(await serverSideTranslations(locale, ['home', 'footer'])),
+		},
+	};
+}
+export default function Home({ locale }): JSX.Element {
 	return (
 		<>
 			<Head>
