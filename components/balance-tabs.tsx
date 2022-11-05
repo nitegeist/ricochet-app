@@ -17,24 +17,27 @@ export const BalanceTabs: NextPage<Props> = ({ close, setClose, action }) => {
 	}, [action]);
 	return (
 		<Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-			<Tab.List className='grid grid-cols-4 justify-items-stretch border-b-2 border-slate-500 mb-8'>
+			<Tab.List className='grid grid-cols-4 justify-items-stretch border-b-2 border-primary-900 border-opacity-30 mb-8'>
 				<Tab as={Fragment}>
 					{({ selected }) => (
-						<button className={selected ? 'text-slate-100 border-b-2 border-slate-200' : 'text-slate-400 border-none'}>
+						<button
+							className={selected ? 'text-slate-100 border-b-2 border-primary-500' : 'text-slate-400 border-none'}>
 							withdraw
 						</button>
 					)}
 				</Tab>
 				<Tab as={Fragment}>
 					{({ selected }) => (
-						<button className={selected ? 'text-slate-100 border-b-2 border-slate-200' : 'text-slate-400 border-none'}>
+						<button
+							className={selected ? 'text-slate-100 border-b-2 border-primary-500' : 'text-slate-400 border-none'}>
 							deposit
 						</button>
 					)}
 				</Tab>
 				<Tab as={Fragment}>
 					{({ selected }) => (
-						<button className={selected ? 'text-slate-100 border-b-2 border-slate-200' : 'text-slate-400 border-none'}>
+						<button
+							className={selected ? 'text-slate-100 border-b-2 border-primary-500' : 'text-slate-400 border-none'}>
 							swap
 						</button>
 					)}

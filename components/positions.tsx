@@ -4,7 +4,8 @@ import { CardTitle } from './card-title';
 import { DataTable } from './data-table';
 
 export interface PositionData {
-	symbol: string;
+	from: string;
+	to: string;
 	position: string;
 	timeLeft: string;
 	input: string;
@@ -16,7 +17,8 @@ const positionTitles = ['symbols', 'positions', 'time left', 'input', 'output', 
 
 const positionData: PositionData[] = [
 	{
-		symbol: 'a > b',
+		from: 'RIC',
+		to: 'USDC',
 		position: '1000 RIC > USDC',
 		timeLeft: '4 months',
 		input: '2039 RIC',
@@ -24,7 +26,8 @@ const positionData: PositionData[] = [
 		avgPrice: '1.02 RIC',
 	},
 	{
-		symbol: 'a > b',
+		from: 'RIC',
+		to: 'USDC',
 		position: '1000 RIC > USDC',
 		timeLeft: '4 months',
 		input: '2039 RIC',
@@ -32,7 +35,8 @@ const positionData: PositionData[] = [
 		avgPrice: '1.02 RIC',
 	},
 	{
-		symbol: 'a > b',
+		from: 'RIC',
+		to: 'USDC',
 		position: '1000 RIC > USDC',
 		timeLeft: '4 months',
 		input: '2039 RIC',
@@ -40,7 +44,8 @@ const positionData: PositionData[] = [
 		avgPrice: '1.02 RIC',
 	},
 	{
-		symbol: 'a > b',
+		from: 'RIC',
+		to: 'USDC',
 		position: '1000 RIC > USDC',
 		timeLeft: '4 months',
 		input: '2039 RIC',
@@ -48,7 +53,8 @@ const positionData: PositionData[] = [
 		avgPrice: '1.02 RIC',
 	},
 	{
-		symbol: 'a > b',
+		from: 'RIC',
+		to: 'USDC',
 		position: '1000 RIC > USDC',
 		timeLeft: '4 months',
 		input: '2039 RIC',
@@ -56,7 +62,8 @@ const positionData: PositionData[] = [
 		avgPrice: '1.02 RIC',
 	},
 	{
-		symbol: 'a > b',
+		from: 'RIC',
+		to: 'USDC',
 		position: '1000 RIC > USDC',
 		timeLeft: '4 months',
 		input: '2039 RIC',
@@ -64,7 +71,8 @@ const positionData: PositionData[] = [
 		avgPrice: '1.02 RIC',
 	},
 	{
-		symbol: 'a > b',
+		from: 'RIC',
+		to: 'USDC',
 		position: '1000 RIC > USDC',
 		timeLeft: '4 months',
 		input: '2039 RIC',
@@ -72,7 +80,8 @@ const positionData: PositionData[] = [
 		avgPrice: '1.02 RIC',
 	},
 	{
-		symbol: 'a > b',
+		from: 'RIC',
+		to: 'USDC',
 		position: '1000 RIC > USDC',
 		timeLeft: '4 months',
 		input: '2039 RIC',
@@ -80,7 +89,8 @@ const positionData: PositionData[] = [
 		avgPrice: '1.02 RIC',
 	},
 	{
-		symbol: 'a > b',
+		from: 'RIC',
+		to: 'USDC',
 		position: '1000 RIC > USDC',
 		timeLeft: '4 months',
 		input: '2039 RIC',
@@ -88,7 +98,8 @@ const positionData: PositionData[] = [
 		avgPrice: '1.02 RIC',
 	},
 	{
-		symbol: 'a > b',
+		from: 'RIC',
+		to: 'USDC',
 		position: '1000 RIC > USDC',
 		timeLeft: '4 months',
 		input: '2039 RIC',
@@ -96,7 +107,8 @@ const positionData: PositionData[] = [
 		avgPrice: '1.02 RIC',
 	},
 	{
-		symbol: 'a > b',
+		from: 'RIC',
+		to: 'USDC',
 		position: '1000 RIC > USDC',
 		timeLeft: '4 months',
 		input: '2039 RIC',
@@ -104,7 +116,8 @@ const positionData: PositionData[] = [
 		avgPrice: '1.02 RIC',
 	},
 	{
-		symbol: 'a > b',
+		from: 'RIC',
+		to: 'USDC',
 		position: '1000 RIC > USDC',
 		timeLeft: '4 months',
 		input: '2039 RIC',

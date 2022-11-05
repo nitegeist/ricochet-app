@@ -1,5 +1,10 @@
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import { ArrowLongRightIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import { combineClasses } from '@richochet/utils/functions';
 import usePagination from 'hooks/usePagination';
+import { BTCLogo } from 'icons/btc-logo';
+import { ETHLogo } from 'icons/eth-logo';
+import { RicochetLogo } from 'icons/richochet-logo';
+import { USDCLogo } from 'icons/usdc-logo';
 import { NextPage } from 'next';
 import { TokenData } from './balances';
 import { MarketData } from './markets';
@@ -11,7 +16,7 @@ interface Props {
 }
 
 const isPositionData = (data: PositionData | MarketData | TokenData): data is PositionData =>
-	!!(data as PositionData).symbol;
+	!!(data as PositionData).position;
 const isMarketData = (data: PositionData | MarketData | TokenData): data is MarketData => !!(data as MarketData).market;
 const isTokenData = (data: PositionData | MarketData | TokenData): data is TokenData => !!(data as TokenData).token;
 
@@ -37,7 +42,11 @@ export const DataTable: NextPage<Props> = ({ headers, rowData }): JSX.Element =>
 						<tr key={index} className='text-slate-200 border-b border-slate-600'>
 							{isPositionData(data) ? (
 								<>
-									<td className='px-6 py-4 whitespace-nowrap'>{data.symbol}</td>
+									<td className='flex items-center px-6 py-4 whitespace-nowrap space-x-1'>
+										{data.from === 'RIC' ? <RicochetLogo width='25' height='25' /> : ''}{' '}
+										<ArrowLongRightIcon className='h-5 w-5' />
+										{data.from === 'USDC' ? <USDCLogo width='22' height='22' /> : ''}
+									</td>
 									<td className='px-6 py-4 whitespace-nowrap'>{data.position}</td>
 									<td className='px-6 py-4 whitespace-nowrap'>{data.timeLeft}</td>
 									<td className='px-6 py-4 whitespace-nowrap'>{data.input}</td>
@@ -52,7 +61,29 @@ export const DataTable: NextPage<Props> = ({ headers, rowData }): JSX.Element =>
 								</>
 							) : isTokenData(data) ? (
 								<>
-									<td className='px-6 py-4 whitespace-nowrap'>{data.token}</td>
+									<td className='flex items-center px-6 py-4 whitespace-nowrap space-x-1'>
+										{data.token === 'ETH' ? (
+											<ETHLogo width='22' height='22' />
+										) : data.token === 'BTC' ? (
+											<BTCLogo width='22' height='22' />
+										) : data.token === 'RIC' ? (
+											<RicochetLogo width='22' height='22' />
+										) : (
+											''
+										)}
+										<span
+											className={combineClasses(
+												data.token === 'ETH'
+													? 'bg-eth text-slate-800 px-1 py-0'
+													: data.token === 'BTC'
+													? 'bg-btc text-slate-800 px-1 py-0'
+													: data.token === 'RIC'
+													? 'bg-ric text-slate-800 px-1 py-0'
+													: 'bg-transparent'
+											)}>
+											{data.token}
+										</span>
+									</td>
 									<td className='px-6 py-4 whitespace-nowrap'>{data.amount}</td>
 									<td className='px-6 py-4 whitespace-nowrap'>{data.dollarVal}</td>
 								</>

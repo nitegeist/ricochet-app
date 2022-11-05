@@ -9,8 +9,8 @@ const data = {
 	datasets: [
 		{
 			data: [300, 50, 100],
-			backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-			hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+			backgroundColor: ['#B3FFFF', '#FF8D8F', '#7B7EFF'],
+			hoverBackgroundColor: ['#B3FFFF', '#FF8D8F', '#7B7EFF'],
 			borderWidth: 0,
 			hoverOffset: 3,
 		},

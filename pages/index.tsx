@@ -1,8 +1,8 @@
-import { AdContent } from '@richochet/components/ad-content';
 import { Balances } from '@richochet/components/balances';
 import { Card, CardWithBackground, CardWithOutline } from '@richochet/components/card';
 import { CardContainer } from '@richochet/components/card-container';
 import { Footer } from '@richochet/components/footer';
+import { AdContent } from '@richochet/components/launchpad';
 import { Markets } from '@richochet/components/markets';
 import Navigation from '@richochet/components/navigation';
 import { Positions } from '@richochet/components/positions';

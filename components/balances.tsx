@@ -19,14 +19,14 @@ const tokenData: TokenData[] = [
 		dollarVal: formatCurrency(6856.45),
 	},
 	{
-		token: 'ETH',
-		amount: 3.445,
-		dollarVal: formatCurrency(6856.45),
+		token: 'BTC',
+		amount: 0.879,
+		dollarVal: formatCurrency(2212.89),
 	},
 	{
-		token: 'ETH',
-		amount: 3.445,
-		dollarVal: formatCurrency(6856.45),
+		token: 'RIC',
+		amount: 6893,
+		dollarVal: formatCurrency(46.456),
 	},
 	{
 		token: 'ETH',
