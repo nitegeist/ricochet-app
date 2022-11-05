@@ -1,7 +1,7 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { ArrowTopRightOnSquareIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
 import { combineClasses } from '@richochet/utils/functions';
-import { RicochetLogo } from 'icons/richochet-logo';
+import RicochetLogo from 'icons/richochet-logo';
 import { useTranslation } from 'next-i18next';
 import { Fragment, useState } from 'react';
 

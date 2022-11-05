@@ -66,6 +66,7 @@ export const Balances = (): JSX.Element => {
 						<SolidButton
 							type='button'
 							action='deposit'
+							primary={true}
 							handleClick={() => {
 								setTabsClosed(false);
 								setAction(1);

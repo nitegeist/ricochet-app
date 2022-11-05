@@ -27,10 +27,10 @@ export const Refer = () => {
 					onChange={(e) => setRefURL(e.target.value)}
 					placeholder='app.ricochet.exchange/#/ref/'
 				/>
-				<SolidButton type='submit' action={t('registerurl')} />
+				<SolidButton type='submit' primary={true} action={t('registerurl')} />
 			</form>
 			<a
-				className='inline-flex items-center space-x-1 text-slate-400'
+				className='inline-flex items-center space-x-1 text-primary-400'
 				href='http://'
 				target='_blank'
 				rel='noopener noreferrer'>

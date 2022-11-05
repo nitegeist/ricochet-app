@@ -1,4 +1,4 @@
-import sampleImage from '@richochet/assets/images/sample-bg.jpg';
+import launchPadBG from '@richochet/assets/images/launchpad-bg.jpg';
 import { NextPage } from 'next';
 import Image from 'next/image';
 
@@ -20,17 +20,17 @@ export const CardWithBackground: NextPage<Props> = ({ content }) => {
 			<div className='z-10'>{content}</div>
 			{/* Background Image */}
 			<Image
-				src={sampleImage}
+				src={launchPadBG}
 				className='object-cover object-bottom absolute inset-0 z-0 rounded-lg'
 				draggable='false'
 				fill={true}
 				sizes='(max-width: 768px) 100vw,
               (max-width: 1200px) 50vw,
               33vw'
-				alt='Sample Image'
+				alt='Launchpad Background'
 				priority={true}
 			/>
-			<div className='absolute inset-0 bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 z-0 opacity-60'></div>
+			<div className='absolute inset-0 bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 z-0 opacity-60 rounded-lg'></div>
 		</div>
 	);
 };

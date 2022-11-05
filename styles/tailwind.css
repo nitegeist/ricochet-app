@@ -13,7 +13,7 @@
 		@apply inline-flex items-center justify-center bg-primary-500 hover:bg-primary-700 text-slate-800 font-semibold text-sm md:text-base py-1 px-3 md:py-2 md:px-6 rounded-full;
 	}
 	.btn-pill-outline {
-		@apply inline-flex items-center justify-center outline-none border-2 border-slate-400 bg-transparent hover:border-transparent hover:bg-primary-500 text-slate-200 hover:text-slate-800 font-semibold text-sm md:text-base py-1 px-3 md:py-2 md:px-6 rounded-full;
+		@apply inline-flex items-center justify-center outline-none border-2 border-primary-400 bg-transparent hover:border-transparent hover:bg-primary-500 text-primary-200 hover:text-slate-800 font-semibold text-sm md:text-base py-1 px-3 md:py-2 md:px-6 rounded-full;
 	}
 	.btn-mobile-menu {
 		@apply lg:hidden inline-flex items-center justify-center ml-auto rounded bg-slate-800 p-2 text-slate-100 hover:bg-slate-700 hover:text-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-100 focus:ring-offset-2 focus:ring-offset-slate-800;
@@ -27,7 +27,7 @@
 	}
 
 	.card-outline {
-		@apply flex flex-col bg-transparent border border-slate-400 text-slate-400 rounded-lg px-10 py-8;
+		@apply flex flex-col bg-transparent border border-primary-400 text-primary-400 rounded-lg px-10 py-8;
 	}
 
 	.container {
@@ -35,7 +35,7 @@
 	}
 
 	.input-outline {
-		@apply p-2 pl-4 w-full text-slate-100 bg-transparent rounded-lg border border-slate-300;
+		@apply p-2 pl-4 w-full text-primary-100 bg-transparent rounded-lg border border-primary-300 focus:outline-none focus:outline-primary-400;
 	}
 
 	.navbar {

@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-export const ETHLogo = (props: SVGProps<SVGSVGElement>) => (
+const ETHLogo = (props: SVGProps<SVGSVGElement>) => (
 	<svg
 		viewBox='0 0 26 26'
 		fill='none'
@@ -21,3 +21,5 @@ export const ETHLogo = (props: SVGProps<SVGSVGElement>) => (
 		</defs>
 	</svg>
 );
+
+export default ETHLogo;

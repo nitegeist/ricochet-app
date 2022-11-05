@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-export const RicochetLogo = (props: SVGProps<SVGSVGElement>) => (
+const RicochetLogo = (props: SVGProps<SVGSVGElement>) => (
 	<svg viewBox='0 0 66 33' fill='none' xmlns='http://www.w3.org/2000/svg' {...props}>
 		<path
 			d='M50.051 0H18.663c0-.056 7.805 6.052 7.805 6.052L0 15.949l26.75 10.123-7.747 6.278 31.048-.452C58.874 31.898 66 24.772 66 15.949S57.234-.056 50.051 0Zm0 28.391c-6.9 0-12.442-5.599-12.442-12.442s5.6-12.442 12.442-12.442c6.844 0 12.443 5.599 12.443 12.442s-5.6 12.442-12.443 12.442Z'
@@ -18,3 +18,5 @@ export const RicochetLogo = (props: SVGProps<SVGSVGElement>) => (
 		</defs>
 	</svg>
 );
+
+export default RicochetLogo;

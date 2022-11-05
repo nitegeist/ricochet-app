@@ -50,7 +50,7 @@ export default function Home({ locale }): JSX.Element {
 				<title>Ricochet Exchange</title>
 				<meta name='description' content='A place to exchange tokens' />
 			</Head>
-			<div className='bg-gradient-to-b from-slate-900 to-slate-800'>
+			<div className='bg-gradient-to-b from-slate-900 to-slate-800 backdrop-blur-lg'>
 				<Navigation />
 				<main>
 					<div className='mx-auto w-screen py-6 px-8 lg:px-16'>

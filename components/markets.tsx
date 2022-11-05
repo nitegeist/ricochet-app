@@ -3,69 +3,82 @@ import { CardTitle } from './card-title';
 import { DataTable } from './data-table';
 
 export interface MarketData {
-	market: string;
+	from: string;
+	to: string;
 	total: string;
 	posAmt: string;
 }
 
 const marketData: MarketData[] = [
 	{
-		market: 'a > b',
+		from: 'BTC',
+		to: 'RIC',
 		total: `${formatCurrency(40012.65)} / month`,
 		posAmt: '15 positions',
 	},
 	{
-		market: 'a > b',
+		from: 'BTC',
+		to: 'RIC',
 		total: `${formatCurrency(40012.65)} / month`,
 		posAmt: '15 positions',
 	},
 	{
-		market: 'a > b',
+		from: 'BTC',
+		to: 'RIC',
 		total: `${formatCurrency(40012.65)} / month`,
 		posAmt: '15 positions',
 	},
 	{
-		market: 'a > b',
+		from: 'BTC',
+		to: 'RIC',
 		total: `${formatCurrency(40012.65)} / month`,
 		posAmt: '15 positions',
 	},
 	{
-		market: 'a > b',
+		from: 'BTC',
+		to: 'RIC',
 		total: `${formatCurrency(40012.65)} / month`,
 		posAmt: '15 positions',
 	},
 	{
-		market: 'a > b',
+		from: 'BTC',
+		to: 'RIC',
 		total: `${formatCurrency(40012.65)} / month`,
 		posAmt: '15 positions',
 	},
 	{
-		market: 'a > b',
+		from: 'BTC',
+		to: 'RIC',
 		total: `${formatCurrency(40012.65)} / month`,
 		posAmt: '15 positions',
 	},
 	{
-		market: 'a > b',
+		from: 'BTC',
+		to: 'RIC',
 		total: `${formatCurrency(40012.65)} / month`,
 		posAmt: '15 positions',
 	},
 	{
-		market: 'a > b',
+		from: 'BTC',
+		to: 'RIC',
 		total: `${formatCurrency(40012.65)} / month`,
 		posAmt: '15 positions',
 	},
 	{
-		market: 'a > b',
+		from: 'BTC',
+		to: 'RIC',
 		total: `${formatCurrency(40012.65)} / month`,
 		posAmt: '15 positions',
 	},
 	{
-		market: 'a > b',
+		from: 'BTC',
+		to: 'RIC',
 		total: `${formatCurrency(40012.65)} / month`,
 		posAmt: '15 positions',
 	},
 	{
-		market: 'a > b',
+		from: 'BTC',
+		to: 'RIC',
 		total: `${formatCurrency(40012.65)} / month`,
 		posAmt: '15 positions',
 	},

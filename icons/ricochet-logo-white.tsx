@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-export const FooterLogo = (props: SVGProps<SVGSVGElement>) => (
+const RicochetLogoWhite = (props: SVGProps<SVGSVGElement>) => (
 	<svg viewBox='0 0 50 25' fill='none' xmlns='http://www.w3.org/2000/svg' {...props}>
 		<path
 			d='M37.918 0h-23.78c0-.043 5.913 4.585 5.913 4.585L0 12.083l20.266 7.669-5.87 4.756 23.522-.343A12.068 12.068 0 0 0 50 12.083C50 5.399 43.359-.043 37.918 0Zm0 21.508c-5.227 0-9.426-4.241-9.426-9.425 0-5.185 4.241-9.426 9.426-9.426 5.184 0 9.426 4.241 9.426 9.426 0 5.184-4.242 9.425-9.426 9.425Z'
@@ -12,3 +12,5 @@ export const FooterLogo = (props: SVGProps<SVGSVGElement>) => (
 		/>
 	</svg>
 );
+
+export default RicochetLogoWhite;

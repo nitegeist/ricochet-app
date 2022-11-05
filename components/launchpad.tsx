@@ -11,8 +11,8 @@ export const AdContent = () => {
 				<p className='uppercase tracking-widest'>Rexpro</p>
 			</div>
 			<p className='text-slate-100'>{t('startaposition')}</p>
-			<SolidButton type='button' action={t('start20position')} />
-			<SolidButton type='button' action={t('buyric')} />
+			<SolidButton type='button' primary={true} action={t('start20position')} />
+			<SolidButton type='button' primary={false} action={t('buyric')} />
 		</div>
 	);
 };
