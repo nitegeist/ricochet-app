@@ -7,7 +7,7 @@ export const Footer = () => {
 		<div className='flex flex-wrap items-start justify-between bg-background-500 p-16'>
 			<h6 className='flex space-x-2 mb-10 md:mb-0'>
 				<RicochetLogoWhite width='50' height='25' />
-				<span className='text-primary-100 font-semibold tracking-wide'>Ricochet</span>
+				<span className='text-slate-100 font-semibold tracking-wide'>Ricochet</span>
 			</h6>
 			<section className='flex flex-wrap items-center space-x-14 lg:space-x-32'>
 				<article className='flex flex-col space-y-4'>

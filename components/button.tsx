@@ -3,15 +3,16 @@ import { NextPage } from 'next';
 import { MouseEventHandler } from 'react';
 interface Props {
 	action: string;
-	primary: boolean;
 	type: 'button' | 'submit' | 'reset';
+	form?: string;
+	primary?: boolean;
 	icon?: JSX.Element;
 	handleClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-export const RoundedButton: NextPage<Props> = ({ action, type, icon, handleClick }) => {
+export const RoundedButton: NextPage<Props> = ({ action, type, form, icon, handleClick }) => {
 	return (
-		<button type={type} className='btn-rounded' onClick={handleClick}>
+		<button type={type} form={form} className='btn-rounded' onClick={handleClick}>
 			{icon}
 			<span>{action}</span>
 		</button>

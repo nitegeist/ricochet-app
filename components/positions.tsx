@@ -1,7 +1,9 @@
 import { PlusSmallIcon } from '@heroicons/react/24/solid';
+import { useState } from 'react';
 import { RoundedButton } from './button';
 import { CardTitle } from './card-title';
 import { DataTable } from './data-table';
+import { NewPosition } from './new-position';
 
 export interface PositionData {
 	from: string;
@@ -127,17 +129,30 @@ const positionData: PositionData[] = [
 ];
 
 export const Positions = () => {
+	const [tabsClosed, setTabsClosed] = useState(true);
 	return (
 		<>
-			<CardTitle
-				content={
-					<>
-						<p className='text-slate-400 uppercase'>Your Positions</p>
-						<RoundedButton icon={<PlusSmallIcon className='h-4 w-4' />} type='button' action='new position' />
-					</>
-				}
-			/>
-			<DataTable headers={positionTitles} rowData={positionData} />
+			{tabsClosed && (
+				<>
+					<CardTitle
+						content={
+							<>
+								<p className='text-slate-400 uppercase'>Your Positions</p>
+								<RoundedButton
+									icon={<PlusSmallIcon className='h-4 w-4' />}
+									type='button'
+									action='new position'
+									handleClick={() => {
+										setTabsClosed(false);
+									}}
+								/>
+							</>
+						}
+					/>
+					<DataTable headers={positionTitles} rowData={positionData} />
+				</>
+			)}
+			{!tabsClosed && <NewPosition close={tabsClosed} setClose={setTabsClosed} />}
 		</>
 	);
 };
