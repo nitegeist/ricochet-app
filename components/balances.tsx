@@ -54,7 +54,7 @@ export const Balances = (): JSX.Element => {
 			{tabsClosed && (
 				<>
 					<p className='font-light uppercase tracking-widest text-slate-400'> Your Balances</p>
-					<div className='flex flex-wrap items-center justify-evenly space-x-3 space-y-2 xl:space-y-0 my-4'>
+					<div className='flex flex-wrap items-center justify-evenly basis-1/3 my-4'>
 						<OutlineButton
 							type='button'
 							action='withdraw'

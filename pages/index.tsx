@@ -54,7 +54,7 @@ export default function Home({ locale }): JSX.Element {
 				<Navigation />
 				<main>
 					<div className='mx-auto w-screen py-6 px-8 lg:px-16'>
-						<div className='flex flex-wrap items-stretch justify-center md:justify-between space-y-8 lg:space-y-4 xl:space-x-0'>
+						<div className='flex flex-wrap items-stretch justify-center md:justify-between basis-1/4'>
 							{stats.map((stat, index) => (
 								<SmallCard key={index} stat={stat} />
 							))}

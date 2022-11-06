@@ -17,7 +17,7 @@ export const BalanceTabs: NextPage<Props> = ({ close, setClose, action }) => {
 	}, [action]);
 	return (
 		<Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-			<Tab.List className='grid grid-cols-4 justify-items-stretch border-b-2 border-primary-900 border-opacity-30 mb-8'>
+			<Tab.List className='flex items-center justify-between border-b-2 border-primary-900 border-opacity-30 mb-8'>
 				<Tab as={Fragment}>
 					{({ selected }) => (
 						<button
@@ -42,7 +42,7 @@ export const BalanceTabs: NextPage<Props> = ({ close, setClose, action }) => {
 						</button>
 					)}
 				</Tab>
-				<button className='text-slate-400 hover:text-slate-100 justify-self-end' onClick={() => setClose(!close)}>
+				<button className='text-slate-400 hover:text-slate-100' onClick={() => setClose(!close)}>
 					<XMarkIcon className='h-4 w-4' />
 				</button>
 			</Tab.List>
