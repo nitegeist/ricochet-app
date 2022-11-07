@@ -37,7 +37,7 @@ export default function Navigation(): JSX.Element {
 				)}>
 				<div className='mobile-links'>
 					<a
-						className='inline-flex items-center space-x-1 text-slate-400'
+						className='inline-flex items-center space-x-1 text-primary-500'
 						href='http://'
 						target='_blank'
 						rel='noopener noreferrer'>
@@ -65,7 +65,7 @@ export default function Navigation(): JSX.Element {
 			{/* Desktop Menu */}
 			<div className='desktop-links'>
 				<a
-					className='inline-flex items-center space-x-1 text-slate-400'
+					className='inline-flex items-center space-x-1 text-primary-500'
 					href='http://'
 					target='_blank'
 					rel='noopener noreferrer'>

@@ -133,11 +133,11 @@ export const Positions = () => {
 	return (
 		<>
 			{tabsClosed && (
-				<>
+				<div className='mt-4'>
 					<CardTitle
 						content={
 							<>
-								<p className='text-slate-400 uppercase'>Your Positions</p>
+								<p className='text-primary-500 uppercase'>Your Positions</p>
 								<RoundedButton
 									icon={<PlusSmallIcon className='h-4 w-4' />}
 									type='button'
@@ -150,7 +150,7 @@ export const Positions = () => {
 						}
 					/>
 					<DataTable headers={positionTitles} rowData={positionData} />
-				</>
+				</div>
 			)}
 			{!tabsClosed && <NewPosition close={tabsClosed} setClose={setTabsClosed} />}
 		</>

@@ -17,7 +17,7 @@ export const BalanceTabs: NextPage<Props> = ({ close, setClose, action }) => {
 	}, [action]);
 	return (
 		<Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-			<Tab.List className='flex items-center justify-between border-b-2 border-primary-900 border-opacity-30 mb-8'>
+			<Tab.List className='flex items-center justify-between border-b-2 border-primary-900 border-opacity-30 mb-8 mt-4'>
 				<Tab as={Fragment}>
 					{({ selected }) => (
 						<button

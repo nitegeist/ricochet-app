@@ -9,7 +9,7 @@ export const SmallCard: NextPage<Props> = ({ stat: { title, value } }) => {
 	const { t } = useTranslation('home');
 	return (
 		<div className='card-sm'>
-			<h6 className='font-light uppercase tracking-widest text-slate-400'>
+			<h6 className='font-light uppercase tracking-widest text-primary-500'>
 				{t(`${title.toLocaleLowerCase().replace(/\s/g, '')}`)}
 			</h6>
 			<p className='text-slate-100 font-light text-2xl'>{value}</p>

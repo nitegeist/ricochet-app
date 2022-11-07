@@ -50,10 +50,10 @@ export const Balances = (): JSX.Element => {
 	const [tabsClosed, setTabsClosed] = useState(true);
 	return (
 		<>
+			<p className='font-light uppercase tracking-widest text-primary-500'> Your Balances</p>
 			{!tabsClosed && <BalanceTabs close={tabsClosed} setClose={setTabsClosed} action={action} />}
 			{tabsClosed && (
 				<>
-					<p className='font-light uppercase tracking-widest text-slate-400'> Your Balances</p>
 					<div className='flex flex-wrap items-center justify-evenly basis-1/3 my-4'>
 						<OutlineButton
 							type='button'
