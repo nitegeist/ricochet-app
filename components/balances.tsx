@@ -2,8 +2,8 @@ import { formatCurrency } from '@richochet/utils/functions';
 import { useState } from 'react';
 import { BalanceTabs } from './balance-tabs';
 import { OutlineButton, SolidButton } from './button';
-import { DataChart } from './data-chart';
 import { DataTable } from './data-table';
+import { DoughnutChart } from './doughnut-chart';
 
 export interface TokenData {
 	token: string;
@@ -82,7 +82,7 @@ export const Balances = (): JSX.Element => {
 						/>
 					</div>
 					<div className='flex justify-center my-4'>
-						<DataChart />
+						<DoughnutChart />
 					</div>
 					<DataTable headers={headerTitles} rowData={tokenData} />
 				</>

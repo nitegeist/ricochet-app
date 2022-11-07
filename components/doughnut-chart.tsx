@@ -5,7 +5,6 @@ import { Doughnut } from 'react-chartjs-2';
 Chart.register(ArcElement, DoughnutController);
 
 const data = {
-	labels: ['Red', 'Green', 'Yellow'],
 	datasets: [
 		{
 			data: [300, 50, 100],
@@ -21,7 +20,7 @@ const options = {
 	cutout: '80%',
 };
 
-export const DataChart = () => (
+export const DoughnutChart = () => (
 	<div className='w-48 md:w-52 lg:w-64 relative'>
 		<div className='absolute top-1/3 left-1/4 lg:left-1/3 text-center'>
 			<h6 className='text-slate-400'>total</h6>

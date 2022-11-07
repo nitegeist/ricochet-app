@@ -6,6 +6,7 @@ import RicochetLogo from 'icons/richochet-logo';
 import { NextPage } from 'next';
 import { Fragment, useState } from 'react';
 import { RoundedButton } from './button';
+import { LineGraph } from './line-graph';
 
 const tokens = ['ETH', 'RIC', 'BTC'];
 const postionTypes = ['anually', 'bi-weekly', '∞ continuous (monthly)', 'weekly'];
@@ -27,10 +28,10 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 	return (
 		<>
 			<p className='text-primary-500 uppercase'>Your Positions</p>
-			<div className='flex flex-wrap items-center justify-between space-y-4 mt-4'>
+			<div className='flex flex-wrap items-center justify-between space-y-4'>
 				<form
 					id='new-position-form'
-					className='flex flex-col items-start w-full xl:w-auto space-y-6'
+					className='flex flex-col items-start p-8 w-full xl:w-1/2 space-y-6'
 					onSubmit={handleSubmit}>
 					<label className='text-slate-100'>Which token do you wish to use?</label>
 					<div className='flex items-center space-x-4 w-full xl:w-auto'>
@@ -238,7 +239,7 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 						</div>
 					</Listbox>
 				</form>
-				<div>Graph goes here</div>
+				<LineGraph />
 				<div className='flex space-x-4 w-full justify-end'>
 					<button type='button' className='text-slate-100 underline' onClick={() => setClose(!close)}>
 						cancel
