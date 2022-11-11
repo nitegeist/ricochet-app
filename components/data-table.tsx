@@ -13,6 +13,8 @@ import { PositionData } from './positions';
 interface Props {
 	headers: string[];
 	rowData: PositionData[] | MarketData[] | TokenData[];
+	selectable?: boolean;
+	selectData?: Function;
 }
 
 const isPositionData = (data: PositionData | MarketData | TokenData): data is PositionData =>
@@ -20,7 +22,7 @@ const isPositionData = (data: PositionData | MarketData | TokenData): data is Po
 const isMarketData = (data: PositionData | MarketData | TokenData): data is MarketData => !!(data as MarketData).posAmt;
 const isTokenData = (data: PositionData | MarketData | TokenData): data is TokenData => !!(data as TokenData).token;
 
-export const DataTable: NextPage<Props> = ({ headers, rowData }): JSX.Element => {
+export const DataTable: NextPage<Props> = ({ headers, rowData, selectable, selectData }): JSX.Element => {
 	const { firstContentIndex, lastContentIndex, nextPage, prevPage, page, gaps, setPage, totalPages } = usePagination({
 		contentPerPage: 6,
 		count: rowData.length,
@@ -40,7 +42,13 @@ export const DataTable: NextPage<Props> = ({ headers, rowData }): JSX.Element =>
 					</thead>
 					<tbody>
 						{rowData.slice(firstContentIndex, lastContentIndex).map((data, index) => (
-							<tr key={index} className='text-slate-200 border-b border-slate-600'>
+							<tr
+								key={index}
+								className={combineClasses(
+									selectable ? 'cursor-pointer' : 'cursor-auto',
+									'text-slate-200 border-b border-slate-600'
+								)}
+								onClick={() => (selectable ? selectData?.(data) : null)}>
 								{isPositionData(data) ? (
 									<>
 										<td className='flex items-center px-6 py-4 whitespace-nowrap space-x-2'>

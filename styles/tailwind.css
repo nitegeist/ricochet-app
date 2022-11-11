@@ -35,7 +35,7 @@
 	}
 
 	.input-outline {
-		@apply p-2 pl-4 w-full text-primary-100 bg-transparent rounded-lg border border-primary-300 focus:outline-none focus:outline-primary-400;
+		@apply p-1 md:p-2 pl-4 w-full text-primary-100 bg-transparent rounded-lg border border-primary-300 focus:outline-none focus:outline-primary-400;
 	}
 
 	.navbar {
