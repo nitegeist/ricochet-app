@@ -2,7 +2,7 @@ import { RectangleGroupIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'next-i18next';
 import { SolidButton } from './button';
 
-export const AdContent = () => {
+export const LaunchPad = () => {
 	const { t } = useTranslation('home');
 	return (
 		<div className='flex flex-col space-y-4'>

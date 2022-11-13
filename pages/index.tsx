@@ -2,7 +2,7 @@ import { Balances } from '@richochet/components/balances';
 import { Card, CardWithBackground, CardWithOutline } from '@richochet/components/card';
 import { CardContainer } from '@richochet/components/card-container';
 import { Footer } from '@richochet/components/footer';
-import { AdContent } from '@richochet/components/launchpad';
+import { LaunchPad } from '@richochet/components/launchpad';
 import { Markets } from '@richochet/components/markets';
 import Navigation from '@richochet/components/navigation';
 import { Positions } from '@richochet/components/positions';
@@ -54,19 +54,19 @@ export default function Home({ locale }): JSX.Element {
 				<Navigation />
 				<main>
 					<div className='mx-auto w-screen py-6 px-8 lg:px-16'>
-						<div className='flex flex-wrap items-stretch justify-center md:justify-between basis-1/4'>
+						<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-items-stretch place-items-stretch gap-10'>
 							{stats.map((stat, index) => (
 								<SmallCard key={index} stat={stat} />
 							))}
 						</div>
-						<div className='flex flex-wrap lg:flex-nowrap items-start space-x-0 lg:space-x-10 space-y-10 lg:space-y-0 mt-16'>
-							<div className='w-full lg:w-2/3 space-y-10'>
+						<div className='grid grid-cols-1 lg:grid-cols-3 gap-10 place-content-stretch mt-16'>
+							<div className='lg:col-span-2 space-y-10'>
 								<CardContainer content={<Positions />} />
 								<CardContainer content={<Markets />} />
 							</div>
-							<div className='w-full lg:w-1/3 space-y-10'>
+							<div className='space-y-10'>
 								<Card content={<Balances />} />
-								<CardWithBackground content={<AdContent />} />
+								<CardWithBackground content={<LaunchPad />} />
 								<CardWithOutline content={<Refer />} />
 							</div>
 						</div>

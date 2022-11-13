@@ -22,8 +22,4 @@ export const data = {
 	],
 };
 
-export const LineGraph = () => (
-	<div className='w-full xl:w-1/2'>
-		<Line options={options} data={data} />
-	</div>
-);
+export const LineGraph = () => <Line options={options} data={data} />;

@@ -28,13 +28,13 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 	return (
 		<>
 			<p className='text-primary-500 uppercase'>Your Positions</p>
-			<div className='flex flex-wrap items-center justify-between space-y-4'>
+			<div className='flex flex-wrap items-center justify-between space-y-4 mt-4'>
 				<form
 					id='new-position-form'
-					className='flex flex-col items-start p-8 w-full xl:w-1/2 space-y-6'
+					className='flex flex-col items-start lg:p-8 w-full lg:w-1/2 space-y-6'
 					onSubmit={handleSubmit}>
 					<label className='text-slate-100'>Which token do you wish to use?</label>
-					<div className='flex items-center space-x-4 w-full xl:w-auto'>
+					<div className='flex items-center space-x-4 w-full lg:w-auto'>
 						<Listbox value={from} onChange={setFrom}>
 							<div className='relative w-full z-10'>
 								<Listbox.Button className='relative w-full cursor-default rounded-lg bg-slate-700 py-2 pl-3 pr-10 text-left text-slate-200 shadow-md focus:outline-none focus-visible:border-slate-500 focus-visible:ring-2 focus-visible:ring-slate-100 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-300 sm:text-sm'>
@@ -239,7 +239,9 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 						</div>
 					</Listbox>
 				</form>
-				<LineGraph />
+				<div className='w-full lg:w-1/2'>
+					<LineGraph />
+				</div>
 				<div className='flex space-x-4 w-full justify-end'>
 					<button type='button' className='text-slate-100 underline' onClick={() => setClose(!close)}>
 						cancel
