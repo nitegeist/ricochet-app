@@ -1,10 +1,15 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
 	content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
 	theme: {
+		fontFamily: {
+			sans: ['Montserrat', ...defaultTheme.fontFamily.sans],
+		},
 		extend: {
 			colors: {
-				background: {
+				footer: {
 					50: '#44474b',
 					100: '#3a3d41',
 					200: '#303337',
@@ -27,6 +32,11 @@ module.exports = {
 					700: '#6d94ba',
 					800: '#638ab0',
 					900: '#5980a6',
+				},
+				background: {
+					700: '#121825',
+					800: '#16212C',
+					900: '#222233',
 				},
 				eth: '#B3FFFF',
 				btc: '#FF8D8F',

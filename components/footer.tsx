@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 export const Footer = () => {
 	const { t } = useTranslation('footer');
 	return (
-		<div className='flex flex-wrap items-start justify-between bg-background-500 p-16'>
+		<div className='flex flex-wrap items-start justify-between bg-footer-500 p-16'>
 			<h6 className='flex space-x-2 mb-10 md:mb-0'>
 				<RicochetLogoWhite width='50' height='25' />
 				<span className='text-slate-100 font-semibold tracking-wide'>Ricochet</span>

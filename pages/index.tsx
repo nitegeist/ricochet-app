@@ -1,3 +1,4 @@
+import { Alert } from '@richochet/components/alert';
 import { Balances } from '@richochet/components/balances';
 import { Card, CardWithBackground, CardWithOutline } from '@richochet/components/card';
 import { CardContainer } from '@richochet/components/card-container';
@@ -11,6 +12,7 @@ import { SmallCard } from '@richochet/components/small-card';
 import { formatCurrency } from '@richochet/utils/functions';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
+import { useState } from 'react';
 
 export interface Stat {
 	title: string;
@@ -44,16 +46,18 @@ export async function getStaticProps({ locale }): Promise<Object> {
 	};
 }
 export default function Home({ locale }): JSX.Element {
+	const [loading, setLoading] = useState(false);
 	return (
 		<>
 			<Head>
 				<title>Ricochet Exchange</title>
 				<meta name='description' content='A place to exchange tokens' />
 			</Head>
-			<div className='bg-gradient-to-b from-slate-900 to-slate-800 backdrop-blur-lg'>
+			<div className='bg-gradient-to-b from-background-700 via-background-800 to-background-900 backdrop-blur-lg'>
 				<Navigation />
 				<main>
 					<div className='mx-auto w-screen py-6 px-8 lg:px-16'>
+						{loading && <Alert type='loading' message='Waiting for your transaction to be confirmed...' />}
 						<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-items-stretch place-items-stretch gap-10'>
 							{stats.map((stat, index) => (
 								<SmallCard key={index} stat={stat} />
