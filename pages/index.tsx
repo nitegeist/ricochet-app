@@ -52,6 +52,8 @@ export default function Home({ locale }): JSX.Element {
 			<Head>
 				<title>Ricochet Exchange</title>
 				<meta name='description' content='A place to exchange tokens' />
+				<link rel='icon' type='image/png' href='/favicon.png' />
+				<link rel='icon' type='image/svg+xml' href='/favicon.svg' />
 			</Head>
 			<div className='bg-gradient-to-b from-background-700 via-background-800 to-background-900 backdrop-blur-lg'>
 				<Navigation />
