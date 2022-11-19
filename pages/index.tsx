@@ -55,7 +55,7 @@ export default function Home({ locale }): JSX.Element {
 				<link rel='icon' type='image/png' href='/favicon.png' />
 				<link rel='icon' type='image/svg+xml' href='/favicon.svg' />
 			</Head>
-			<div className='bg-gradient-to-b from-background-700 via-background-800 to-background-900 backdrop-blur-lg'>
+			<div className='bg-gradient-to-b from-background-700 via-background-800 to-background-900 overflow-clip'>
 				<Navigation />
 				<main>
 					<div className='mx-auto w-screen py-6 px-8 lg:px-16'>

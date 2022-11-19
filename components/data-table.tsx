@@ -29,7 +29,7 @@ export const DataTable: NextPage<Props> = ({ headers, rowData, selectable, selec
 	});
 	return (
 		<>
-			<div className='overflow-scroll'>
+			<div className='overflow-auto'>
 				<table className='table-fixed min-w-full'>
 					<thead>
 						<tr>
