@@ -35,6 +35,7 @@ export default function Home({ locale }): JSX.Element {
 	const { data } = useBalance({
 		addressOrName: address,
 		watch: true,
+		chainId: 137,
 		token: tokens[Token.RIC],
 	});
 	const isMounted = useIsMounted();
