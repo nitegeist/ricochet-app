@@ -8,7 +8,7 @@ interface Props {
 	primary?: boolean;
 	disabled?: boolean;
 	icon?: JSX.Element;
-	handleClick?: MouseEventHandler<HTMLButtonElement>;
+	handleClick?: MouseEventHandler<HTMLButtonElement> | undefined;
 }
 
 export const RoundedButton: NextPage<Props> = ({ action, type, form, icon, primary, disabled, handleClick }) => {

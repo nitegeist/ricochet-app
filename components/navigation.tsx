@@ -1,16 +1,23 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { ArrowTopRightOnSquareIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { combineClasses } from '@richochet/utils/functions';
+import { tokens } from '@richochet/utils/tokens';
+import { Token } from 'enumerations/token.enum';
 import RicochetLogo from 'icons/richochet-logo';
 import { useTranslation } from 'next-i18next';
 import { Fragment } from 'react';
-
-const userNavigation = [
-	{ name: 'Your Activity', href: 'http://' },
-	{ name: 'Disconnect Wallet', href: 'http://' },
-];
+import { useAccount, useBalance, useDisconnect } from 'wagmi';
+import { RoundedButton } from './button';
 
 export default function Navigation(): JSX.Element {
+	const { disconnect } = useDisconnect();
+	const { address, isConnected } = useAccount();
+	const { data, isError, isLoading } = useBalance({
+		address: address,
+		watch: true,
+		token: tokens[Token.RIC],
+	});
 	const { t } = useTranslation('home');
 	return (
 		<Disclosure as='nav' className='navbar'>
@@ -39,22 +46,66 @@ export default function Navigation(): JSX.Element {
 								<span className='underline'>support</span>
 								<ArrowTopRightOnSquareIcon className='h-4 w-4' />
 							</a>
-							<p>6893 RIC</p>
-							<button type='button' className='address-link'>
-								0x123...2838
-							</button>
+							{isLoading && <p>Fetching balance...</p>}
+							{isError && <></>}
+							{!isLoading && !isError && isConnected && (
+								<p>
+									{data?.formatted} {data?.symbol}
+								</p>
+							)}
+							<ConnectButton.Custom>
+								{({ account, chain, openChainModal, openConnectModal, mounted }) => {
+									return (
+										<div
+											{...(!mounted && {
+												'aria-hidden': true,
+												style: {
+													opacity: 0,
+													pointerEvents: 'none',
+													userSelect: 'none',
+												},
+											})}>
+											{(() => {
+												if (!mounted || !account || !chain) {
+													return (
+														<RoundedButton
+															action='connect callet'
+															handleClick={openConnectModal}
+															type='button'></RoundedButton>
+													);
+												}
+
+												if (chain.unsupported) {
+													return (
+														<RoundedButton
+															action='wrong network'
+															handleClick={openChainModal}
+															type='button'></RoundedButton>
+													);
+												}
+
+												return (
+													<button type='button' className='address-link'>
+														{account.displayName}
+													</button>
+												);
+											})()}
+										</div>
+									);
+								}}
+							</ConnectButton.Custom>
 							<div className='mt-3 space-y-1 px-2'>
-								{userNavigation.map((item) => (
-									<Disclosure.Button
-										key={item.name}
-										as='a'
-										href={item.href}
-										target='_blank'
-										rel='noopener noreferrer'
-										className='block rounded-md px-3 py-2 text-base font-medium text-slate-400 hover:bg-slate-700 hover:text-slate-100'>
-										{t(`${item.name.toLocaleLowerCase().replace(/\s/g, '')}`)}
-									</Disclosure.Button>
-								))}
+								<Disclosure.Button
+									as='a'
+									className='block rounded-md px-3 py-2 text-base font-medium text-slate-400 hover:bg-slate-700 hover:text-slate-100 cursor-pointer'>
+									{t(`youractivity`)}
+								</Disclosure.Button>
+								<Disclosure.Button
+									as='a'
+									onClick={() => disconnect()}
+									className='block rounded-md px-3 py-2 text-base font-medium text-slate-400 hover:bg-slate-700 hover:text-slate-100 cursor-pointer'>
+									{t(`disconnectwallet`)}
+								</Disclosure.Button>
 							</div>
 						</div>
 					</Disclosure.Panel>
@@ -69,43 +120,95 @@ export default function Navigation(): JSX.Element {
 							<span className='underline'>{t('support')}</span>
 							<ArrowTopRightOnSquareIcon className='h-4 w-4' />
 						</a>
-						<p>6893 RIC</p>
-						<Menu as='div' className='relative ml-3'>
-							<Menu.Button
-								type='button'
-								className='address-link'
-								id='user-menu-button'
-								aria-expanded='false'
-								aria-haspopup='true'>
-								<span className='sr-only'>Open user menu</span>
-								0x123...2838
-							</Menu.Button>
-							<Transition
-								as={Fragment}
-								enter='transition ease-out duration-100'
-								enterFrom='transform opacity-0 scale-95'
-								enterTo='transform opacity-100 scale-100'
-								leave='transition ease-in duration-75'
-								leaveFrom='transform opacity-100 scale-100'
-								leaveTo='transform opacity-0 scale-95'>
-								<Menu.Items className='absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
-									{userNavigation.map((item) => (
-										<Menu.Item key={item.name}>
-											{({ active }) => (
-												<a
-													href={item.href}
-													className={combineClasses(
-														active ? 'bg-slate-100' : '',
-														'block px-4 py-2 text-sm text-slate-600'
-													)}>
-													{t(`${item.name.toLocaleLowerCase().replace(/\s/g, '')}`)}
-												</a>
-											)}
-										</Menu.Item>
-									))}
-								</Menu.Items>
-							</Transition>
-						</Menu>
+						{isLoading && <p>Fetching balance...</p>}
+						{isError && <></>}
+						{!isLoading && !isError && isConnected && (
+							<p>
+								{data?.formatted} {data?.symbol}
+							</p>
+						)}
+						<ConnectButton.Custom>
+							{({ account, chain, openChainModal, openConnectModal, mounted }) => {
+								return (
+									<div
+										{...(!mounted && {
+											'aria-hidden': true,
+											style: {
+												opacity: 0,
+												pointerEvents: 'none',
+												userSelect: 'none',
+											},
+										})}>
+										{(() => {
+											if (!mounted || !account || !chain) {
+												return (
+													<RoundedButton
+														action='connect wallet'
+														handleClick={openConnectModal}
+														type='button'></RoundedButton>
+												);
+											}
+
+											if (chain.unsupported) {
+												return (
+													<RoundedButton
+														action='wrong network'
+														handleClick={openChainModal}
+														type='button'></RoundedButton>
+												);
+											}
+
+											return (
+												<Menu as='div' className='relative ml-3'>
+													<Menu.Button
+														type='button'
+														className='address-link'
+														id='user-menu-button'
+														aria-expanded='false'
+														aria-haspopup='true'>
+														{account.displayName}
+													</Menu.Button>
+													<Transition
+														as={Fragment}
+														enter='transition ease-out duration-100'
+														enterFrom='transform opacity-0 scale-95'
+														enterTo='transform opacity-100 scale-100'
+														leave='transition ease-in duration-75'
+														leaveFrom='transform opacity-100 scale-100'
+														leaveTo='transform opacity-0 scale-95'>
+														<Menu.Items className='absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
+															<Menu.Item>
+																{({ active }) => (
+																	<a
+																		className={combineClasses(
+																			active ? 'bg-slate-100' : '',
+																			'block px-4 py-2 text-sm text-slate-600 cursor-pointer'
+																		)}>
+																		{t('youractivity')}
+																	</a>
+																)}
+															</Menu.Item>
+															<Menu.Item>
+																{({ active }) => (
+																	<a
+																		onClick={() => disconnect()}
+																		className={combineClasses(
+																			active ? 'bg-slate-100' : '',
+																			'block px-4 py-2 text-sm text-slate-600 cursor-pointer'
+																		)}>
+																		{t('disconnectwallet')}
+																	</a>
+																)}
+															</Menu.Item>
+														</Menu.Items>
+													</Transition>
+												</Menu>
+											);
+										})()}
+									</div>
+								);
+							}}
+						</ConnectButton.Custom>
 					</div>
 				</>
 			)}
