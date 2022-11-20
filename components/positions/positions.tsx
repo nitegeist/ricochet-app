@@ -1,8 +1,8 @@
 import { PlusSmallIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
-import { RoundedButton } from './button';
-import { CardTitle } from './card-title';
-import { DataTable } from './data-table';
+import { RoundedButton } from '../button';
+import { CardTitle } from '../cards';
+import { DataTable } from '../table';
 import { NewPosition } from './new-position';
 import { ViewPosition } from './view-position';
 

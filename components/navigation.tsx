@@ -1,8 +1,8 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { ArrowTopRightOnSquareIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { combineClasses } from '@richochet/utils/functions';
 import { tokens } from '@richochet/utils/tokens';
+import { ConnectKitButton } from 'connectkit';
 import { Token } from 'enumerations/token.enum';
 import RicochetLogo from 'icons/richochet-logo';
 import { useTranslation } from 'next-i18next';
@@ -14,7 +14,7 @@ export default function Navigation(): JSX.Element {
 	const { disconnect } = useDisconnect();
 	const { address, isConnected } = useAccount();
 	const { data, isError, isLoading } = useBalance({
-		address: address,
+		addressOrName: address,
 		watch: true,
 		token: tokens[Token.RIC],
 	});
@@ -40,7 +40,7 @@ export default function Navigation(): JSX.Element {
 						<div className='mobile-links'>
 							<a
 								className='inline-flex items-center space-x-1 text-primary-500'
-								href='http://'
+								href='https://discord.com/channels/862796510604296263/864667072357597185'
 								target='_blank'
 								rel='noopener noreferrer'>
 								<span className='underline'>support</span>
@@ -53,60 +53,48 @@ export default function Navigation(): JSX.Element {
 									{data?.formatted} {data?.symbol}
 								</p>
 							)}
-							<ConnectButton.Custom>
-								{({ account, chain, openChainModal, openConnectModal, mounted }) => {
+							<ConnectKitButton.Custom>
+								{({ isConnected, show, unsupported, truncatedAddress, ensName }) => {
 									return (
-										<div
-											{...(!mounted && {
-												'aria-hidden': true,
-												style: {
-													opacity: 0,
-													pointerEvents: 'none',
-													userSelect: 'none',
-												},
-											})}>
+										<>
 											{(() => {
-												if (!mounted || !account || !chain) {
+												if (!isConnected) {
 													return (
-														<RoundedButton
-															action='connect callet'
-															handleClick={openConnectModal}
-															type='button'></RoundedButton>
+														<RoundedButton action='connect wallet' handleClick={show} type='button'></RoundedButton>
 													);
 												}
 
-												if (chain.unsupported) {
+												if (unsupported) {
 													return (
-														<RoundedButton
-															action='wrong network'
-															handleClick={openChainModal}
-															type='button'></RoundedButton>
+														<RoundedButton action='wrong network' handleClick={show} type='button'></RoundedButton>
 													);
 												}
 
 												return (
 													<button type='button' className='address-link'>
-														{account.displayName}
+														{ensName ?? truncatedAddress}
 													</button>
 												);
 											})()}
-										</div>
+										</>
 									);
 								}}
-							</ConnectButton.Custom>
-							<div className='mt-3 space-y-1 px-2'>
-								<Disclosure.Button
-									as='a'
-									className='block rounded-md px-3 py-2 text-base font-medium text-slate-400 hover:bg-slate-700 hover:text-slate-100 cursor-pointer'>
-									{t(`youractivity`)}
-								</Disclosure.Button>
-								<Disclosure.Button
-									as='a'
-									onClick={() => disconnect()}
-									className='block rounded-md px-3 py-2 text-base font-medium text-slate-400 hover:bg-slate-700 hover:text-slate-100 cursor-pointer'>
-									{t(`disconnectwallet`)}
-								</Disclosure.Button>
-							</div>
+							</ConnectKitButton.Custom>
+							{isConnected && (
+								<div className='mt-3 space-y-1 px-2'>
+									<Disclosure.Button
+										as='a'
+										className='block rounded-md px-3 py-2 text-base font-medium text-slate-400 hover:bg-slate-700 hover:text-slate-100 cursor-pointer'>
+										{t(`youractivity`)}
+									</Disclosure.Button>
+									<Disclosure.Button
+										as='a'
+										onClick={() => disconnect()}
+										className='block rounded-md px-3 py-2 text-base font-medium text-slate-400 hover:bg-slate-700 hover:text-slate-100 cursor-pointer'>
+										{t(`disconnectwallet`)}
+									</Disclosure.Button>
+								</div>
+							)}
 						</div>
 					</Disclosure.Panel>
 
@@ -114,7 +102,7 @@ export default function Navigation(): JSX.Element {
 					<div className='desktop-links'>
 						<a
 							className='inline-flex items-center space-x-1 text-primary-500'
-							href='http://'
+							href='https://discord.com/channels/862796510604296263/864667072357597185'
 							target='_blank'
 							rel='noopener noreferrer'>
 							<span className='underline'>{t('support')}</span>
@@ -127,35 +115,17 @@ export default function Navigation(): JSX.Element {
 								{data?.formatted} {data?.symbol}
 							</p>
 						)}
-						<ConnectButton.Custom>
-							{({ account, chain, openChainModal, openConnectModal, mounted }) => {
+						<ConnectKitButton.Custom>
+							{({ isConnected, show, unsupported, truncatedAddress, ensName }) => {
 								return (
-									<div
-										{...(!mounted && {
-											'aria-hidden': true,
-											style: {
-												opacity: 0,
-												pointerEvents: 'none',
-												userSelect: 'none',
-											},
-										})}>
+									<>
 										{(() => {
-											if (!mounted || !account || !chain) {
-												return (
-													<RoundedButton
-														action='connect wallet'
-														handleClick={openConnectModal}
-														type='button'></RoundedButton>
-												);
+											if (!isConnected) {
+												return <RoundedButton action='connect wallet' handleClick={show} type='button'></RoundedButton>;
 											}
 
-											if (chain.unsupported) {
-												return (
-													<RoundedButton
-														action='wrong network'
-														handleClick={openChainModal}
-														type='button'></RoundedButton>
-												);
+											if (unsupported) {
+												return <RoundedButton action='wrong network' handleClick={show} type='button'></RoundedButton>;
 											}
 
 											return (
@@ -166,7 +136,7 @@ export default function Navigation(): JSX.Element {
 														id='user-menu-button'
 														aria-expanded='false'
 														aria-haspopup='true'>
-														{account.displayName}
+														{ensName ?? truncatedAddress}
 													</Menu.Button>
 													<Transition
 														as={Fragment}
@@ -205,10 +175,10 @@ export default function Navigation(): JSX.Element {
 												</Menu>
 											);
 										})()}
-									</div>
+									</>
 								);
 							}}
-						</ConnectButton.Custom>
+						</ConnectKitButton.Custom>
 					</div>
 				</>
 			)}

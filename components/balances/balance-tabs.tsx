@@ -2,7 +2,7 @@ import { Tab } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { NextPage } from 'next';
 import { Fragment, useEffect, useState } from 'react';
-import { TransactionContent } from './transaction-content';
+import { TransactionContent } from '../transactions';
 
 interface Props {
 	action: number;

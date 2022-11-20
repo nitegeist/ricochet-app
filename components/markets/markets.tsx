@@ -1,6 +1,6 @@
 import { formatCurrency } from '@richochet/utils/functions';
-import { CardTitle } from './card-title';
-import { DataTable } from './data-table';
+import { CardTitle } from '../cards/card-title';
+import { DataTable } from '../table/data-table';
 
 export interface MarketData {
 	from: string;

@@ -1,9 +1,9 @@
 import { formatCurrency } from '@richochet/utils/functions';
 import { useState } from 'react';
+import { OutlineButton, SolidButton } from '../button';
+import { DoughnutChart } from '../graphs';
+import { DataTable } from '../table';
 import { BalanceTabs } from './balance-tabs';
-import { OutlineButton, SolidButton } from './button';
-import { DataTable } from './data-table';
-import { DoughnutChart } from './doughnut-chart';
 
 export interface TokenData {
 	token: string;

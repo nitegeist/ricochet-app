@@ -1,19 +1,17 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Alert } from '@richochet/components/alert';
 import { Balances } from '@richochet/components/balances';
 import { OutlineButton } from '@richochet/components/button';
-import { Card, CardWithBackground, CardWithOutline } from '@richochet/components/card';
-import { CardContainer } from '@richochet/components/card-container';
+import { Card, CardContainer, CardWithBackground, CardWithOutline, SmallCard } from '@richochet/components/cards';
 import { Footer } from '@richochet/components/footer';
 import { LaunchPad } from '@richochet/components/launchpad';
 import { Markets } from '@richochet/components/markets';
 import Navigation from '@richochet/components/navigation';
 import { Positions } from '@richochet/components/positions';
 import { Refer } from '@richochet/components/refer';
-import { SmallCard } from '@richochet/components/small-card';
 import { useIsMounted } from '@richochet/hooks/useIsMounted';
 import { formatCurrency } from '@richochet/utils/functions';
 import { tokens } from '@richochet/utils/tokens';
+import { ConnectKitButton } from 'connectkit';
 import { Token } from 'enumerations/token.enum';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
@@ -34,8 +32,8 @@ export async function getStaticProps({ locale }): Promise<Object> {
 }
 export default function Home({ locale }): JSX.Element {
 	const { address, isConnected } = useAccount();
-	const { data, isError, isLoading } = useBalance({
-		address: address,
+	const { data } = useBalance({
+		addressOrName: address,
 		watch: true,
 		token: tokens[Token.RIC],
 	});
@@ -92,45 +90,19 @@ export default function Home({ locale }): JSX.Element {
 										isConnected ? (
 											<Positions />
 										) : (
-											<div className='flex flex-col items-center justify-center space-y-4 h-72'>
+											<div className='flex flex-col items-center justify-center space-y-4 h-96'>
 												<p className='text-primary-500'>
 													Connect your wallet to see your positions or start a new position.
 												</p>
-												<ConnectButton.Custom>
-													{({ account, chain, openConnectModal, openChainModal, mounted }) => {
-														return (
-															<div
-																{...(!mounted && {
-																	'aria-hidden': true,
-																	style: {
-																		opacity: 0,
-																		pointerEvents: 'none',
-																		userSelect: 'none',
-																	},
-																})}>
-																{(() => {
-																	if (!mounted || !account || !chain) {
-																		return (
-																			<OutlineButton
-																				action='connect wallet'
-																				type='button'
-																				handleClick={openConnectModal}></OutlineButton>
-																		);
-																	}
-
-																	if (chain.unsupported) {
-																		return (
-																			<OutlineButton
-																				action='wrong network'
-																				type='button'
-																				handleClick={openChainModal}></OutlineButton>
-																		);
-																	}
-																})()}
-															</div>
-														);
-													}}
-												</ConnectButton.Custom>
+												<ConnectKitButton.Custom>
+													{({ isConnected, show }) => (
+														<>
+															{!isConnected && (
+																<OutlineButton action='connect wallet' type='button' handleClick={show}></OutlineButton>
+															)}
+														</>
+													)}
+												</ConnectKitButton.Custom>
 											</div>
 										)
 									}
@@ -143,43 +115,17 @@ export default function Home({ locale }): JSX.Element {
 										isConnected ? (
 											<Balances />
 										) : (
-											<div className='flex flex-col items-center justify-center space-y-4 h-72'>
+											<div className='flex flex-col items-center justify-center space-y-4 h-96'>
 												<p className='text-primary-500'>Connect your wallet to see your balances.</p>
-												<ConnectButton.Custom>
-													{({ account, chain, openConnectModal, openChainModal, mounted }) => {
-														return (
-															<div
-																{...(!mounted && {
-																	'aria-hidden': true,
-																	style: {
-																		opacity: 0,
-																		pointerEvents: 'none',
-																		userSelect: 'none',
-																	},
-																})}>
-																{(() => {
-																	if (!mounted || !account || !chain) {
-																		return (
-																			<OutlineButton
-																				action='connect wallet'
-																				type='button'
-																				handleClick={openConnectModal}></OutlineButton>
-																		);
-																	}
-
-																	if (chain.unsupported) {
-																		return (
-																			<OutlineButton
-																				action='wrong network'
-																				type='button'
-																				handleClick={openChainModal}></OutlineButton>
-																		);
-																	}
-																})()}
-															</div>
-														);
-													}}
-												</ConnectButton.Custom>
+												<ConnectKitButton.Custom>
+													{({ isConnected, show }) => (
+														<>
+															{!isConnected && (
+																<OutlineButton action='connect wallet' type='button' handleClick={show}></OutlineButton>
+															)}
+														</>
+													)}
+												</ConnectKitButton.Custom>
 											</div>
 										)
 									}

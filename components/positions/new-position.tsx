@@ -5,8 +5,8 @@ import ETHLogo from 'icons/eth-logo';
 import RicochetLogo from 'icons/richochet-logo';
 import { NextPage } from 'next';
 import { Fragment, useState } from 'react';
-import { RoundedButton } from './button';
-import { LineGraph } from './line-graph';
+import { RoundedButton } from '../button';
+import { LineGraph } from '../graphs';
 
 const tokens = ['ETH', 'RIC', 'BTC'];
 const postionTypes = ['anually', 'bi-weekly', '∞ continuous (monthly)', 'weekly'];

@@ -4,8 +4,8 @@ import RicochetLogo from 'icons/richochet-logo';
 import USDCLogo from 'icons/usdc-logo';
 import { NextPage } from 'next';
 import { useState } from 'react';
+import { LineGraph } from '../graphs/line-graph';
 import { EditPosition } from './edit-position';
-import { LineGraph } from './line-graph';
 import { PositionData } from './positions';
 
 interface Props {

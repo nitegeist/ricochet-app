@@ -6,9 +6,9 @@ import ETHLogo from 'icons/eth-logo';
 import RicochetLogo from 'icons/richochet-logo';
 import USDCLogo from 'icons/usdc-logo';
 import { NextPage } from 'next';
-import { TokenData } from './balances';
-import { MarketData } from './markets';
-import { PositionData } from './positions';
+import { TokenData } from '../balances';
+import { MarketData } from '../markets';
+import { PositionData } from '../positions';
 
 interface Props {
 	headers: string[];

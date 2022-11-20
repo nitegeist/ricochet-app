@@ -5,7 +5,7 @@ import ETHLogo from 'icons/eth-logo';
 import RicochetLogo from 'icons/richochet-logo';
 import { NextPage } from 'next';
 import { Fragment, useState } from 'react';
-import { RoundedButton } from './button';
+import { RoundedButton } from '../button';
 
 const tokens = ['ETH', 'RIC', 'BTC'];
 const tolerance = ['0.02%', '0.03%', '0.05%'];

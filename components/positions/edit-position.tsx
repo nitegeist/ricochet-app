@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { useState } from 'react';
-import { OutlineButton, RoundedButton } from './button';
+import { OutlineButton, RoundedButton } from '../button';
 import { PositionData } from './positions';
 
 interface Props {
