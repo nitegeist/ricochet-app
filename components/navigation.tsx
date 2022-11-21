@@ -6,6 +6,7 @@ import { ConnectKitButton } from 'connectkit';
 import { Token } from 'enumerations/token.enum';
 import RicochetLogo from 'icons/richochet-logo';
 import { useTranslation } from 'next-i18next';
+import Link from 'next/link';
 import { Fragment } from 'react';
 import { useAccount, useBalance, useDisconnect } from 'wagmi';
 import { RoundedButton } from './button';
@@ -24,10 +25,10 @@ export default function Navigation(): JSX.Element {
 		<Disclosure as='nav' className='navbar'>
 			{({ open }) => (
 				<>
-					<a href='#' className='p-2 mr-4 inline-flex items-center space-x-2' draggable={false}>
+					<Link href='/' className='p-2 mr-4 inline-flex items-center space-x-2' draggable={false}>
 						<RicochetLogo width='50' height='25' />
 						<span className='text-xl tracking-wide'>Ricochet</span>
-					</a>
+					</Link>
 					<Disclosure.Button className='btn-mobile-menu'>
 						<span className='sr-only'>Open main menu</span>
 						{open ? (

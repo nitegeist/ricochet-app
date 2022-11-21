@@ -1,4 +1,3 @@
-import { formatCurrency } from '@richochet/utils/functions';
 import { useState } from 'react';
 import { OutlineButton, SolidButton } from '../button';
 import { DoughnutChart } from '../graphs';
@@ -8,7 +7,7 @@ import { BalanceTabs } from './balance-tabs';
 export interface TokenData {
 	token: string;
 	amount: number;
-	dollarVal: string;
+	dollarVal: number;
 }
 
 const headerTitles = ['token', 'amount', 'dollar-value'];
@@ -16,32 +15,32 @@ const tokenData: TokenData[] = [
 	{
 		token: 'ETH',
 		amount: 3.445,
-		dollarVal: formatCurrency(6856.45),
+		dollarVal: 6856.45,
 	},
 	{
 		token: 'BTC',
 		amount: 0.879,
-		dollarVal: formatCurrency(2212.89),
+		dollarVal: 2212.89,
 	},
 	{
 		token: 'RIC',
 		amount: 6893,
-		dollarVal: formatCurrency(46.456),
+		dollarVal: 46.456,
 	},
 	{
 		token: 'ETH',
 		amount: 3.445,
-		dollarVal: formatCurrency(6856.45),
+		dollarVal: 6856.45,
 	},
 	{
 		token: 'ETH',
 		amount: 3.445,
-		dollarVal: formatCurrency(6856.45),
+		dollarVal: 6856.45,
 	},
 	{
 		token: 'ETH',
 		amount: 3.445,
-		dollarVal: formatCurrency(6856.45),
+		dollarVal: 6856.45,
 	},
 ];
 
@@ -82,7 +81,7 @@ export const Balances = (): JSX.Element => {
 						/>
 					</div>
 					<div className='flex justify-center my-4'>
-						<DoughnutChart />
+						<DoughnutChart tokens={tokenData} />
 					</div>
 					<DataTable headers={headerTitles} rowData={tokenData} />
 				</>

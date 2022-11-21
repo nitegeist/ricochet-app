@@ -1,5 +1,5 @@
 import { ArrowLongRightIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
-import { combineClasses } from '@richochet/utils/functions';
+import { combineClasses, formatCurrency } from '@richochet/utils/functions';
 import usePagination from 'hooks/usePagination';
 import BTCLogo from 'icons/btc-logo';
 import ETHLogo from 'icons/eth-logo';
@@ -102,7 +102,7 @@ export const DataTable: NextPage<Props> = ({ headers, rowData, selectable, selec
 											</span>
 										</td>
 										<td className='px-6 py-4 whitespace-nowrap'>{data.amount}</td>
-										<td className='px-6 py-4 whitespace-nowrap'>{data.dollarVal}</td>
+										<td className='px-6 py-4 whitespace-nowrap'>{formatCurrency(data.dollarVal)}</td>
 									</>
 								) : (
 									<></>
