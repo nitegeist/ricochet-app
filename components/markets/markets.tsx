@@ -96,7 +96,7 @@ export const Markets = () => {
 					</>
 				}
 			/>
-			<DataTable headers={marketTitles} rowData={marketData} />
+			<DataTable headers={marketTitles} rowData={marketData} tableLoaderRows={12} />
 		</>
 	);
 };

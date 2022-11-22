@@ -156,6 +156,7 @@ export const Positions = () => {
 						<DataTable
 							headers={positionTitles}
 							rowData={positionData}
+							tableLoaderRows={12}
 							selectable={true}
 							selectData={(data: PositionData) => {
 								setSelectedPosition(data);

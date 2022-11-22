@@ -68,8 +68,8 @@ export default function Home({ locale }): JSX.Element {
 		<>
 			<Head>
 				<title>Ricochet | Streaming Exchange</title>
-				<meta name='description' content='A place to exchange tokens' />
-				<link rel='icon' type='image/png' href='/favicon.png' />
+				<meta name='description' content='Automatic Real-Time Crypto Investing' />
+				<link rel='icon' href='/favicon.ico' />
 				<link rel='icon' type='image/svg+xml' href='/favicon.svg' />
 			</Head>
 			<div className='bg-gradient-to-b from-background-700 via-background-800 to-background-900 overflow-clip'>

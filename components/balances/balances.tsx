@@ -83,7 +83,7 @@ export const Balances = (): JSX.Element => {
 					<div className='flex justify-center my-4'>
 						<DoughnutChart tokens={tokenData} />
 					</div>
-					<DataTable headers={headerTitles} rowData={tokenData} />
+					<DataTable headers={headerTitles} rowData={tokenData} tableLoaderRows={6} />
 				</>
 			)}
 		</>

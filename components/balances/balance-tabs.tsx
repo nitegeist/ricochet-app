@@ -1,5 +1,6 @@
 import { Tab } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
+import { BalanceAction } from 'enumerations/balanceActions.enum';
 import { NextPage } from 'next';
 import { Fragment, useEffect, useState } from 'react';
 import { TransactionContent } from '../transactions';
@@ -48,13 +49,13 @@ export const BalanceTabs: NextPage<Props> = ({ close, setClose, action }) => {
 			</Tab.List>
 			<Tab.Panels>
 				<Tab.Panel>
-					<TransactionContent type='withdraw' close={close} setClose={setClose} />
+					<TransactionContent type={BalanceAction.Withdraw} close={close} setClose={setClose} />
 				</Tab.Panel>
 				<Tab.Panel>
-					<TransactionContent type='deposit' close={close} setClose={setClose} />
+					<TransactionContent type={BalanceAction.Deposit} close={close} setClose={setClose} />
 				</Tab.Panel>
 				<Tab.Panel>
-					<TransactionContent type='swap' close={close} setClose={setClose} />
+					<TransactionContent type={BalanceAction.Swap} close={close} setClose={setClose} />
 				</Tab.Panel>
 			</Tab.Panels>
 		</Tab.Group>

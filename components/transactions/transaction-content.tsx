@@ -1,5 +1,6 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
+import { BalanceAction } from 'enumerations/balanceActions.enum';
 import BTCLogo from 'icons/btc-logo';
 import ETHLogo from 'icons/eth-logo';
 import RicochetLogo from 'icons/richochet-logo';
@@ -11,7 +12,7 @@ const tokens = ['ETH', 'RIC', 'BTC'];
 const tolerance = ['0.02%', '0.03%', '0.05%'];
 
 interface Props {
-	type: 'withdraw' | 'deposit' | 'swap';
+	type: BalanceAction;
 	close: boolean;
 	setClose: Function;
 }
@@ -28,7 +29,7 @@ export const TransactionContent: NextPage<Props> = ({ type, close, setClose }) =
 	return (
 		<div className='flex flex-col items-start'>
 			<form onSubmit={handleSubmit} className='flex flex-col items-start w-full space-y-6'>
-				{(type === 'withdraw' || type === 'deposit') && (
+				{(type === BalanceAction.Withdraw || type === BalanceAction.Deposit) && (
 					<>
 						<label className='text-slate-100'>Which token do you wish to {type}?</label>
 						<Listbox value={selectedToken} onChange={setSelectedToken}>
@@ -100,10 +101,10 @@ export const TransactionContent: NextPage<Props> = ({ type, close, setClose }) =
 						</Listbox>
 					</>
 				)}
-				{type === 'swap' && (
+				{type === BalanceAction.Swap && (
 					<>
 						<label className='text-slate-100'>
-							Which {type === 'swap' ? 'tokens' : 'token'} do you wish to {type}?
+							Which {type === BalanceAction.Swap.toLowerCase() ? 'tokens' : 'token'} do you wish to {type}?
 						</label>
 						<div className='flex items-center space-x-2 w-full'>
 							<span className='text-slate-100'>From: </span>
@@ -254,9 +255,9 @@ export const TransactionContent: NextPage<Props> = ({ type, close, setClose }) =
 					value={amount}
 					step='any'
 					onChange={(e) => setAmount(e.target.value)}
-					placeholder={type === 'swap' ? `Amount in ${swapFrom}` : 'Amount'}
+					placeholder={type === BalanceAction.Swap ? `Amount in ${swapFrom}` : 'Amount'}
 				/>
-				{type === 'swap' && (
+				{type === BalanceAction.Swap && (
 					<>
 						<label className='text-slate-100'>Choose slippage tolerance:</label>
 						<Listbox value={slippageTolerance} onChange={setSlippageTolerance}>
