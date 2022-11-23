@@ -34,7 +34,6 @@ export default function Home({ locale }): JSX.Element {
 	const { address, isConnected } = useAccount();
 	const { data } = useBalance({
 		addressOrName: address,
-		watch: true,
 		chainId: 137,
 		token: tokens[Token.RIC],
 	});

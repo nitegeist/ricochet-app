@@ -4,7 +4,7 @@ import RicochetLogo from 'icons/richochet-logo';
 import USDCLogo from 'icons/usdc-logo';
 import { NextPage } from 'next';
 import { useState } from 'react';
-import { LineGraph } from '../graphs/line-graph';
+import { AreaGraph } from '../graphs/area-graph';
 import { EditPosition } from './edit-position';
 import { PositionData } from './positions';
 
@@ -54,7 +54,7 @@ export const ViewPosition: NextPage<Props> = ({ setClose, position }) => {
 				</div>
 				{!edit && (
 					<div className='w-full md:w-1/2'>
-						<LineGraph />
+						<AreaGraph />
 						<p className='text-slate-100 my-2'>
 							<span className='text-slate-400'>average buy price:</span> 1 ETH = {formatCurrency(1456.78)}
 						</p>

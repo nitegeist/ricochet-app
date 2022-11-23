@@ -11,7 +11,6 @@
   "dependencies": {
     "@headlessui/react": "^1.7.3",
     "@heroicons/react": "^2.0.12",
-    "chart.js": "^3.9.1",
     "connectkit": "^1.0.0",
     "ethers": "^5.7.2",
     "i18next": "^22.0.4",
@@ -19,9 +18,9 @@
     "next": "13.0.0",
     "next-i18next": "^12.1.0",
     "react": "18.2.0",
-    "react-chartjs-2": "^4.3.1",
     "react-dom": "18.2.0",
     "react-i18next": "^12.0.0",
+    "recharts": "^2.1.16",
     "wagmi": "0.7.15"
   },
   "devDependencies": {

@@ -1,3 +1,3 @@
+export * from './area-graph';
 export * from './doughnut-chart';
-export * from './line-graph';
 

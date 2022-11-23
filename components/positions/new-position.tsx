@@ -6,7 +6,7 @@ import RicochetLogo from 'icons/richochet-logo';
 import { NextPage } from 'next';
 import { Fragment, useState } from 'react';
 import { RoundedButton } from '../button';
-import { LineGraph } from '../graphs';
+import { AreaGraph } from '../graphs';
 
 const tokens = ['ETH', 'RIC', 'BTC'];
 const postionTypes = ['anually', 'bi-weekly', '∞ continuous (monthly)', 'weekly'];
@@ -240,7 +240,7 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 					</Listbox>
 				</form>
 				<div className='w-full lg:w-1/2'>
-					<LineGraph />
+					<AreaGraph />
 				</div>
 				<div className='flex space-x-4 w-full justify-end'>
 					<button type='button' className='text-slate-100 underline' onClick={() => setClose(!close)}>

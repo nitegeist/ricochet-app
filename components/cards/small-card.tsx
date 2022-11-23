@@ -17,7 +17,7 @@ export const SmallCard: NextPage<Props> = ({ stat: { title, value } }) => {
 					</div>
 				</div>
 			)}
-			{title && value && (
+			{!!title && !!value && (
 				<>
 					<h6 className='font-light uppercase tracking-widest text-primary-500'>
 						{t(`${title.toLocaleLowerCase().replace(/\s/g, '')}`)}

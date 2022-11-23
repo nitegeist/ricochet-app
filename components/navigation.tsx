@@ -16,7 +16,6 @@ export default function Navigation(): JSX.Element {
 	const { address, isConnected } = useAccount();
 	const { data, isError, isLoading } = useBalance({
 		addressOrName: address,
-		watch: true,
 		chainId: 137,
 		token: tokens[Token.RIC],
 	});
