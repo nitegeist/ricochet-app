@@ -1,7 +1,5 @@
 import { faker } from '@faker-js/faker';
-import useBreakpoint from '@richochet/hooks/useBreakpoint';
-import breakpoints from '@richochet/utils/breakpoints';
-import { Area, AreaChart, Tooltip, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 interface ChartData {
 	name: string;
@@ -23,36 +21,16 @@ labels.map((label) => {
 });
 
 export const AreaGraph = () => {
-	const breakpoint = useBreakpoint();
 	return (
-		<AreaChart
-			width={
-				breakpoint < breakpoints[640]
-					? 300
-					: breakpoint >= breakpoints[768] && breakpoint < breakpoints[1024]
-					? 400
-					: breakpoint >= breakpoints[1024] && breakpoint < breakpoints[1280]
-					? 200
-					: breakpoint >= breakpoints[1280] && breakpoint < breakpoints[1536]
-					? 600
-					: 300
-			}
-			height={
-				breakpoint < breakpoints[640]
-					? 200
-					: breakpoint < breakpoints[768] && breakpoint < breakpoints[1024]
-					? 400
-					: breakpoint < breakpoints[1024] && breakpoint < breakpoints[1280]
-					? 200
-					: breakpoint < breakpoints[1280] && breakpoint < breakpoints[1536]
-					? 600
-					: 300
-			}
-			data={data}>
-			<XAxis dataKey='name' />
-			<YAxis />
-			<Tooltip />
-			<Area type='monotone' dataKey='uv' stroke='#81a8ce' fill='#81a8ce' />
-		</AreaChart>
+		<div className='h-52 min-h-full w-52 min-w-full'>
+			<ResponsiveContainer height='100%' width='100%'>
+				<AreaChart data={data}>
+					<XAxis dataKey='name' />
+					<YAxis />
+					<Tooltip />
+					<Area type='monotone' dataKey='uv' stroke='#81a8ce' fill='#81a8ce' />
+				</AreaChart>
+			</ResponsiveContainer>
+		</div>
 	);
 };

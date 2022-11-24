@@ -12,25 +12,49 @@ export const Footer = () => {
 			<section className='flex flex-wrap items-center space-x-14 lg:space-x-32'>
 				<article className='flex flex-col space-y-4'>
 					<h6 className='text-slate-600 font-bold'>{t('support')}</h6>
-					<a href='http://' className='text-primary-400 underline'>
+					<a
+						href='https://discord.gg/ptqCBnJ9dr'
+						target='_blank'
+						rel='noopener noreferrer'
+						className='text-primary-400 underline'>
 						{t('discord')}
 					</a>
-					<a href='http://' className='text-primary-400 underline'>
+					<a
+						href='https://docs.ricochet.exchange/tutorial/using-the-dapp'
+						target='_blank'
+						rel='noopener noreferrer'
+						className='text-primary-400 underline'>
 						{t('tutorials')}
 					</a>
-					<a href='http://' className='text-primary-400 underline'>
+					<a
+						href='https://docs.ricochet.exchange/'
+						target='_blank'
+						rel='noopener noreferrer'
+						className='text-primary-400 underline'>
 						{t('documentation')}
 					</a>
 				</article>
 				<article className='flex flex-col space-y-4'>
 					<h6 className='text-slate-600 font-bold'>{t('explore')}</h6>
-					<a href='http://' className='text-primary-400 underline'>
+					<a
+						href='https://medium.com/ricochet-exchange'
+						target='_blank'
+						rel='noopener noreferrer'
+						className='text-primary-400 underline'>
 						{t('medium')}
 					</a>
-					<a href='http://' className='text-primary-400 underline'>
+					<a
+						href='https://github.com/Ricochet-Exchange/'
+						target='_blank'
+						rel='noopener noreferrer'
+						className='text-primary-400 underline'>
 						{t('github')}
 					</a>
-					<a href='http://' className='text-primary-400 underline'>
+					<a
+						href='https://twitter.com/ricochetxchange'
+						target='_blank'
+						rel='noopener noreferrer'
+						className='text-primary-400 underline'>
 						{t('twitter')}
 					</a>
 				</article>

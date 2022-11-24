@@ -28,7 +28,7 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 	return (
 		<>
 			<p className='text-primary-500 uppercase'>Your Positions</p>
-			<div className='flex flex-wrap items-center justify-between space-y-4 mt-4'>
+			<div className='flex flex-wrap items-center justify-between space-y-8 lg:space-y-0 mt-4'>
 				<form
 					id='new-position-form'
 					className='flex flex-col items-start lg:p-8 w-full lg:w-1/2 space-y-6'
