@@ -9,7 +9,7 @@ export const Footer = () => {
 				<RicochetLogoWhite width='50' height='25' />
 				<span className='text-slate-100 font-semibold tracking-wide'>Ricochet</span>
 			</h6>
-			<section className='flex flex-wrap items-center space-x-14 lg:space-x-32'>
+			<section className='flex flex-wrap items-center space-x-8 md:space-x-14 lg:space-x-32'>
 				<article className='flex flex-col space-y-4'>
 					<h6 className='text-slate-600 font-bold'>{t('support')}</h6>
 					<a
