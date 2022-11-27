@@ -61,13 +61,19 @@ export default function Navigation(): JSX.Element {
 											{(() => {
 												if (!isConnected) {
 													return (
-														<RoundedButton action='connect wallet' handleClick={show} type='button'></RoundedButton>
+														<RoundedButton
+															action={`${t('connect-wallet')}`}
+															handleClick={show}
+															type='button'></RoundedButton>
 													);
 												}
 
 												if (unsupported) {
 													return (
-														<RoundedButton action='wrong network' handleClick={show} type='button'></RoundedButton>
+														<RoundedButton
+															action={`${t('wrong-network')}`}
+															handleClick={show}
+															type='button'></RoundedButton>
 													);
 												}
 
@@ -86,13 +92,13 @@ export default function Navigation(): JSX.Element {
 									<Disclosure.Button
 										as='a'
 										className='block rounded-md px-3 py-2 text-base font-medium text-slate-400 hover:bg-slate-700 hover:text-slate-100 cursor-pointer'>
-										{t(`youractivity`)}
+										{t(`your-activity`)}
 									</Disclosure.Button>
 									<Disclosure.Button
 										as='a'
 										onClick={() => disconnect()}
 										className='block rounded-md px-3 py-2 text-base font-medium text-slate-400 hover:bg-slate-700 hover:text-slate-100 cursor-pointer'>
-										{t(`disconnectwallet`)}
+										{t(`disconnect-wallet`)}
 									</Disclosure.Button>
 								</div>
 							)}
@@ -122,11 +128,21 @@ export default function Navigation(): JSX.Element {
 									<>
 										{(() => {
 											if (!isConnected) {
-												return <RoundedButton action='connect wallet' handleClick={show} type='button'></RoundedButton>;
+												return (
+													<RoundedButton
+														action={`${t('connect-wallet')}`}
+														handleClick={show}
+														type='button'></RoundedButton>
+												);
 											}
 
 											if (unsupported) {
-												return <RoundedButton action='wrong network' handleClick={show} type='button'></RoundedButton>;
+												return (
+													<RoundedButton
+														action={`${t('wrong-network')}`}
+														handleClick={show}
+														type='button'></RoundedButton>
+												);
 											}
 
 											return (
@@ -155,7 +171,7 @@ export default function Navigation(): JSX.Element {
 																			active ? 'bg-slate-100' : '',
 																			'block px-4 py-2 text-sm text-slate-600 cursor-pointer'
 																		)}>
-																		{t('youractivity')}
+																		{t('your-activity')}
 																	</a>
 																)}
 															</Menu.Item>
@@ -167,7 +183,7 @@ export default function Navigation(): JSX.Element {
 																			active ? 'bg-slate-100' : '',
 																			'block px-4 py-2 text-sm text-slate-600 cursor-pointer'
 																		)}>
-																		{t('disconnectwallet')}
+																		{t('disconnect-wallet')}
 																	</a>
 																)}
 															</Menu.Item>

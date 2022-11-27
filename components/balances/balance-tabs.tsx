@@ -2,6 +2,7 @@ import { Tab } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { BalanceAction } from 'enumerations/balanceActions.enum';
 import { NextPage } from 'next';
+import { useTranslation } from 'next-i18next';
 import { Fragment, useEffect, useState } from 'react';
 import { TransactionContent } from '../transactions';
 
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export const BalanceTabs: NextPage<Props> = ({ close, setClose, action }) => {
+	const { t } = useTranslation('home');
 	const [selectedIndex, setSelectedIndex] = useState(0);
 	useEffect(() => {
 		setSelectedIndex(action);
@@ -23,7 +25,7 @@ export const BalanceTabs: NextPage<Props> = ({ close, setClose, action }) => {
 					{({ selected }) => (
 						<button
 							className={selected ? 'text-slate-100 border-b-2 border-primary-500' : 'text-slate-400 border-none'}>
-							withdraw
+							{t('withdraw')}
 						</button>
 					)}
 				</Tab>
@@ -31,7 +33,7 @@ export const BalanceTabs: NextPage<Props> = ({ close, setClose, action }) => {
 					{({ selected }) => (
 						<button
 							className={selected ? 'text-slate-100 border-b-2 border-primary-500' : 'text-slate-400 border-none'}>
-							deposit
+							{t('deposit')}
 						</button>
 					)}
 				</Tab>
@@ -39,7 +41,7 @@ export const BalanceTabs: NextPage<Props> = ({ close, setClose, action }) => {
 					{({ selected }) => (
 						<button
 							className={selected ? 'text-slate-100 border-b-2 border-primary-500' : 'text-slate-400 border-none'}>
-							swap
+							{t('swap')}
 						</button>
 					)}
 				</Tab>

@@ -59,7 +59,9 @@ export default function Home({ locale }): JSX.Element {
 								<SmallCard
 									content={
 										<>
-											<h6 className='font-light uppercase tracking-widest text-primary-500'>{t('total-in-positions')}</h6>
+											<h6 className='font-light uppercase tracking-widest text-primary-500'>
+												{t('total-in-positions')}
+											</h6>
 											<p className='text-slate-100 font-light text-2xl'>{formatCurrency(2556.789)}</p>
 										</>
 									}
@@ -101,14 +103,15 @@ export default function Home({ locale }): JSX.Element {
 											<Positions />
 										) : (
 											<div className='flex flex-col items-center justify-center space-y-4 h-96'>
-												<p className='text-primary-500'>
-													Connect your wallet to see your positions or start a new position.
-												</p>
+												<p className='text-primary-500'>{t('connect-for-positions')}.</p>
 												<ConnectKitButton.Custom>
 													{({ isConnected, show }) => (
 														<>
 															{!isConnected && (
-																<OutlineButton action='connect wallet' type='button' handleClick={show}></OutlineButton>
+																<OutlineButton
+																	action={`${t('connect-wallet')}`}
+																	type='button'
+																	handleClick={show}></OutlineButton>
 															)}
 														</>
 													)}
@@ -126,12 +129,15 @@ export default function Home({ locale }): JSX.Element {
 											<Balances />
 										) : (
 											<div className='flex flex-col items-center justify-center space-y-4 h-96'>
-												<p className='text-primary-500'>Connect your wallet to see your balances.</p>
+												<p className='text-primary-500'>{t('connect-for-balances')}.</p>
 												<ConnectKitButton.Custom>
 													{({ isConnected, show }) => (
 														<>
 															{!isConnected && (
-																<OutlineButton action='connect wallet' type='button' handleClick={show}></OutlineButton>
+																<OutlineButton
+																	action={`${t('connect-wallet')}`}
+																	type='button'
+																	handleClick={show}></OutlineButton>
 															)}
 														</>
 													)}

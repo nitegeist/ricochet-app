@@ -5,6 +5,7 @@ import BTCLogo from 'icons/btc-logo';
 import ETHLogo from 'icons/eth-logo';
 import RicochetLogo from 'icons/richochet-logo';
 import { NextPage } from 'next';
+import { useTranslation } from 'next-i18next';
 import { Fragment, useState } from 'react';
 import { RoundedButton } from '../button';
 
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export const TransactionContent: NextPage<Props> = ({ type, close, setClose }) => {
+	const { t } = useTranslation('home');
 	const [selectedToken, setSelectedToken] = useState(tokens[0]);
 	const [swapFrom, setSwapFrom] = useState(tokens[0]);
 	const [swapTo, setSwapTo] = useState(tokens[1]);
@@ -31,7 +33,9 @@ export const TransactionContent: NextPage<Props> = ({ type, close, setClose }) =
 			<form onSubmit={handleSubmit} className='flex flex-col items-start w-full space-y-6'>
 				{(type === BalanceAction.Withdraw || type === BalanceAction.Deposit) && (
 					<>
-						<label className='text-slate-100'>Which token do you wish to {type}?</label>
+						<label className='text-slate-100'>
+							{t('token-action')} {t(type)}?
+						</label>
 						<Listbox value={selectedToken} onChange={setSelectedToken}>
 							<div className='relative w-full z-10'>
 								<Listbox.Button className='relative w-full cursor-default rounded-lg bg-slate-700 py-2 pl-3 pr-10 text-left text-slate-200 shadow-md focus:outline-none focus-visible:border-slate-500 focus-visible:ring-2 focus-visible:ring-slate-100 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-300 sm:text-sm'>
@@ -104,10 +108,10 @@ export const TransactionContent: NextPage<Props> = ({ type, close, setClose }) =
 				{type === BalanceAction.Swap && (
 					<>
 						<label className='text-slate-100'>
-							Which {type === BalanceAction.Swap.toLowerCase() ? 'tokens' : 'token'} do you wish to {type}?
+							{type === BalanceAction.Swap ? t('tokens-action') : t('token-action')} {t(type)}?
 						</label>
 						<div className='flex items-center space-x-2 w-full'>
-							<span className='text-slate-100'>From: </span>
+							<span className='text-slate-100'>{t('from')}: </span>
 							<Listbox value={swapFrom} onChange={setSwapFrom}>
 								<div className='relative w-full z-20'>
 									<Listbox.Button className='relative w-full cursor-default rounded-lg bg-slate-700 py-2 pl-3 pr-10 text-left text-slate-200 shadow-md focus:outline-none focus-visible:border-slate-500 focus-visible:ring-2 focus-visible:ring-slate-100 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-300 sm:text-sm'>
@@ -177,7 +181,7 @@ export const TransactionContent: NextPage<Props> = ({ type, close, setClose }) =
 							</Listbox>
 						</div>
 						<div className='flex items-center space-x-2 w-full'>
-							<span className='text-slate-100'>To: </span>
+							<span className='text-slate-100'>{t('to')}: </span>
 							<Listbox value={swapTo} onChange={setSwapTo}>
 								<div className='relative w-full z-10'>
 									<Listbox.Button className='relative w-full cursor-default rounded-lg bg-slate-700 py-2 pl-3 pr-10 text-left text-slate-200 shadow-md focus:outline-none focus-visible:border-slate-500 focus-visible:ring-2 focus-visible:ring-slate-100 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-300 sm:text-sm'>
@@ -248,18 +252,20 @@ export const TransactionContent: NextPage<Props> = ({ type, close, setClose }) =
 						</div>
 					</>
 				)}
-				<label className='text-slate-100'>Which amount do you wish to {type}?</label>
+				<label className='text-slate-100'>
+					{t('amount-action')} {t(type)}?
+				</label>
 				<input
 					type='number'
 					className='input-outline'
 					value={amount}
 					step='any'
 					onChange={(e) => setAmount(e.target.value)}
-					placeholder={type === BalanceAction.Swap ? `Amount in ${swapFrom}` : 'Amount'}
+					placeholder={type === BalanceAction.Swap ? `${t('amount-in')} ${swapFrom}` : t('amount')}
 				/>
 				{type === BalanceAction.Swap && (
 					<>
-						<label className='text-slate-100'>Choose slippage tolerance:</label>
+						<label className='text-slate-100'>{t('slippage-tolerance')}:</label>
 						<Listbox value={slippageTolerance} onChange={setSlippageTolerance}>
 							<div className='relative w-full z-10'>
 								<Listbox.Button className='relative w-full cursor-default rounded-lg bg-slate-700 py-2 pl-3 pr-10 text-left text-slate-200 shadow-md focus:outline-none focus-visible:border-slate-500 focus-visible:ring-2 focus-visible:ring-slate-100 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-300 sm:text-sm'>
@@ -299,14 +305,16 @@ export const TransactionContent: NextPage<Props> = ({ type, close, setClose }) =
 								</Transition>
 							</div>
 						</Listbox>
-						<p className='text-slate-100'>Minimum output amount: ...{swapTo}</p>
+						<p className='text-slate-100'>
+							{t('min-output-amt')}: ...{swapTo}
+						</p>
 					</>
 				)}
 				<div className='flex space-x-4 w-full justify-end'>
 					<button type='button' className='text-slate-100 underline' onClick={() => setClose(!close)}>
-						cancel
+						{t('cancel')}
 					</button>
-					<RoundedButton type='submit' action={`confirm ${type}`} />
+					<RoundedButton type='submit' action={`${t('confirm')} ${t(type)}`} />
 				</div>
 			</form>
 		</div>
