@@ -5,7 +5,7 @@ interface Props {
 	stat: Stat;
 }
 
-export const SmallCard: NextPage<Props> = ({ stat: { title, value } }) => {
+export const SmallCard: NextPage<Props> = ({ stat: { title, value, symbol } }) => {
 	const { t } = useTranslation('home');
 	return (
 		<div className='card-sm'>
@@ -22,7 +22,10 @@ export const SmallCard: NextPage<Props> = ({ stat: { title, value } }) => {
 					<h6 className='font-light uppercase tracking-widest text-primary-500'>
 						{t(`${title.toLocaleLowerCase().replace(/\s/g, '')}`)}
 					</h6>
-					<p className='text-slate-100 font-light text-2xl'>{value}</p>
+					<p className='text-slate-100 font-light text-2xl flex items-center space-x-1'>
+						<span className='truncate'>{value}</span>
+						{symbol && <span>{symbol}</span>}
+					</p>
 				</>
 			)}
 		</div>

@@ -21,6 +21,7 @@ import { useAccount, useBalance } from 'wagmi';
 export interface Stat {
 	title: string;
 	value: string;
+	symbol?: string;
 }
 
 export async function getStaticProps({ locale }): Promise<Object> {
@@ -51,7 +52,8 @@ export default function Home({ locale }): JSX.Element {
 		},
 		{
 			title: `${data?.symbol} Balance`,
-			value: `${data?.formatted} ${data?.symbol}`,
+			value: `${data?.formatted}`,
+			symbol: `${data?.symbol}`,
 		},
 		{
 			title: 'Rewards Earned',
