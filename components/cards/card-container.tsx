@@ -5,5 +5,5 @@ interface Props {
 }
 
 export const CardContainer: NextPage<Props> = ({ content }) => {
-	return <div className='container'>{content}</div>;
+	return <div className='card-container'>{content}</div>;
 };

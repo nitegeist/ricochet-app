@@ -1,4 +1,5 @@
 import { PlusSmallIcon } from '@heroicons/react/24/solid';
+import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { RoundedButton } from '../button';
 import { CardTitle } from '../cards';
@@ -16,7 +17,7 @@ export interface PositionData {
 	avgPrice: string;
 }
 
-const positionTitles = ['symbols', 'positions', 'time left', 'input', 'output', 'avg. price'];
+const positionTitles = ['symbols', 'positions', 'time left', 'input', 'output', 'average price'];
 
 const positionData: PositionData[] = [
 	{
@@ -130,6 +131,7 @@ const positionData: PositionData[] = [
 ];
 
 export const Positions = () => {
+	const { t } = useTranslation('home');
 	const [newPosition, newPositionClosed] = useState(true);
 	const [selectedPosition, setSelectedPosition] = useState(positionData[0]);
 	const [closePosition, setClosePosition] = useState(true);
@@ -140,11 +142,11 @@ export const Positions = () => {
 					<CardTitle
 						content={
 							<>
-								<p className='text-primary-500 uppercase'>Your Positions</p>
+								<p className='text-primary-500 uppercase'>{t('your-positions')}</p>
 								<RoundedButton
 									icon={<PlusSmallIcon className='h-4 w-4' />}
 									type='button'
-									action='new position'
+									action={`${t('new-position')}`}
 									handleClick={() => {
 										newPositionClosed(false);
 									}}

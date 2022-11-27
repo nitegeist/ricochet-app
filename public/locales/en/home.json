@@ -1,17 +1,1 @@
-{
-	"applyrefer": "Apply to refer your friends and receive a % of fees that Ricochet Exchange charges.",
-	"buyric": "buy 100,000 RIC",
-	"customizeurl": "Customize your referral url",
-	"disconnectwallet": "Disconnect Wallet",
-	"howdoesitwork": "How does it work?",
-	"netflowrate": "Net Flow Rate",
-	"refer": "Refer",
-	"registerurl": "register referral URL",
-	"rewardsearned": "Rewards Earned",
-	"ricbalance": "RIC Balance",
-	"start20position": "start $20/month-position",
-	"startaposition": "Start a position swapping any coin for RIC and gain access to token-gated content!",
-	"support": "support",
-	"totalinpositions": "Total in Positions",
-	"youractivity": "Your Activity"
-}
+{"amount":"amount","amount-action":"Which amount do you wish to","amount-in":"Amount in","annually":"annually","apply-refer":"Apply to refer your friends and receive a % of fees that Ricochet Exchange charges.","average-buy-price":"average buy price","average-price":"average price","bi-weekly":"bi-weekly","buy-ric":"buy 100,000 RIC","cancel":"cancel","change-swap-amount":"change swap-amount","confirm":"confirm","confirm-change":"confirm change","connect-for-balances":"Connect your wallet to see your balances","connect-for-positions":"Connect your wallet to see your positions or start a new position","continuous":"continuous (monthly)","current-price":"current price","customize-url":"Customize your referral url","day":"day","days":"days","deposit":"deposit","desired-swap-amount":"What is your desired swap-amount","disconnect-wallet":"Disconnect Wallet","dollar-value":"dollar value","editing-position":"editing position","edit-position":"edit position","from":"From","how-does-it-work":"How does it work?","input":"input","market":"market","markets":"Markets","min-output-amt":"Minimum output amount","month":"month","months":"months","net-flow-rate":"Net Flow Rate","new-position":"new position","output":"output","position-action":"What would you like to do to your position","position-amount":"Which amount do you wish to set for this new position","position-amt":"position amount","positions":"positions","position-select":"Select the position-type you wish to start","position-token":"Which token do you wish to use","refer":"Refer","register-url":"register referral URL","rewards-earned":"Rewards Earned","ric-balance":"RIC Balance","show-all":"show all","slippage-tolerance":"Choose slippage tolerance","start-20-position":"start $20/month-position","start-a-position":"Start a position swapping any coin for RIC and gain access to token-gated content!","start-new-position":"start new position","stop-position":"stop position","support":"support","swap":"swap","swap-amount":"Swap-amount","symbols":"symbols","time-left":"time left","to":"To","token":"token","token-action":"Which token do you wish to","tokens-action":"Which tokens do you wish to","total":"total","total-in-positions":"Total in Positions","weekly":"weekly","withdraw":"withdraw","your-activity":"Your Activity","your-balances":"Your Balances","your-positions":"Your Positions"}

@@ -1,4 +1,5 @@
 import { formatCurrency } from '@richochet/utils/functions';
+import { useTranslation } from 'next-i18next';
 import { CardTitle } from '../cards/card-title';
 import { DataTable } from '../table/data-table';
 
@@ -84,15 +85,16 @@ const marketData: MarketData[] = [
 	},
 ];
 
-const marketTitles = ['market', 'total', 'position amt.'];
+const marketTitles = ['market', 'total', 'position amount'];
 
 export const Markets = () => {
+	const { t } = useTranslation('home');
 	return (
 		<>
 			<CardTitle
 				content={
 					<>
-						<p className='text-slate-400 uppercase'>Markets</p>
+						<p className='text-slate-400 uppercase'>{t('markets')}</p>
 					</>
 				}
 			/>

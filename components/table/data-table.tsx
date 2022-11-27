@@ -6,6 +6,7 @@ import ETHLogo from 'icons/eth-logo';
 import RicochetLogo from 'icons/richochet-logo';
 import USDCLogo from 'icons/usdc-logo';
 import { NextPage } from 'next';
+import { useTranslation } from 'next-i18next';
 import { TokenData } from '../balances';
 import { MarketData } from '../markets';
 import { PositionData } from '../positions';
@@ -31,6 +32,7 @@ export const DataTable: NextPage<Props> = ({
 	selectData,
 	tableLoaderRows,
 }): JSX.Element => {
+	const { t } = useTranslation('home');
 	const { firstContentIndex, lastContentIndex, nextPage, prevPage, page, gaps, setPage, totalPages } = usePagination({
 		contentPerPage: 6,
 		count: rowData.length,
@@ -45,7 +47,7 @@ export const DataTable: NextPage<Props> = ({
 							<tr>
 								{headers.map((title, index) => (
 									<th scope='col' key={index} className='font-normal text-slate-400 px-6 py-4 text-start'>
-										{title}
+										{t(`${title.toLocaleLowerCase().replace(/\s/g, '-')}`)}
 									</th>
 								))}
 							</tr>

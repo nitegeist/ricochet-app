@@ -113,7 +113,7 @@ export default function Navigation(): JSX.Element {
 						{isError && <></>}
 						{!isLoading && !isError && isConnected && (
 							<p>
-								{data?.formatted} {data?.symbol}
+								{Number(data?.formatted).toFixed(2)} {data?.symbol}
 							</p>
 						)}
 						<ConnectKitButton.Custom>

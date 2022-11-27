@@ -17,8 +17,8 @@ export const Refer = () => {
 				<UsersIcon className='h-6 w-6' />
 				<p className='uppercase tracking-widest'>{t('refer')}</p>
 			</div>
-			<p className='text-slate-100'>{t('applyrefer')}</p>
-			<p className='text-slate-400'>{t('customizeurl')}:</p>
+			<p className='text-slate-100'>{t('apply-refer')}</p>
+			<p className='text-slate-400'>{t('customize-url')}:</p>
 			<form onSubmit={handleSubmit} className='space-y-4'>
 				<input
 					type='text'
@@ -27,14 +27,14 @@ export const Refer = () => {
 					onChange={(e) => setRefURL(e.target.value)}
 					placeholder='app.ricochet.exchange/#/ref/'
 				/>
-				<SolidButton type='submit' primary={true} action={t('registerurl')} />
+				<SolidButton type='submit' primary={true} action={t('register-url')} />
 			</form>
 			<a
 				className='inline-flex items-center space-x-1 text-primary-400'
 				href='http://'
 				target='_blank'
 				rel='noopener noreferrer'>
-				<span className='underline'>{t('howdoesitwork')}</span>
+				<span className='underline'>{t('how-does-it-work')}</span>
 			</a>
 		</div>
 	);

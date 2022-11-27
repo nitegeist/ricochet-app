@@ -10,9 +10,9 @@ export const LaunchPad = () => {
 				<RectangleGroupIcon className='h-6 w-6' />
 				<p className='uppercase tracking-widest'>Rexpro</p>
 			</div>
-			<p className='text-slate-100'>{t('startaposition')}</p>
-			<SolidButton type='button' primary={true} action={t('start20position')} />
-			<SolidButton type='button' primary={false} action={t('buyric')} />
+			<p className='text-slate-100'>{t('start-a-position')}</p>
+			<SolidButton type='button' primary={true} action={t('start-20-position')} />
+			<SolidButton type='button' primary={false} action={t('buy-ric')} />
 		</div>
 	);
 };

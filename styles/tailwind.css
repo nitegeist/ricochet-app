@@ -4,7 +4,7 @@
 
 @layer components {
 	.address-link {
-		@apply inline-flex items-center justify-center bg-slate-700 hover:bg-slate-600 text-slate-100 font-semibold py-1 px-3 lg:py-2 lg:px-6 rounded;
+		@apply inline-flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold py-1 px-3 lg:py-2 lg:px-6 rounded;
 	}
 	.btn-rounded {
 		@apply inline-flex items-center justify-center bg-slate-100 hover:bg-slate-300 disabled:bg-slate-200 disabled:text-slate-500 text-slate-800 font-semibold text-sm md:text-base py-2 px-3 lg:px-6 space-x-1 rounded;
@@ -19,19 +19,19 @@
 		@apply lg:hidden inline-flex items-center justify-center ml-auto rounded bg-slate-800 p-2 text-slate-100 hover:bg-slate-700 hover:text-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-100 focus:ring-offset-2 focus:ring-offset-slate-800;
 	}
 	.card-sm {
-		@apply flex flex-col bg-slate-800 rounded-lg px-10 py-8;
+		@apply flex flex-col bg-gradient-to-b from-card-800 to-card-900 rounded-lg px-10 py-8;
 	}
 
 	.card {
-		@apply flex flex-col bg-gradient-to-b from-slate-800 to-slate-900 text-slate-400 rounded-lg px-10 py-8;
+		@apply flex flex-col bg-gradient-to-b from-card-800 to-card-900 text-slate-400 rounded-lg px-10 py-8;
 	}
 
 	.card-outline {
 		@apply flex flex-col bg-transparent border border-primary-400 text-primary-400 rounded-lg px-10 py-8;
 	}
 
-	.container {
-		@apply bg-gradient-to-b from-slate-800 to-slate-900 text-slate-400 px-10 py-8 rounded-lg;
+	.card-container {
+		@apply bg-gradient-to-b from-card-800 to-card-900 text-slate-400 px-10 py-8 rounded-lg;
 	}
 
 	.input-outline {
@@ -39,7 +39,7 @@
 	}
 
 	.navbar {
-		@apply flex items-center bg-slate-900 text-slate-100 font-semibold p-3 flex-wrap;
+		@apply flex items-center bg-transparent text-slate-100 font-semibold p-3 flex-wrap;
 	}
 	.mobile-links {
 		@apply lg:hidden inline-flex w-full space-y-4 lg:space-x-6 items-stretch flex-col;

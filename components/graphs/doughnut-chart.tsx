@@ -1,5 +1,6 @@
 import { formatCurrency } from '@richochet/utils/functions';
 import { NextPage } from 'next';
+import { useTranslation } from 'next-i18next';
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
 import { TokenData } from '../balances';
 
@@ -13,6 +14,7 @@ interface ChartData {
 }
 
 export const DoughnutChart: NextPage<Props> = ({ tokens }): JSX.Element => {
+	const { t } = useTranslation('home');
 	const data: ChartData[] = [];
 	const COLORS = ['#B3FFFF', '#FF8D8F', '#7B7EFF'];
 	tokens
@@ -29,7 +31,7 @@ export const DoughnutChart: NextPage<Props> = ({ tokens }): JSX.Element => {
 			<ResponsiveContainer height='100%' width='100%'>
 				<PieChart>
 					<text fill='#81a8ce' x={100} y={80} textAnchor='middle' dominantBaseline='middle'>
-						total
+						{t('total')}
 					</text>
 					<text fill='white' x={100} y={110} fontWeight={600} textAnchor='middle' dominantBaseline='middle'>
 						{formatCurrency(total)}

@@ -13,16 +13,11 @@ import { formatCurrency } from '@richochet/utils/functions';
 import { tokens } from '@richochet/utils/tokens';
 import { ConnectKitButton } from 'connectkit';
 import { Token } from 'enumerations/token.enum';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useState } from 'react';
 import { useAccount, useBalance } from 'wagmi';
-
-export interface Stat {
-	title: string;
-	value: string;
-	symbol?: string;
-}
 
 export async function getStaticProps({ locale }): Promise<Object> {
 	return {
@@ -32,6 +27,7 @@ export async function getStaticProps({ locale }): Promise<Object> {
 	};
 }
 export default function Home({ locale }): JSX.Element {
+	const { t } = useTranslation('home');
 	const { address, isConnected } = useAccount();
 	const { data } = useBalance({
 		addressOrName: address,
@@ -40,26 +36,6 @@ export default function Home({ locale }): JSX.Element {
 	});
 	const isMounted = useIsMounted();
 	const [loading, setLoading] = useState(false);
-
-	const stats: Stat[] = [
-		{
-			title: 'Total in Positions',
-			value: formatCurrency(2556.789),
-		},
-		{
-			title: 'Net Flow Rate',
-			value: `${formatCurrency(2556.789)} / hr`,
-		},
-		{
-			title: `${data?.symbol} Balance`,
-			value: `${data?.formatted}`,
-			symbol: `${data?.symbol}`,
-		},
-		{
-			title: 'Rewards Earned',
-			value: formatCurrency(2556.789),
-		},
-	];
 
 	if (!isMounted) {
 		return <></>;
@@ -80,9 +56,41 @@ export default function Home({ locale }): JSX.Element {
 						{loading && <Alert type='loading' message='Waiting for your transaction to be confirmed...' />}
 						{isConnected && (
 							<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-items-stretch place-items-stretch gap-10'>
-								{stats.map((stat, index) => (
-									<SmallCard key={index} stat={stat} />
-								))}
+								<SmallCard
+									content={
+										<>
+											<h6 className='font-light uppercase tracking-widest text-primary-500'>{t('total-in-positions')}</h6>
+											<p className='text-slate-100 font-light text-2xl'>{formatCurrency(2556.789)}</p>
+										</>
+									}
+								/>
+								<SmallCard
+									content={
+										<>
+											<h6 className='font-light uppercase tracking-widest text-primary-500'>{t('net-flow-rate')}</h6>
+											<p className='text-slate-100 font-light text-2xl'>{formatCurrency(2556.789)} / hr</p>
+										</>
+									}
+								/>
+								<SmallCard
+									content={
+										<>
+											<h6 className='font-light uppercase tracking-widest text-primary-500'>{t('ric-balance')}</h6>
+											<p className='text-slate-100 font-light text-2xl space-x-1'>
+												<span>{Number(data?.formatted).toFixed(2)}</span>
+												<span>{data?.symbol}</span>
+											</p>
+										</>
+									}
+								/>
+								<SmallCard
+									content={
+										<>
+											<h6 className='font-light uppercase tracking-widest text-primary-500'>{t('rewards-earned')}</h6>
+											<p className='text-slate-100 font-light text-2xl'>{formatCurrency(2556.789)}</p>
+										</>
+									}
+								/>
 							</div>
 						)}
 						<div className='grid grid-cols-1 lg:grid-cols-3 gap-10 place-content-stretch mt-16'>
