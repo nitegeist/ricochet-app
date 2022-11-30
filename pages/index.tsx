@@ -17,7 +17,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useState } from 'react';
-import { useAccount, useBalance } from 'wagmi';
+import { chain, useAccount, useBalance } from 'wagmi';
 
 export async function getStaticProps({ locale }): Promise<Object> {
 	return {
@@ -31,7 +31,7 @@ export default function Home({ locale }): JSX.Element {
 	const { address, isConnected } = useAccount();
 	const { data } = useBalance({
 		addressOrName: address,
-		chainId: 137,
+		chainId: Number(chain.polygon),
 		token: tokens[Token.RIC],
 	});
 	const isMounted = useIsMounted();

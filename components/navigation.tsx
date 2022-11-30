@@ -8,7 +8,7 @@ import RicochetLogo from 'icons/richochet-logo';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { Fragment } from 'react';
-import { useAccount, useBalance, useDisconnect } from 'wagmi';
+import { chain, useAccount, useBalance, useDisconnect } from 'wagmi';
 import { RoundedButton } from './button';
 
 export default function Navigation(): JSX.Element {
@@ -16,7 +16,7 @@ export default function Navigation(): JSX.Element {
 	const { address, isConnected } = useAccount();
 	const { data, isError, isLoading } = useBalance({
 		addressOrName: address,
-		chainId: 137,
+		chainId: Number(chain.polygon),
 		token: tokens[Token.RIC],
 	});
 	const { t } = useTranslation('home');
