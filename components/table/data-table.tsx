@@ -1,6 +1,6 @@
 import { ArrowLongRightIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import usePagination from '@richochet/hooks/usePagination';
 import { combineClasses, formatCurrency } from '@richochet/utils/functions';
-import usePagination from 'hooks/usePagination';
 import BTCLogo from 'icons/btc-logo';
 import ETHLogo from 'icons/eth-logo';
 import RicochetLogo from 'icons/richochet-logo';

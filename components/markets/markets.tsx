@@ -85,7 +85,7 @@ const marketData: MarketData[] = [
 	},
 ];
 
-const marketTitles = ['market', 'total', 'position amount'];
+const marketTitles = ['market', 'total', 'amount of positions'];
 
 export const Markets = () => {
 	const { t } = useTranslation('home');
