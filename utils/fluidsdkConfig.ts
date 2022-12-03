@@ -1,12 +1,11 @@
 import { Framework } from '@superfluid-finance/sdk-core';
+import { getProvider } from '@wagmi/core';
+import { chain } from 'wagmi';
 
-interface Args {
-	provider: any;
-	chain: number;
-}
-
-export const getSFFramework = async (args: Args) =>
-	await Framework.create({
-		provider: args.provider,
-		chainId: Number(args.chain),
+export const getSFFramework = async () => {
+	const provider = getProvider({ chainId: Number(chain.polygon) });
+	return await Framework.create({
+		provider: provider,
+		chainId: Number(chain.polygon),
 	});
+};
