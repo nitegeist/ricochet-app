@@ -1,6 +1,8 @@
 import { ConnectKitProvider } from 'connectkit';
 import { appWithTranslation } from 'next-i18next';
 import type { AppProps } from 'next/app';
+import { Provider } from 'react-redux';
+import { store } from 'redux/store';
 import { chain, configureChains, createClient, defaultChains, defaultL2Chains, WagmiConfig } from 'wagmi';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { InjectedConnector } from 'wagmi/connectors/injected';
@@ -53,7 +55,9 @@ function App({ Component, pageProps }: AppProps) {
 					'--ck-accent-text-color': '##f1f5f9',
 					'--ck-body-background': '#16212C',
 				}}>
-				<Component {...pageProps} />
+				<Provider store={store}>
+					<Component {...pageProps} />
+				</Provider>
 			</ConnectKitProvider>
 		</WagmiConfig>
 	);

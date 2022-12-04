@@ -3,6 +3,8 @@
 		"baseUrl": ".",
 		"paths": {
 			"@richochet/components/*": ["components/*"],
+			"@richochet/api/*": ["pages/api/*"],
+			"@richochet/store/*": ["store/*"],
 			"@richochet/utils/*": ["utils/*"],
 			"@richochet/assets/*": ["public/*"],
 			"@richochet/hooks/*": ["hooks/*"]
@@ -22,6 +24,6 @@
 		"jsx": "preserve",
 		"incremental": true
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next-i18next.config.js", "next-i18next.config.js"],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next-i18next.config.js", "constants/polygon_config.js"],
 	"exclude": ["node_modules"]
 }
