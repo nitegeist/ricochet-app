@@ -1,12 +1,11 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { startFlow } from '@richochet/api/ethereum';
 import { transformError } from '@richochet/utils/transformError';
-import { getContract, getProvider } from '@wagmi/core';
+import { getContract } from '@wagmi/core';
 import { idaABI } from 'constants/abis';
 import { idaAddress } from 'constants/polygon_config';
-import { chain } from 'wagmi';
 
-export const streamsReducers = createApi({
+export const streamsApi = createApi({
 	reducerPath: 'startStream',
 	baseQuery: fakeBaseQuery(),
 	endpoints: (builder) => {
@@ -30,20 +29,13 @@ export const streamsReducers = createApi({
 				//normalizedAmount,
 				//config.referralId
 
-				queryFn: async (payload: {
-					amount: string;
-					config: {
-						[key: string]: string;
-					};
-					callback: (e?: string) => void;
-				}): Promise<void> => {
+				queryFn: async (payload: any): Promise<void> => {
 					try {
-						const provider = getProvider({ chainId: Number(chain.polygon) });
+						const { config, amount } = payload;
 						// we must initialize a contract address with idaContract: getContract(idaAddress, idaABI, web3);
 						const idaContract = getContract({ address: idaAddress, abi: idaABI });
-						const { config } = payload;
 						// We must normalize the payload amount for superfluid function
-						const normalizedAmount = Math.round((Number(payload.amount) * 1e18) / 2592000);
+						const normalizedAmount = Math.round((Number(amount) * 1e18) / 2592000);
 						// we must call the startFlow function in api/ethereum.ts with following Data
 						//
 						//idaContract: Initialized Contract Object from line 18 comment,

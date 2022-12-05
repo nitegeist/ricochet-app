@@ -8,6 +8,11 @@ module.exports = {
 			sans: ['Montserrat', ...defaultTheme.fontFamily.sans],
 		},
 		extend: {
+			transitionProperty: {
+				height: 'height',
+				width: 'width',
+				spacing: 'margin, padding',
+			},
 			colors: {
 				footer: {
 					50: '#44474b',
