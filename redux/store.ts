@@ -1,11 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { streamsReducers } from './slices/streamsReducer.slice';
+import {
+	allSubgraphEndpoints,
+	createApiWithReactHooks,
+	initializeSubgraphApiSlice
+} from '@superfluid-finance/sdk-redux';
+import { streamsApi } from './slices/streamsReducer.slice';
+
+export const sfSubgraph = initializeSubgraphApiSlice(createApiWithReactHooks).injectEndpoints(allSubgraphEndpoints);
 
 export const store = configureStore({
 	reducer: {
-		[streamsReducers.reducerPath]: streamsReducers.reducer,
+		[streamsApi.reducerPath]: streamsApi.reducer,
+		[sfSubgraph.reducerPath]: sfSubgraph.reducer,
 	},
 });
 
-export type AppStore = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
