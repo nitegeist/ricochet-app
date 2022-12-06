@@ -94,16 +94,16 @@ export const Markets = () => {
 		<>
 			<CardTitle
 				content={
-					<div className='w-full flex items-center justify-between'>
+					<div className='w-full flex flex-wrap items-center justify-between space-y-4 lg:space-y-0'>
 						<p className='text-slate-400 uppercase'>{t('markets')}</p>
 						<label className='relative block w-max'>
 							<span className='sr-only'>Search</span>
-							<span className='absolute inset-y-0 right-0 flex items-center cursor-pointer pr-2'>
+							<span className='absolute inset-y-0 right-0 flex items-center pr-2'>
 								<MagnifyingGlassIcon className='h-4 w-4 fill-slate-400' viewBox='0 0 20 20' />
 							</span>
 							<input
-								className='placeholder-transparent placeholder-slate-400 placeholder:italic block bg-transparent h-8 w-8 focus:cursor-text focus:w-full focus:border rounded-md py-2 pr-9 pl-3 shadow-sm focus:outline-none focus:border-slate-500 focus:ring-slate-400 focus:ring-1 sm:text-sm'
-								placeholder='search by name...'
+								className='w-full h-8 pl-4 pr-8 text-sm text-slate-400 bg-transparent border border-slate-400 rounded-lg xl:transition-all xl:duration-300 xl:w-24 xl:focus:w-28 2xl:w-32 2xl:focus:w-44 dark:bg-slate-900 dark:text-slate-400 dark:border-slate-600 focus:border-primary-500 dark:focus:border-primary-500 focus:outline-none focus:ring focus:ring-slate-500 dark:placeholder-slate-400 focus:ring-opacity-20'
+								placeholder='search'
 								type='text'
 								name='search'
 							/>
