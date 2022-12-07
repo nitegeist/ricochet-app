@@ -8,12 +8,14 @@ import { streamsApi } from './slices/streamsReducer.slice';
 
 export const sfSubgraph = initializeSubgraphApiSlice(createApiWithReactHooks).injectEndpoints(allSubgraphEndpoints);
 
-export const store = configureStore({
+const store = configureStore({
 	reducer: {
 		[streamsApi.reducerPath]: streamsApi.reducer,
 		[sfSubgraph.reducerPath]: sfSubgraph.reducer,
 	},
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export type AppState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export default store;
