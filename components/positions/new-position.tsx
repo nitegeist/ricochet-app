@@ -25,6 +25,8 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 	const [positionType, setPositionType] = useState(postionTypes[2]);
 	const handleSubmit = (event) => {
 		event?.preventDefault();
+		// Need to call hook here to start a new stream.
+		// const stream = useStartStream(amount, config);
 		console.log({ from, to, amount, positionType });
 	};
 	return (

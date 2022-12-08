@@ -1,13 +1,10 @@
-import { ArrowLongRightIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import usePagination from '@richochet/hooks/usePagination';
 import { combineClasses, formatCurrency } from '@richochet/utils/functions';
-import BTCLogo from 'icons/btc-logo';
-import ETHLogo from 'icons/eth-logo';
-import RicochetLogo from 'icons/richochet-logo';
-import USDCLogo from 'icons/usdc-logo';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { TokenData } from '../balances';
+import { CoinChange, DataType } from '../coins/coin-change';
 import { MarketData } from '../markets';
 import { PositionData } from '../positions';
 import { TableLoader } from './table-loader';
@@ -64,9 +61,7 @@ export const DataTable: NextPage<Props> = ({
 									{isPositionData(data) ? (
 										<>
 											<td className='flex items-center px-6 py-4 whitespace-nowrap space-x-2'>
-												{data.from === 'RIC' ? <RicochetLogo width='25' height='25' /> : ''}{' '}
-												<ArrowLongRightIcon className='h-5 w-5' />
-												{data.to === 'USDC' ? <USDCLogo width='22' height='22' /> : ''}
+												<CoinChange coinA={data.from} coinB={data.to} type={DataType.Position} />
 											</td>
 											<td className='px-6 py-4 whitespace-nowrap'>{data.position}</td>
 											<td className='px-6 py-4 whitespace-nowrap'>{data.timeLeft}</td>
@@ -77,13 +72,7 @@ export const DataTable: NextPage<Props> = ({
 									) : isMarketData(data) ? (
 										<>
 											<td className='flex items-center px-6 py-4 whitespace-nowrap space-x-2'>
-												<span className='flex items-center space-x-2'>
-													{data.from === 'BTC' ? <BTCLogo width='22' height='22' /> : ''} <span>{data.from}</span>
-												</span>
-												<ArrowLongRightIcon className='h-5 w-5' />
-												<span className='flex items-center space-x-2'>
-													{data.to === 'RIC' ? <RicochetLogo width='25' height='25' /> : ''} <span>{data.to}</span>
-												</span>
+												<CoinChange coinA={data.from} coinB={data.to} type={DataType.Market} />
 											</td>
 											<td className='px-6 py-4 whitespace-nowrap'>{data.total}</td>
 											<td className='px-6 py-4 whitespace-nowrap'>{data.posAmt}</td>
@@ -91,27 +80,7 @@ export const DataTable: NextPage<Props> = ({
 									) : isTokenData(data) ? (
 										<>
 											<td className='flex items-center px-6 py-4 whitespace-nowrap space-x-2'>
-												{data.token === 'ETH' ? (
-													<ETHLogo width='22' height='22' />
-												) : data.token === 'BTC' ? (
-													<BTCLogo width='22' height='22' />
-												) : data.token === 'RIC' ? (
-													<RicochetLogo width='25' height='25' />
-												) : (
-													''
-												)}
-												<span
-													className={combineClasses(
-														data.token === 'ETH'
-															? 'bg-eth text-slate-800 px-1 py-0'
-															: data.token === 'BTC'
-															? 'bg-btc text-slate-800 px-1 py-0'
-															: data.token === 'RIC'
-															? 'bg-ric text-slate-800 px-1 py-0'
-															: 'bg-transparent'
-													)}>
-													{data.token}
-												</span>
+												<CoinChange token={data.token} type={DataType.Balances} />
 											</td>
 											<td className='px-6 py-4 whitespace-nowrap'>{data.amount}</td>
 											<td className='px-6 py-4 whitespace-nowrap'>{formatCurrency(data.dollarVal)}</td>

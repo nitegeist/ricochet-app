@@ -102,7 +102,7 @@ export const Markets = () => {
 								<MagnifyingGlassIcon className='h-4 w-4 fill-slate-400' viewBox='0 0 20 20' />
 							</span>
 							<input
-								className='w-full h-8 pl-4 pr-8 text-sm text-slate-400 bg-transparent border border-slate-400 rounded-lg xl:transition-all xl:duration-300 xl:w-24 xl:focus:w-28 2xl:w-32 2xl:focus:w-44 dark:bg-slate-900 dark:text-slate-400 dark:border-slate-600 focus:border-primary-500 dark:focus:border-primary-500 focus:outline-none focus:ring focus:ring-slate-500 dark:placeholder-slate-400 focus:ring-opacity-20'
+								className='input-search'
 								placeholder='search'
 								type='text'
 								name='search'
