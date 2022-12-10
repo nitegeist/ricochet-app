@@ -2,7 +2,10 @@ import { Listbox, Transition } from '@headlessui/react';
 import { ArrowLongRightIcon, CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
 import { Coin } from 'constants/coins';
 import { FlowEnum, FlowTypes } from 'constants/flowConfig';
-import { StIbAlluoETHAddress, StIbAlluoUSDAddress, twoWayMarketibAlluoUSDETHAddress } from 'constants/polygon_config';
+import {
+	RICAddress, twoWayMarketRICUSDCAddress,
+	USDCxAddress
+} from 'constants/polygon_config';
 import BTCLogo from 'icons/btc-logo';
 import ETHLogo from 'icons/eth-logo';
 import RicochetLogo from 'icons/richochet-logo';
@@ -32,12 +35,12 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 		event?.preventDefault();
 		// Need to call hook here to start a new stream.
 		const config = {
-			superToken: twoWayMarketibAlluoUSDETHAddress,
-			tokenA: StIbAlluoETHAddress,
-			tokenB: StIbAlluoUSDAddress,
-			coinA: Coin.IbAlluoETH,
-			coinB: Coin.IbAlluoUSD,
-			flowKey: FlowEnum.twoWayIbEthIbUsdFlowQuery,
+			superToken: twoWayMarketRICUSDCAddress,
+			tokenA: RICAddress,
+			tokenB: USDCxAddress,
+			coinA: Coin.RIC,
+			coinB: Coin.USDC,
+			flowKey: FlowEnum.twoWayRicUsdcFlowQuery,
 			type: FlowTypes.market,
 		};
 		//@ts-ignore

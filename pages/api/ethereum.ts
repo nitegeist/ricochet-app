@@ -100,6 +100,7 @@ export const startFlow = async (
 			providerOrSigner: provider,
 		});
 		const { maxFeePerGas, maxPriorityFeePerGas } = await gas();
+		console.log({ maxFeePerGas, maxPriorityFeePerGas });
 		if (web3Subscription.approved) {
 			if (Number(userFlow.flowRate) !== 0) {
 				//Existing flow so call updateFlow
@@ -131,6 +132,7 @@ export const startFlow = async (
 					.exec(signer as Signer);
 			}
 		} else {
+			console.log('made it to approve!');
 			const userData = referralId ? ethers.utils.solidityPack(['string'], [referralId]) : '0x';
 			if (
 				exchangeAddress === usdcxRicExchangeAddress ||
