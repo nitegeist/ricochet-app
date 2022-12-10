@@ -9,7 +9,7 @@ import RicochetLogo from 'icons/richochet-logo';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { Fragment, useState } from 'react';
-import { streamsApi } from 'redux/slices/streamsReducer.slice';
+import { streams } from 'redux/slices/streamsReducer.slice';
 import { RoundedButton } from '../button';
 import { AreaGraph } from '../graphs';
 
@@ -27,22 +27,22 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 	const [to, setTo] = useState(tokens[1]);
 	const [amount, setAmount] = useState('1');
 	const [positionType, setPositionType] = useState(postionTypes[2]);
-	const config = {
-		superToken: twoWayMarketibAlluoUSDETHAddress,
-		tokenA: StIbAlluoETHAddress,
-		tokenB: StIbAlluoUSDAddress,
-		coinA: Coin.IbAlluoETH,
-		coinB: Coin.IbAlluoUSD,
-		flowKey: FlowEnum.twoWayIbEthIbUsdFlowQuery,
-		type: FlowTypes.market,
-	};
-	//@ts-ignore
-	const stream = streamsApi.useStartStreamQuery({ amount, config });
-	console.log({ stream });
 	const handleSubmit = (event: any) => {
 		console.log('Made it to handle submit!');
 		event?.preventDefault();
 		// Need to call hook here to start a new stream.
+		const config = {
+			superToken: twoWayMarketibAlluoUSDETHAddress,
+			tokenA: StIbAlluoETHAddress,
+			tokenB: StIbAlluoUSDAddress,
+			coinA: Coin.IbAlluoETH,
+			coinB: Coin.IbAlluoUSD,
+			flowKey: FlowEnum.twoWayIbEthIbUsdFlowQuery,
+			type: FlowTypes.market,
+		};
+		//@ts-ignore
+		const stream = streams.caseReducers.start({}, { type: 'start', payload: { amount, config } });
+		console.log({ stream });
 	};
 	return (
 		<>
