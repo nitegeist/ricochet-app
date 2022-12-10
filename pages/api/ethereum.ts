@@ -70,9 +70,10 @@ export const startFlow = async (
 	referralId?: string
 ) => {
 	try {
-		const provider = getProvider({ chainId: Number(chain.polygon) });
+		const provider = getProvider({ chainId: chain.polygon.id });
 		const { address } = getAccount();
-		const signer = await fetchSigner({ chainId: Number(chain.polygon) }).then((signer) => signer);
+		const signer = await fetchSigner({ chainId: chain.polygon.id });
+		console.log(signer);
 		const framework = await getSFFramework();
 		const config = indexIDA.find(
 			(data) =>

@@ -3,9 +3,9 @@ import { getProvider } from '@wagmi/core';
 import { chain } from 'wagmi';
 
 export const getSFFramework = async () => {
-	const provider = getProvider({ chainId: Number(chain.polygon) });
+	const provider = getProvider({ chainId: chain.polygon.id });
 	return await Framework.create({
 		provider: provider,
-		chainId: Number(chain.polygon),
+		chainId: chain.polygon.id,
 	});
 };

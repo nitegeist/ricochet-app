@@ -1,4 +1,5 @@
 import { PlusSmallIcon } from '@heroicons/react/24/solid';
+import { flowConfig, FlowTypes } from 'constants/flowConfig';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { RoundedButton } from '../button';
@@ -134,7 +135,9 @@ export const Positions = () => {
 	const { t } = useTranslation('home');
 	const [newPosition, newPositionClosed] = useState(true);
 	const [selectedPosition, setSelectedPosition] = useState(positionData[0]);
+	const [filteredList, setFilteredList] = useState(flowConfig);
 	const [closePosition, setClosePosition] = useState(true);
+	const flowType = FlowTypes.market;
 	return (
 		<>
 			{newPosition && (

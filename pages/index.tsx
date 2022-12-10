@@ -19,19 +19,19 @@ import Head from 'next/head';
 import { useState } from 'react';
 import { chain, useAccount, useBalance } from 'wagmi';
 
-export async function getStaticProps({ locale }): Promise<Object> {
+export async function getStaticProps({ locale }: any): Promise<Object> {
 	return {
 		props: {
 			...(await serverSideTranslations(locale, ['home', 'footer'])),
 		},
 	};
 }
-export default function Home({ locale }): JSX.Element {
+export default function Home({ locale }: any): JSX.Element {
 	const { t } = useTranslation('home');
 	const { address, isConnected } = useAccount();
 	const { data } = useBalance({
 		addressOrName: address,
-		chainId: Number(chain.polygon),
+		chainId: chain.polygon.id,
 		token: tokens[Token.RIC],
 	});
 	const isMounted = useIsMounted();

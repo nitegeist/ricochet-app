@@ -16,7 +16,7 @@ export default function Navigation(): JSX.Element {
 	const { address, isConnected } = useAccount();
 	const { data, isError, isLoading } = useBalance({
 		addressOrName: address,
-		chainId: Number(chain.polygon),
+		chainId: chain.polygon.id,
 		token: tokens[Token.RIC],
 	});
 	const { t } = useTranslation('home');

@@ -13,6 +13,7 @@ export const store = configureStore({
 		[streamsApi.reducerPath]: streamsApi.reducer,
 		[sfSubgraph.reducerPath]: sfSubgraph.reducer,
 	},
+	middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(streamsApi.middleware),
 });
 
 export type AppState = ReturnType<typeof store.getState>;
