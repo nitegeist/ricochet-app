@@ -4,7 +4,7 @@ import {
 	createApiWithReactHooks,
 	initializeSubgraphApiSlice
 } from '@superfluid-finance/sdk-redux';
-import { streams, streamsApi } from './slices/streamsReducer.slice';
+import { streams } from './slices/streamsReducer.slice';
 
 export const sfSubgraph = initializeSubgraphApiSlice(createApiWithReactHooks).injectEndpoints(allSubgraphEndpoints);
 
@@ -13,7 +13,7 @@ export const store = configureStore({
 		[streams.name]: streams.reducer,
 		[sfSubgraph.reducerPath]: sfSubgraph.reducer,
 	},
-	middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(streamsApi.middleware),
+	// middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(streamsApi.middleware),
 });
 
 export type AppState = ReturnType<typeof store.getState>;
