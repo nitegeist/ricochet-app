@@ -16,7 +16,7 @@ import { Token } from 'enumerations/token.enum';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useAppSelector } from 'redux/hooks';
 import { chain, useAccount, useBalance } from 'wagmi';
 
 export async function getStaticProps({ locale }: any): Promise<Object> {
@@ -29,13 +29,13 @@ export async function getStaticProps({ locale }: any): Promise<Object> {
 export default function Home({ locale }: any): JSX.Element {
 	const { t } = useTranslation('home');
 	const { address, isConnected } = useAccount();
+	const { loading, message, error, success } = useAppSelector((state) => state.streams);
 	const { data } = useBalance({
 		addressOrName: address,
 		chainId: chain.polygon.id,
 		token: tokens[Token.RIC],
 	});
 	const isMounted = useIsMounted();
-	const [loading, setLoading] = useState(false);
 
 	if (!isMounted) {
 		return <></>;
@@ -53,7 +53,9 @@ export default function Home({ locale }: any): JSX.Element {
 				<Navigation />
 				<main>
 					<div className='mx-auto w-screen py-6 px-8 lg:px-16'>
-						{loading && <Alert type='loading' message='Waiting for your transaction to be confirmed...' />}
+						{loading && <Alert type='loading' message={message} />}
+						{success && <Alert type='success' message={message} />}
+						{error && <Alert type='error' message={error?.data?.message ?? error?.message} />}
 						{isConnected && (
 							<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-items-stretch place-items-stretch gap-10'>
 								<SmallCard

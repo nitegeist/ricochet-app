@@ -1,5 +1,6 @@
 import { TransactionReceipt } from '@ethersproject/providers';
 import { getSFFramework } from '@richochet/utils/fluidsdkConfig';
+import { transformError } from '@richochet/utils/transformError';
 import { Framework, Operation } from '@superfluid-finance/sdk-core';
 import { fetchSigner, getAccount, getProvider } from '@wagmi/core';
 import { indexIDA } from 'constants/flowConfig';
@@ -280,7 +281,9 @@ export const startFlow = async (
 				await executeBatchOperations(operations, framework, signer as Signer);
 			}
 		}
-	} catch (error) {
-		console.log(error);
+	} catch (e) {
+		console.error(e);
+		const error = transformError(e);
+		return error;
 	}
 };

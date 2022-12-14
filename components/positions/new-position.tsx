@@ -2,17 +2,15 @@ import { Listbox, Transition } from '@headlessui/react';
 import { ArrowLongRightIcon, CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
 import { Coin } from 'constants/coins';
 import { FlowEnum, FlowTypes } from 'constants/flowConfig';
-import {
-	RICAddress, twoWayMarketRICUSDCAddress,
-	USDCxAddress
-} from 'constants/polygon_config';
+import { RICAddress, twoWayMarketRICUSDCAddress, USDCxAddress } from 'constants/polygon_config';
 import BTCLogo from 'icons/btc-logo';
 import ETHLogo from 'icons/eth-logo';
 import RicochetLogo from 'icons/richochet-logo';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { Fragment, useState } from 'react';
-import { streams } from 'redux/slices/streamsReducer.slice';
+import { startStream } from 'redux/actions';
+import { useAppDispatch } from 'redux/hooks';
 import { RoundedButton } from '../button';
 import { AreaGraph } from '../graphs';
 
@@ -27,6 +25,7 @@ interface Props {
 export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 	const { t } = useTranslation('home');
 	const [from, setFrom] = useState(tokens[0]);
+	const dispatch = useAppDispatch();
 	const [to, setTo] = useState(tokens[1]);
 	const [amount, setAmount] = useState('1');
 	const [positionType, setPositionType] = useState(postionTypes[2]);
@@ -44,7 +43,7 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 			type: FlowTypes.market,
 		};
 		//@ts-ignore
-		const stream = streams.caseReducers.start({}, { type: 'start', payload: { amount, config } });
+		const stream = dispatch(startStream({ type: 'start', payload: { amount, config } }));
 		console.log({ stream });
 	};
 	return (
