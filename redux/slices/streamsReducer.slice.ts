@@ -1,5 +1,5 @@
 import { Action, AnyAction, createSlice } from '@reduxjs/toolkit';
-import { startStream } from 'redux/actions';
+import { startStream } from 'redux/actions/stream';
 
 interface RejectedAction extends Action {
 	error: Error;

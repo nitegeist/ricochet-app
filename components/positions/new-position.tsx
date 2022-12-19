@@ -9,7 +9,7 @@ import RicochetLogo from 'icons/richochet-logo';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { Fragment, useState } from 'react';
-import { startStream } from 'redux/actions';
+import { startStream } from 'redux/actions/stream';
 import { useAppDispatch } from 'redux/hooks';
 import { RoundedButton } from '../button';
 import { AreaGraph } from '../graphs';
