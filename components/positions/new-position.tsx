@@ -3,9 +3,6 @@ import { ArrowLongRightIcon, CheckIcon, ChevronUpDownIcon } from '@heroicons/rea
 import { Coin } from 'constants/coins';
 import { FlowEnum, FlowTypes } from 'constants/flowConfig';
 import { RICAddress, twoWayMarketRICUSDCAddress, USDCxAddress } from 'constants/polygon_config';
-import BTCLogo from 'icons/btc-logo';
-import ETHLogo from 'icons/eth-logo';
-import RicochetLogo from 'icons/richochet-logo';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { Fragment, useState } from 'react';
@@ -13,6 +10,7 @@ import { startStream } from 'redux/actions/stream';
 import { useAppDispatch } from 'redux/hooks';
 import { RoundedButton } from '../button';
 import { AreaGraph } from '../graphs';
+import TokenList from '../token-list';
 
 const tokens = ['ETH', 'RIC', 'BTC'];
 const postionTypes = ['annually', 'bi-weekly', 'continuous', 'weekly'];
@@ -24,9 +22,9 @@ interface Props {
 
 export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 	const { t } = useTranslation('home');
-	const [from, setFrom] = useState(tokens[0]);
+	const [from, setFrom] = useState(Coin.BTC);
 	const dispatch = useAppDispatch();
-	const [to, setTo] = useState(tokens[1]);
+	const [to, setTo] = useState(Coin.RIC);
 	const [amount, setAmount] = useState('1');
 	const [positionType, setPositionType] = useState(postionTypes[2]);
 	const handleSubmit = (event: any) => {
@@ -56,153 +54,9 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 					onSubmit={handleSubmit}>
 					<label className='text-slate-100'>{t('token-action')}?</label>
 					<div className='flex items-center space-x-4 w-full lg:w-auto'>
-						<Listbox value={from} onChange={setFrom}>
-							<div className='relative w-full z-10'>
-								<Listbox.Button className='relative w-full cursor-default rounded-lg bg-slate-700 py-2 pl-3 pr-10 text-left text-slate-200 shadow-md focus:outline-none focus-visible:border-slate-500 focus-visible:ring-2 focus-visible:ring-slate-100 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-300 sm:text-sm'>
-									<div className='flex items-center whitespace-nowrap space-x-2'>
-										<span>
-											{from === 'ETH' ? (
-												<ETHLogo width='22' height='22' />
-											) : from === 'BTC' ? (
-												<BTCLogo width='22' height='22' />
-											) : from === 'RIC' ? (
-												<RicochetLogo width='25' height='25' />
-											) : (
-												''
-											)}
-										</span>
-										<span className='block truncate'>{from}</span>
-									</div>
-									<span className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2'>
-										<ChevronUpDownIcon className='h-5 w-5 text-slate-100' aria-hidden='true' />
-									</span>
-								</Listbox.Button>
-								<Transition
-									as={Fragment}
-									leave='transition ease-in duration-100'
-									leaveFrom='opacity-100'
-									leaveTo='opacity-0'>
-									<Listbox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-slate-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
-										{tokens.map((token, index) => (
-											<Listbox.Option
-												key={index}
-												className={({ active }) =>
-													`relative cursor-default select-none py-2 pl-10 pr-4 ${
-														active ? 'bg-slate-800 text-slate-200' : 'text-slate-200'
-													}`
-												}
-												value={token}>
-												{({ selected }) => (
-													<>
-														<div className='flex items-center whitespace-nowrap space-x-2'>
-															<span>
-																{token === 'ETH' ? (
-																	<ETHLogo width='22' height='22' />
-																) : token === 'BTC' ? (
-																	<BTCLogo width='22' height='22' />
-																) : token === 'RIC' ? (
-																	<RicochetLogo width='25' height='25' />
-																) : (
-																	''
-																)}
-															</span>
-															<span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
-																{token}
-															</span>
-														</div>
-														{selected ? (
-															<span className='absolute inset-y-0 left-0 flex items-center pl-3 text-green-600'>
-																<CheckIcon className='h-5 w-5' aria-hidden='true' />
-															</span>
-														) : null}
-
-														{selected ? (
-															<span className='absolute inset-y-0 left-0 flex items-center pl-3 text-green-600'>
-																<CheckIcon className='h-5 w-5' aria-hidden='true' />
-															</span>
-														) : null}
-													</>
-												)}
-											</Listbox.Option>
-										))}
-									</Listbox.Options>
-								</Transition>
-							</div>
-						</Listbox>
+						<TokenList value={from} handleChange={setFrom} />
 						<ArrowLongRightIcon className='h-10 w-16' />
-						<Listbox value={to} onChange={setTo}>
-							<div className='relative w-full z-10'>
-								<Listbox.Button className='relative w-full cursor-default rounded-lg bg-slate-700 py-2 pl-3 pr-10 text-left text-slate-200 shadow-md focus:outline-none focus-visible:border-slate-500 focus-visible:ring-2 focus-visible:ring-slate-100 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-300 sm:text-sm'>
-									<div className='flex items-center whitespace-nowrap space-x-2'>
-										<span>
-											{to === 'ETH' ? (
-												<ETHLogo width='22' height='22' />
-											) : to === 'BTC' ? (
-												<BTCLogo width='22' height='22' />
-											) : to === 'RIC' ? (
-												<RicochetLogo width='25' height='25' />
-											) : (
-												''
-											)}
-										</span>
-										<span className='block truncate'>{to}</span>
-									</div>
-									<span className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2'>
-										<ChevronUpDownIcon className='h-5 w-5 text-slate-100' aria-hidden='true' />
-									</span>
-								</Listbox.Button>
-								<Transition
-									as={Fragment}
-									leave='transition ease-in duration-100'
-									leaveFrom='opacity-100'
-									leaveTo='opacity-0'>
-									<Listbox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-slate-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
-										{tokens.map((token, index) => (
-											<Listbox.Option
-												key={index}
-												className={({ active }) =>
-													`relative cursor-default select-none py-2 pl-10 pr-4 ${
-														active ? 'bg-slate-800 text-slate-200' : 'text-slate-200'
-													}`
-												}
-												value={token}>
-												{({ selected }) => (
-													<>
-														<div className='flex items-center whitespace-nowrap space-x-2'>
-															<span>
-																{token === 'ETH' ? (
-																	<ETHLogo width='22' height='22' />
-																) : token === 'BTC' ? (
-																	<BTCLogo width='22' height='22' />
-																) : token === 'RIC' ? (
-																	<RicochetLogo width='25' height='25' />
-																) : (
-																	''
-																)}
-															</span>
-															<span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
-																{token}
-															</span>
-														</div>
-														{selected ? (
-															<span className='absolute inset-y-0 left-0 flex items-center pl-3 text-green-600'>
-																<CheckIcon className='h-5 w-5' aria-hidden='true' />
-															</span>
-														) : null}
-
-														{selected ? (
-															<span className='absolute inset-y-0 left-0 flex items-center pl-3 text-green-600'>
-																<CheckIcon className='h-5 w-5' aria-hidden='true' />
-															</span>
-														) : null}
-													</>
-												)}
-											</Listbox.Option>
-										))}
-									</Listbox.Options>
-								</Transition>
-							</div>
-						</Listbox>
+						<TokenList value={to} handleChange={setTo} />
 					</div>
 					<label className='text-slate-100'>{t('position-amount')}?</label>
 					<input

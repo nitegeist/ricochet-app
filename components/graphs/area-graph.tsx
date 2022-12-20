@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { useEffect } from 'react';
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 interface ChartData {
@@ -20,7 +21,16 @@ labels.map((label) => {
 	});
 });
 
+// Get coingecko token history
+const coingeckoUrl = `https://api.coingecko.com/api/v3/coins/deusdc/market_chart?vs_currency=usd&days=1`;
+console.log({ coingeckoUrl });
+console.log({ data });
 export const AreaGraph = () => {
+	useEffect(() => {
+		fetch(coingeckoUrl)
+			.then((res) => res.json())
+			.then((data) => console.log({ data }));
+	}, []);
 	return (
 		<div className='h-52 min-h-full w-52 min-w-full'>
 			<ResponsiveContainer height='100%' width='100%'>

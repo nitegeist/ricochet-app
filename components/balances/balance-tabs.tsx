@@ -4,7 +4,7 @@ import { BalanceAction } from 'enumerations/balanceActions.enum';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { Fragment, useEffect, useState } from 'react';
-import { TransactionContent } from '../transactions';
+import { Transactions } from '../transactions';
 
 interface Props {
 	action: number;
@@ -51,13 +51,13 @@ export const BalanceTabs: NextPage<Props> = ({ close, setClose, action }) => {
 			</Tab.List>
 			<Tab.Panels>
 				<Tab.Panel>
-					<TransactionContent type={BalanceAction.Withdraw} close={close} setClose={setClose} />
+					<Transactions type={BalanceAction.Withdraw} close={close} setClose={setClose} />
 				</Tab.Panel>
 				<Tab.Panel>
-					<TransactionContent type={BalanceAction.Deposit} close={close} setClose={setClose} />
+					<Transactions type={BalanceAction.Deposit} close={close} setClose={setClose} />
 				</Tab.Panel>
 				<Tab.Panel>
-					<TransactionContent type={BalanceAction.Swap} close={close} setClose={setClose} />
+					<Transactions type={BalanceAction.Swap} close={close} setClose={setClose} />
 				</Tab.Panel>
 			</Tab.Panels>
 		</Tab.Group>
