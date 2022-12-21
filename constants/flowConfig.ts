@@ -5,6 +5,8 @@ import {
 	USDCxAddress, usdcxibAlluoUSDAddress, usdcxRicExchangeAddress, WBTCxAddress, WETHxAddress
 } from './polygon_config';
 
+// To-Do: Refactor this
+
 export enum FlowEnum {
 	twoWayusdcWethFlowQuery = 'twoWayusdcWethFlowQuery',
 	twoWaywethUsdcFlowQuery = 'twoWaywethUsdcFlowQuery',

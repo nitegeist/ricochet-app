@@ -1,3 +1,5 @@
+//To-Do: Create a folder and place each abi within the folder, give it the same name as ABI
+
 export const launchpadABI = [
 	{
 		inputs: [
