@@ -17,6 +17,8 @@ import { ethers, Signer } from 'ethers';
 import { chain } from 'wagmi';
 import { gas } from './gasEstimator';
 
+// Unwrap ERC777 ricochet token to ERC20
+
 export const downgrade = async (contract: any, amount: string, address: string) =>
 	contract.methods.downgrade(amount).send({
 		from: address,
@@ -30,14 +32,7 @@ export const downgradeMatic = async (contract: any, amount: string, address: str
 		...(await gas()),
 	});
 
-export const allowance = (contract: any, address: string, superTokenAddress: string) =>
-	contract.methods.allowance(address, superTokenAddress).call();
-
-export const approve = async (contract: any, address: string, tokenAddress: string, amount: string) =>
-	contract.methods.approve(tokenAddress, amount).send({
-		from: address,
-		...(await gas()),
-	});
+// Wraps ERC20 ricochet token to ERC777
 
 export const upgrade = async (contract: any, amount: string, address: string) =>
 	contract.methods.upgrade(amount).send({
@@ -53,6 +48,17 @@ export const upgradeMatic = async (contract: any, amount: string, address: strin
 	});
 };
 
+// Allow tokens to be spent
+
+export const allowance = (contract: any, address: string, superTokenAddress: string) =>
+	contract.methods.allowance(address, superTokenAddress).call();
+
+export const approve = async (contract: any, address: string, tokenAddress: string, amount: string) =>
+	contract.methods.approve(tokenAddress, amount).send({
+		from: address,
+		...(await gas()),
+	});
+
 const executeBatchOperations = async (
 	operations: Operation[],
 	framework: Framework,
@@ -62,6 +68,9 @@ const executeBatchOperations = async (
 	return txnResponse.wait();
 };
 
+// Start a DCA stream to markets
+
+// To-Do: MAKE THIS DRY
 export const startFlow = async (
 	idaContract: any,
 	exchangeAddress: string,
@@ -133,7 +142,6 @@ export const startFlow = async (
 					.exec(signer as Signer);
 			}
 		} else {
-			console.log('made it to approve!');
 			const userData = referralId ? ethers.utils.solidityPack(['string'], [referralId]) : '0x';
 			if (
 				exchangeAddress === usdcxRicExchangeAddress ||
