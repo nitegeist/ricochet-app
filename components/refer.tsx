@@ -6,7 +6,7 @@ import { SolidButton } from './button';
 export const Refer = () => {
 	const { t } = useTranslation('home');
 	const [refURL, setRefURL] = useState('');
-	const handleSubmit = (event) => {
+	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event?.preventDefault();
 		console.log(refURL);
 		setRefURL('');
@@ -31,7 +31,7 @@ export const Refer = () => {
 			</form>
 			<a
 				className='inline-flex items-center space-x-1 text-primary-400'
-				href='http://'
+				href='https://docs.ricochet.exchange/readme/referral-program'
 				target='_blank'
 				rel='noopener noreferrer'>
 				<span className='underline'>{t('how-does-it-work')}</span>
