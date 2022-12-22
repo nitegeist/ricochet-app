@@ -1,10 +1,8 @@
 import { ArrowLongRightIcon } from '@heroicons/react/24/solid';
 import { combineClasses } from '@richochet/utils/functions';
-import BTCLogo from 'icons/btc-logo';
-import ETHLogo from 'icons/eth-logo';
-import RicochetLogo from 'icons/richochet-logo';
-import USDCLogo from 'icons/usdc-logo';
+import { Coin, iconsCoin } from 'constants/coins';
 import { NextPage } from 'next';
+import Image from 'next/image';
 
 export enum DataType {
 	Position = 'Position',
@@ -23,8 +21,9 @@ export const CoinChange: NextPage<Props> = ({ coinA, coinB, token, type }) => {
 	if (type === DataType.Position && coinA && coinB) {
 		return (
 			<>
-				{coinA === 'RIC' ? <RicochetLogo width='25' height='25' /> : ''} <ArrowLongRightIcon className='h-5 w-5' />
-				{coinB === 'USDC' ? <USDCLogo width='22' height='22' /> : ''}
+				<Image width='24' height='24' src={iconsCoin[coinA as Coin] as string} alt={coinA} />{' '}
+				<ArrowLongRightIcon className='h-5 w-5' />
+				<Image width='24' height='24' src={iconsCoin[coinB as Coin] as string} alt={coinB} />
 			</>
 		);
 	}
@@ -32,11 +31,11 @@ export const CoinChange: NextPage<Props> = ({ coinA, coinB, token, type }) => {
 		return (
 			<>
 				<span className='flex items-center space-x-2'>
-					{coinA === 'BTC' ? <BTCLogo width='22' height='22' /> : ''} <span>{coinA}</span>
+					<Image width='24' height='24' src={iconsCoin[coinA as Coin] as string} alt={coinA} /> <span>{coinA}</span>
 				</span>
 				<ArrowLongRightIcon className='h-5 w-5' />
 				<span className='flex items-center space-x-2'>
-					{coinB === 'RIC' ? <RicochetLogo width='25' height='25' /> : ''} <span>{coinB}</span>
+					<Image width='24' height='24' src={iconsCoin[coinB as Coin] as string} alt={coinB} /> <span>{coinB}</span>
 				</span>
 			</>
 		);
@@ -44,23 +43,19 @@ export const CoinChange: NextPage<Props> = ({ coinA, coinB, token, type }) => {
 	if (type === DataType.Balances && token) {
 		return (
 			<>
-				{token === 'ETH' ? (
-					<ETHLogo width='22' height='22' />
-				) : token === 'BTC' ? (
-					<BTCLogo width='22' height='22' />
-				) : token === 'RIC' ? (
-					<RicochetLogo width='25' height='25' />
-				) : (
-					''
-				)}
+				<Image width='24' height='24' src={iconsCoin[token as Coin] as string} alt={token} />
 				<span
 					className={combineClasses(
-						token === 'ETH'
+						token === Coin.ETH
 							? 'bg-eth text-slate-800 px-1 py-0'
-							: token === 'BTC'
+							: token === Coin.WBTC
 							? 'bg-btc text-slate-800 px-1 py-0'
-							: token === 'RIC'
+							: token === Coin.RIC
 							? 'bg-ric text-slate-800 px-1 py-0'
+							: token === Coin.StIbAlluoETH
+							? 'bg-stIbAlluoEth text-slate-800 px-1 py-0'
+							: token === Coin.StIbAlluoUSD
+							? 'bg-stIbAlluoUsd text-slate-800 px-1 py-0'
 							: 'bg-transparent'
 					)}>
 					{token}

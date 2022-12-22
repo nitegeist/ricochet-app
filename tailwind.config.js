@@ -50,6 +50,8 @@ module.exports = {
 				eth: '#B3FFFF',
 				btc: '#FF8D8F',
 				ric: '#7B7EFF',
+				stIbAlluoEth: '#75E276',
+				stIbAlluoUsd: '#E9DF89',
 			},
 		},
 	},

@@ -16,15 +16,14 @@ interface ChartData {
 export const DoughnutChart: NextPage<Props> = ({ tokens }): JSX.Element => {
 	const { t } = useTranslation('home');
 	const data: ChartData[] = [];
-	const COLORS = ['#B3FFFF', '#FF8D8F', '#7B7EFF'];
-	tokens
-		.filter((token, index, self) => self.findIndex((t) => t.dollarVal === token.dollarVal) === index)
-		.map((token) => {
-			data.push({
-				name: token.token,
-				value: token.dollarVal,
-			});
+	const COLORS = ['#B3FFFF', '#FF8D8F', '#7B7EFF', '#75E276', '#E9DF89'];
+	tokens.map((token) => {
+		data.push({
+			name: token.token,
+			value: token.dollarVal,
 		});
+		console.log({ data });
+	});
 	const total: number = tokens.reduce((accumulator, current) => accumulator + current.dollarVal, 0);
 	return (
 		<div className='h-52 w-52'>
@@ -38,7 +37,7 @@ export const DoughnutChart: NextPage<Props> = ({ tokens }): JSX.Element => {
 					</text>
 					<Pie data={data} innerRadius={80} outerRadius={100} fill='#81a8ce' paddingAngle={0} dataKey='value'>
 						{data.map((entry, index) => (
-							<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+							<Cell key={`cell-${entry.name}`} fill={COLORS[index % COLORS.length]} />
 						))}
 					</Pie>
 				</PieChart>

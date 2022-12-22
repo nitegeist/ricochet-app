@@ -1,54 +1,84 @@
+import { chain, fetchBalance } from '@wagmi/core';
+import { Coin } from 'constants/coins';
+import { upgradeTokensList } from 'constants/upgradeConfig';
+import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import useSWR, { Fetcher } from 'swr';
+import { useAccount } from 'wagmi';
 import { OutlineButton, SolidButton } from '../button';
 import { DoughnutChart } from '../graphs';
 import { DataTable } from '../table';
 import { BalanceTabs } from './balance-tabs';
 
+interface Props {
+	data: any;
+}
 export interface TokenData {
 	token: string;
-	amount: number;
+	amount: string;
 	dollarVal: number;
 }
 
-const headerTitles = ['token', 'amount', 'dollar-value'];
-const tokenData: TokenData[] = [
-	{
-		token: 'ETH',
-		amount: 3.445,
-		dollarVal: 6856.45,
-	},
-	{
-		token: 'BTC',
-		amount: 0.879,
-		dollarVal: 2212.89,
-	},
-	{
-		token: 'RIC',
-		amount: 6893,
-		dollarVal: 46.456,
-	},
-	{
-		token: 'ETH',
-		amount: 3.445,
-		dollarVal: 6856.45,
-	},
-	{
-		token: 'ETH',
-		amount: 3.445,
-		dollarVal: 6856.45,
-	},
-	{
-		token: 'ETH',
-		amount: 3.445,
-		dollarVal: 6856.45,
-	},
-];
+const fetcher: Fetcher<string, string> = (...args) => fetch(...args).then((res) => res.json());
 
-export const Balances = (): JSX.Element => {
+const coingeckoUrl =
+	'https://api.coingecko.com/api/v3/simple/price?ids=richochet%2Cusd-coin%2Cdai%2Cmaker%2Cethereum%2Cwrapped-bitcoin%2Cidle%2Cmatic-network%2Csushi&vs_currencies=usd';
+const geckoMapping = {
+	USDC: 'usd-coin',
+	MATIC: 'matic-network',
+	ETH: 'ethereum',
+	WBTC: 'wrapped-bitcoin',
+	DAI: 'dai',
+	RIC: 'richochet',
+	StIbAlluoETH: 'ethereum',
+	StIbAlluoBTC: 'wrapped-bitcoin',
+	StIbAlluoUSD: 'usd-coin',
+};
+
+const headerTitles = ['token', 'amount', 'dollar-value'];
+let tokenData: TokenData[] = [];
+
+export const Balances: NextPage<Props> = (): JSX.Element => {
 	const { t } = useTranslation('home');
+	const { address } = useAccount();
 	const [action, setAction] = useState(0);
 	const [tabsClosed, setTabsClosed] = useState(true);
+	const [sortedUpgradeTokensList, setSortedUpgradeTokensList] = useState(upgradeTokensList);
+	const { data, error } = useSWR(coingeckoUrl, fetcher);
+	const [geckoPriceList, setGeckoPriceList] = useState<Object>();
+	useEffect(() => {
+		if (data) setGeckoPriceList(data);
+		if (error) console.error(error);
+		const getTokenData = async () => {
+			if (geckoPriceList) {
+				console.log({ geckoPriceList });
+				tokenData = await Promise.all(
+					sortedUpgradeTokensList.map(async (token) => {
+						const balance = await fetchBalance({
+							addressOrName: address as string,
+							chainId: chain.polygon.id,
+							token: token.coin !== Coin.RIC ? (token.tokenAddress as `0x${string}`) : undefined,
+						});
+						console.log(
+							{
+								token: token.coin,
+								amount: token.coin === Coin.RIC ? 'N/A' : Number(balance?.formatted),
+								dollarVal: parseFloat((geckoPriceList as any)[(geckoMapping as any)[token.coin]].usd),
+							},
+							token.tokenAddress
+						);
+						return {
+							token: token.coin,
+							amount: token.coin === Coin.RIC ? 'N/A' : Number(balance?.formatted).toFixed(2),
+							dollarVal: parseFloat((geckoPriceList as any)[(geckoMapping as any)[token.coin]].usd),
+						};
+					})
+				);
+			}
+		};
+		getTokenData();
+	}, [data, geckoPriceList, sortedUpgradeTokensList]);
 	return (
 		<>
 			<p className='font-light uppercase tracking-widest text-primary-500'>{t('your-balances')}</p>
