@@ -55,7 +55,6 @@ export const Balances: NextPage<Props> = (): JSX.Element => {
 			if (error) console.error(error);
 			const getTokenData = async () => {
 				if (geckoPriceList) {
-					console.log({ geckoPriceList });
 					const tokens = await Promise.all(
 						sortedUpgradeTokensList.map(async (token) => {
 							const balance = await fetchBalance({
@@ -72,7 +71,6 @@ export const Balances: NextPage<Props> = (): JSX.Element => {
 						})
 					);
 					if (tokens.length) setTokenList(tokens);
-					console.log({ tokenList });
 				}
 			};
 			getTokenData();
