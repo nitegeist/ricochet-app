@@ -10,21 +10,25 @@ interface Props {
 
 interface ChartData {
 	name: string;
+	color: string;
 	value: number;
 }
 
 export const DoughnutChart: NextPage<Props> = ({ tokens }): JSX.Element => {
 	const { t } = useTranslation('home');
 	const data: ChartData[] = [];
-	const COLORS = ['#B3FFFF', '#FF8D8F', '#7B7EFF', '#75E276', '#E9DF89'];
-	tokens.map((token) => {
-		data.push({
-			name: token.token,
-			value: token.dollarVal,
+	tokens
+		.filter((token) => !!token.color)
+		.map((token) => {
+			data.push({
+				name: token.token,
+				color: token.color,
+				value: token.dollarVal,
+			});
 		});
-		console.log({ data });
-	});
-	const total: number = tokens.reduce((accumulator, current) => accumulator + current.dollarVal, 0);
+	const total: number = tokens
+		.filter((token) => !!token.dollarVal)
+		.reduce((accumulator, current) => accumulator + current.dollarVal, 0);
 	return (
 		<div className='h-52 w-52'>
 			<ResponsiveContainer height='100%' width='100%'>
@@ -35,9 +39,16 @@ export const DoughnutChart: NextPage<Props> = ({ tokens }): JSX.Element => {
 					<text fill='white' x={100} y={110} fontWeight={600} textAnchor='middle' dominantBaseline='middle'>
 						{formatCurrency(total)}
 					</text>
-					<Pie data={data} innerRadius={80} outerRadius={100} fill='#81a8ce' paddingAngle={0} dataKey='value'>
-						{data.map((entry, index) => (
-							<Cell key={`cell-${entry.name}`} fill={COLORS[index % COLORS.length]} />
+					<Pie
+						data={data}
+						innerRadius={80}
+						outerRadius={100}
+						fill='#81a8ce'
+						paddingAngle={0}
+						nameKey='name'
+						dataKey='value'>
+						{data.map((entry) => (
+							<Cell key={`cell-${entry.name}`} fill={entry.color} />
 						))}
 					</Pie>
 				</PieChart>

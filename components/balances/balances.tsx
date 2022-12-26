@@ -1,6 +1,7 @@
 import { chain, fetchBalance } from '@wagmi/core';
 import { Coin } from 'constants/coins';
 import { upgradeTokensList } from 'constants/upgradeConfig';
+import { colors } from 'enumerations/colors.enum';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
@@ -17,6 +18,7 @@ interface Props {
 export interface TokenData {
 	token: string;
 	amount: string;
+	color: string;
 	dollarVal: number;
 }
 
@@ -37,47 +39,44 @@ const geckoMapping = {
 };
 
 const headerTitles = ['token', 'amount', 'dollar-value'];
-let tokenData: TokenData[] = [];
 
 export const Balances: NextPage<Props> = (): JSX.Element => {
 	const { t } = useTranslation('home');
-	const { address } = useAccount();
+	const { address, isConnected } = useAccount();
 	const [action, setAction] = useState(0);
 	const [tabsClosed, setTabsClosed] = useState(true);
 	const [sortedUpgradeTokensList, setSortedUpgradeTokensList] = useState(upgradeTokensList);
 	const { data, error } = useSWR(coingeckoUrl, fetcher);
 	const [geckoPriceList, setGeckoPriceList] = useState<Object>();
+	const [tokenList, setTokenList] = useState<TokenData[]>([]);
 	useEffect(() => {
-		if (data) setGeckoPriceList(data);
-		if (error) console.error(error);
-		const getTokenData = async () => {
-			if (geckoPriceList) {
-				console.log({ geckoPriceList });
-				tokenData = await Promise.all(
-					sortedUpgradeTokensList.map(async (token) => {
-						const balance = await fetchBalance({
-							addressOrName: address as string,
-							chainId: chain.polygon.id,
-							token: token.coin !== Coin.RIC ? (token.tokenAddress as `0x${string}`) : undefined,
-						});
-						console.log(
-							{
+		if (isConnected) {
+			if (data) setGeckoPriceList(data);
+			if (error) console.error(error);
+			const getTokenData = async () => {
+				if (geckoPriceList) {
+					console.log({ geckoPriceList });
+					const tokens = await Promise.all(
+						sortedUpgradeTokensList.map(async (token) => {
+							const balance = await fetchBalance({
+								addressOrName: address as string,
+								chainId: chain.polygon.id,
+								token: token.coin !== Coin.RIC ? (token.tokenAddress as `0x${string}`) : undefined,
+							});
+							return {
 								token: token.coin,
-								amount: token.coin === Coin.RIC ? 'N/A' : Number(balance?.formatted),
+								amount: token.coin === Coin.RIC ? 'N/A' : Number(balance?.formatted).toFixed(2),
+								color: colors[token.coin],
 								dollarVal: parseFloat((geckoPriceList as any)[(geckoMapping as any)[token.coin]].usd),
-							},
-							token.tokenAddress
-						);
-						return {
-							token: token.coin,
-							amount: token.coin === Coin.RIC ? 'N/A' : Number(balance?.formatted).toFixed(2),
-							dollarVal: parseFloat((geckoPriceList as any)[(geckoMapping as any)[token.coin]].usd),
-						};
-					})
-				);
-			}
-		};
-		getTokenData();
+							};
+						})
+					);
+					if (tokens.length) setTokenList(tokens);
+					console.log({ tokenList });
+				}
+			};
+			getTokenData();
+		}
 	}, [data, geckoPriceList, sortedUpgradeTokensList]);
 	return (
 		<>
@@ -113,9 +112,9 @@ export const Balances: NextPage<Props> = (): JSX.Element => {
 						/>
 					</div>
 					<div className='flex justify-center my-4'>
-						<DoughnutChart tokens={tokenData} />
+						<DoughnutChart tokens={tokenList} />
 					</div>
-					<DataTable headers={headerTitles} rowData={tokenData} tableLoaderRows={6} />
+					<DataTable headers={headerTitles} rowData={tokenList} tableLoaderRows={6} />
 				</>
 			)}
 		</>
