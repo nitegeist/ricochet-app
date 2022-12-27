@@ -2,7 +2,6 @@ import { chain, fetchBalance } from '@wagmi/core';
 import { Coin } from 'constants/coins';
 import { upgradeTokensList } from 'constants/upgradeConfig';
 import { colors } from 'enumerations/colors.enum';
-import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import useSWR, { Fetcher } from 'swr';
@@ -12,9 +11,6 @@ import { DoughnutChart } from '../graphs';
 import { DataTable } from '../table';
 import { BalanceTabs } from './balance-tabs';
 
-interface Props {
-	data: any;
-}
 export interface TokenData {
 	token: string;
 	amount: string;
@@ -40,7 +36,7 @@ const geckoMapping = {
 
 const headerTitles = ['token', 'amount', 'dollar-value'];
 
-export const Balances: NextPage<Props> = (): JSX.Element => {
+export const Balances = (): JSX.Element => {
 	const { t } = useTranslation('home');
 	const { address, isConnected } = useAccount();
 	const [action, setAction] = useState(0);
@@ -70,7 +66,9 @@ export const Balances: NextPage<Props> = (): JSX.Element => {
 							};
 						})
 					);
-					if (tokens.length) setTokenList(tokens);
+					// sort array by dollar value in descending order
+					const sortedTokens = tokens.sort((a, b) => b.dollarVal - a.dollarVal);
+					if (sortedTokens.length) setTokenList(sortedTokens);
 				}
 			};
 			getTokenData();
