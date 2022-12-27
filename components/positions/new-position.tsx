@@ -6,8 +6,8 @@ import { RICAddress, twoWayMarketRICUSDCAddress, USDCxAddress } from 'constants/
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { Fragment, useState } from 'react';
-import { startStream } from 'redux/actions/stream';
 import { useAppDispatch } from 'redux/hooks';
+import streamApi from 'redux/slices/streams.slice';
 import { RoundedButton } from '../button';
 import { AreaGraph } from '../graphs';
 import TokenList from '../token-list';
@@ -26,6 +26,7 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 	const dispatch = useAppDispatch();
 	const [to, setTo] = useState(Coin.RIC);
 	const [amount, setAmount] = useState('1');
+	const [startStreamTrigger] = streamApi.useLazyStartStreamQuery();
 	const [positionType, setPositionType] = useState(postionTypes[2]);
 	const handleSubmit = (event: any) => {
 		console.log('Made it to handle submit!');
@@ -41,7 +42,8 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 			type: FlowTypes.market,
 		};
 		//@ts-ignore
-		const stream = dispatch(startStream({ type: 'start', payload: { amount, config } }));
+		const stream = startStreamTrigger({ amount, config }).then((response: any) => console.log({ response }));
+		// const stream = dispatch(startStream({ type: 'start', payload: { amount, config } }));
 		console.log({ stream });
 	};
 	return (
