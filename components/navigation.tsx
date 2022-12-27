@@ -1,9 +1,8 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { ArrowTopRightOnSquareIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
 import { combineClasses } from '@richochet/utils/functions';
-import { tokens } from '@richochet/utils/tokens';
 import { ConnectKitButton } from 'connectkit';
-import { Token } from 'enumerations/token.enum';
+import { RICAddress } from 'constants/polygon_config';
 import RicochetLogo from 'icons/richochet-logo';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
@@ -17,7 +16,7 @@ export default function Navigation(): JSX.Element {
 	const { data, isError, isLoading } = useBalance({
 		addressOrName: address,
 		chainId: chain.polygon.id,
-		token: tokens[Token.RIC],
+		token: RICAddress,
 	});
 	const { t } = useTranslation('home');
 	return (
