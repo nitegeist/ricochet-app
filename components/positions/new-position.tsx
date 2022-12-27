@@ -26,7 +26,7 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 	const dispatch = useAppDispatch();
 	const [to, setTo] = useState(Coin.RIC);
 	const [amount, setAmount] = useState('1');
-	const [startStreamTrigger] = streamApi.useLazyStartStreamQuery();
+	const [startStreamTrigger, { isLoading, isError, data, error }] = streamApi.useLazyStartStreamQuery();
 	const [positionType, setPositionType] = useState(postionTypes[2]);
 	const handleSubmit = (event: any) => {
 		console.log('Made it to handle submit!');

@@ -18,9 +18,8 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
+import coingeckoApi from 'redux/slices/coingecko.slice';
 import { chain, useAccount, useBalance, useProvider } from 'wagmi';
-
-const coingeckoUrl = `https://api.coingecko.com/api/v3/simple/price?ids=richochet&vs_currencies=usd`;
 
 export async function getStaticProps({ locale }: any): Promise<Object> {
 	return {
@@ -35,33 +34,43 @@ export default function Home({ locale }: any): JSX.Element {
 	const [usdPrice, setUsdPrice] = useState<Big>(new Big(0));
 	const [usdFlowRate, setUsdFlowRate] = useState<string>();
 	const provider = useProvider();
+	const {
+		data: tokenPrice,
+		isLoading,
+		isFetching,
+		isSuccess,
+		isError,
+		error,
+		refetch,
+	} = coingeckoApi.useGetTokenPriceQuery('richochet');
 	useEffect(() => {
-		fetch(coingeckoUrl)
-			.then((res) => res.json())
-			.then((data) => setUsdPrice(new Big(parseFloat(data.richochet.usd))));
-	}, []);
-	// const { loading, message, error, success } = useAppSelector((state) => state.streams);
+		if (isConnected && isSuccess && tokenPrice) {
+			setUsdPrice(new Big(parseFloat(tokenPrice?.richochet?.usd)));
+		}
+	}, [isConnected, isSuccess, tokenPrice]);
 	useEffect(() => {
-		const getNetFlowRate = async () => {
-			const framework = await getSFFramework();
-			//load the token you'd like to use like this
-			//note that tokens may be loaded by symbol or by address
-			const ric = await framework.loadSuperToken(Coin.RIC);
-			let flowRate = await ric.getNetFlow({
-				account: address as string,
-				providerOrSigner: provider,
-			});
-			const flowRateBigNumber = new Big(flowRate);
-			console.log({ usdPrice });
-			const usdFlowRate = flowRateBigNumber
-				.times(new Big('2592000'))
-				.div(new Big('10e17'))
-				.times(usdPrice as BigSource)
-				.toFixed(2);
-			setUsdFlowRate(usdFlowRate);
-		};
-		getNetFlowRate();
-	}, [address, provider, usdPrice]);
+		if (isConnected) {
+			const getNetFlowRate = async () => {
+				const framework = await getSFFramework();
+				//load the token you'd like to use like this
+				//note that tokens may be loaded by symbol or by address
+				const ric = await framework.loadSuperToken(Coin.RIC);
+				let flowRate = await ric.getNetFlow({
+					account: address as string,
+					providerOrSigner: provider,
+				});
+				const flowRateBigNumber = new Big(flowRate);
+				console.log({ usdPrice });
+				const usdFlowRate = flowRateBigNumber
+					.times(new Big('2592000'))
+					.div(new Big('10e17'))
+					.times(usdPrice as BigSource)
+					.toFixed(2);
+				setUsdFlowRate(usdFlowRate);
+			};
+			getNetFlowRate();
+		}
+	}, [isConnected, usdPrice]);
 	const { data } = useBalance({
 		addressOrName: address,
 		chainId: chain.polygon.id,
@@ -105,7 +114,7 @@ export default function Home({ locale }: any): JSX.Element {
 										<>
 											<h6 className='font-light uppercase tracking-widest text-primary-500'>{t('net-flow-rate')}</h6>
 											<p className='text-slate-100 font-light text-2xl'>
-												{formatCurrency(parseFloat(usdFlowRate as string))} / mo
+												{formatCurrency(parseFloat(usdFlowRate as string))} / {t('month')}
 											</p>
 										</>
 									}
@@ -192,10 +201,4 @@ export default function Home({ locale }: any): JSX.Element {
 			</div>
 		</>
 	);
-}
-function useSWR(
-	coingeckoUrl: string,
-	fetcher: (args: string) => import('swr/_internal').FetcherResponse<string>
-): { data: any; error: any } {
-	throw new Error('Function not implemented.');
 }

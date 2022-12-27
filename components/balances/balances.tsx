@@ -4,7 +4,7 @@ import { upgradeTokensList } from 'constants/upgradeConfig';
 import { colors } from 'enumerations/colors.enum';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
-import useSWR, { Fetcher } from 'swr';
+import coingeckoApi from 'redux/slices/coingecko.slice';
 import { useAccount } from 'wagmi';
 import { OutlineButton, SolidButton } from '../button';
 import { DoughnutChart } from '../graphs';
@@ -18,10 +18,6 @@ export interface TokenData {
 	dollarVal: number;
 }
 
-const fetcher: Fetcher<string, string> = (...args) => fetch(...args).then((res) => res.json());
-
-const coingeckoUrl =
-	'https://api.coingecko.com/api/v3/simple/price?ids=richochet%2Cusd-coin%2Cdai%2Cmaker%2Cethereum%2Cwrapped-bitcoin%2Cidle%2Cmatic-network%2Csushi&vs_currencies=usd';
 const geckoMapping = {
 	USDC: 'usd-coin',
 	MATIC: 'matic-network',
@@ -41,14 +37,24 @@ export const Balances = (): JSX.Element => {
 	const { address, isConnected } = useAccount();
 	const [action, setAction] = useState(0);
 	const [tabsClosed, setTabsClosed] = useState(true);
+	const {
+		data: tokens,
+		isLoading,
+		isFetching,
+		isSuccess,
+		isError,
+		error,
+		refetch,
+		//@ts-ignore
+	} = coingeckoApi.useGetUpgradedTokensListQuery();
 	const [sortedUpgradeTokensList, setSortedUpgradeTokensList] = useState(upgradeTokensList);
-	const { data, error } = useSWR(coingeckoUrl, fetcher);
+
 	const [geckoPriceList, setGeckoPriceList] = useState<Object>();
 	const [tokenList, setTokenList] = useState<TokenData[]>([]);
 	useEffect(() => {
 		if (isConnected) {
-			if (data) setGeckoPriceList(data);
-			if (error) console.error(error);
+			if (tokens && isSuccess) setGeckoPriceList(tokens);
+			if (isError) console.error(error);
 			const getTokenData = async () => {
 				if (geckoPriceList) {
 					const tokens = await Promise.all(
@@ -73,7 +79,7 @@ export const Balances = (): JSX.Element => {
 			};
 			getTokenData();
 		}
-	}, [data, geckoPriceList, sortedUpgradeTokensList]);
+	}, [tokens, geckoPriceList, sortedUpgradeTokensList]);
 	return (
 		<>
 			<p className='font-light uppercase tracking-widest text-primary-500'>{t('your-balances')}</p>

@@ -1,6 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { useEffect } from 'react';
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import coingeckoApi from 'redux/slices/coingecko.slice';
+import { useAccount } from 'wagmi';
 
 interface ChartData {
 	name: string;
@@ -22,15 +24,22 @@ labels.map((label) => {
 });
 
 // Get coingecko token history
-const coingeckoUrl = `https://api.coingecko.com/api/v3/coins/deusdc/market_chart?vs_currency=usd&days=1`;
-console.log({ coingeckoUrl });
-console.log({ data });
 export const AreaGraph = () => {
+	const { isConnected } = useAccount();
+	const {
+		data: tokens,
+		isLoading,
+		isFetching,
+		isSuccess,
+		isError,
+		error,
+		refetch,
+	} = coingeckoApi.useGetTokenHistoryQuery('deusdc');
 	useEffect(() => {
-		fetch(coingeckoUrl)
-			.then((res) => res.json())
-			.then((data) => console.log({ data }));
-	}, []);
+		if (isConnected && isSuccess) {
+			console.log({ tokens });
+		}
+	}, [isConnected, isSuccess, tokens]);
 	return (
 		<div className='h-52 min-h-full w-52 min-w-full'>
 			<ResponsiveContainer height='100%' width='100%'>
