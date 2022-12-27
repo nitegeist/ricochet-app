@@ -1,4 +1,3 @@
-import { Alert } from '@richochet/components/alert';
 import { Balances } from '@richochet/components/balances';
 import { OutlineButton } from '@richochet/components/button';
 import { Card, CardContainer, CardWithBackground, CardWithOutline, SmallCard } from '@richochet/components/cards';
@@ -9,15 +8,19 @@ import Navigation from '@richochet/components/navigation';
 import { Positions } from '@richochet/components/positions';
 import { Refer } from '@richochet/components/refer';
 import { useIsMounted } from '@richochet/hooks/useIsMounted';
+import { getSFFramework } from '@richochet/utils/fluidsdkConfig';
 import { formatCurrency } from '@richochet/utils/functions';
-import { tokens } from '@richochet/utils/tokens';
+import Big, { BigSource } from 'big.js';
 import { ConnectKitButton } from 'connectkit';
-import { Token } from 'enumerations/token.enum';
+import { Coin } from 'constants/coins';
+import { RICAddress } from 'constants/polygon_config';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
-import { useAppSelector } from 'redux/hooks';
-import { chain, useAccount, useBalance } from 'wagmi';
+import { useEffect, useState } from 'react';
+import { chain, useAccount, useBalance, useProvider } from 'wagmi';
+
+const coingeckoUrl = `https://api.coingecko.com/api/v3/simple/price?ids=richochet&vs_currencies=usd`;
 
 export async function getStaticProps({ locale }: any): Promise<Object> {
 	return {
@@ -29,11 +32,40 @@ export async function getStaticProps({ locale }: any): Promise<Object> {
 export default function Home({ locale }: any): JSX.Element {
 	const { t } = useTranslation('home');
 	const { address, isConnected } = useAccount();
-	const { loading, message, error, success } = useAppSelector((state) => state.streams);
+	const [usdPrice, setUsdPrice] = useState<Big>(new Big(0));
+	const [usdFlowRate, setUsdFlowRate] = useState<string>();
+	const provider = useProvider();
+	useEffect(() => {
+		fetch(coingeckoUrl)
+			.then((res) => res.json())
+			.then((data) => setUsdPrice(new Big(parseFloat(data.richochet.usd))));
+	}, []);
+	// const { loading, message, error, success } = useAppSelector((state) => state.streams);
+	useEffect(() => {
+		const getNetFlowRate = async () => {
+			const framework = await getSFFramework();
+			//load the token you'd like to use like this
+			//note that tokens may be loaded by symbol or by address
+			const ric = await framework.loadSuperToken(Coin.RIC);
+			let flowRate = await ric.getNetFlow({
+				account: address as string,
+				providerOrSigner: provider,
+			});
+			const flowRateBigNumber = new Big(flowRate);
+			console.log({ usdPrice });
+			const usdFlowRate = flowRateBigNumber
+				.times(new Big('2592000'))
+				.div(new Big('10e17'))
+				.times(usdPrice as BigSource)
+				.toFixed(2);
+			setUsdFlowRate(usdFlowRate);
+		};
+		getNetFlowRate();
+	}, [address, provider, usdPrice]);
 	const { data } = useBalance({
 		addressOrName: address,
 		chainId: chain.polygon.id,
-		token: tokens[Token.RIC],
+		token: RICAddress,
 	});
 	const isMounted = useIsMounted();
 
@@ -53,9 +85,9 @@ export default function Home({ locale }: any): JSX.Element {
 				<Navigation />
 				<main>
 					<div className='mx-auto w-screen py-6 px-8 lg:px-16'>
-						{loading && <Alert type='loading' message={message} />}
+						{/* {loading && <Alert type='loading' message={message} />}
 						{success && <Alert type='success' message={message} />}
-						{error && <Alert type='error' message={error?.data?.message ?? error?.message} />}
+						{error && <Alert type='error' message={error?.data?.message ?? error?.message} />} */}
 						{isConnected && (
 							<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-items-stretch place-items-stretch gap-10'>
 								<SmallCard
@@ -72,7 +104,9 @@ export default function Home({ locale }: any): JSX.Element {
 									content={
 										<>
 											<h6 className='font-light uppercase tracking-widest text-primary-500'>{t('net-flow-rate')}</h6>
-											<p className='text-slate-100 font-light text-2xl'>{formatCurrency(2556.789)} / hr</p>
+											<p className='text-slate-100 font-light text-2xl'>
+												{formatCurrency(parseFloat(usdFlowRate as string))} / mo
+											</p>
 										</>
 									}
 								/>
@@ -158,4 +192,10 @@ export default function Home({ locale }: any): JSX.Element {
 			</div>
 		</>
 	);
+}
+function useSWR(
+	coingeckoUrl: string,
+	fetcher: (args: string) => import('swr/_internal').FetcherResponse<string>
+): { data: any; error: any } {
+	throw new Error('Function not implemented.');
 }
