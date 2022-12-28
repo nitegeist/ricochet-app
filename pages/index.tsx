@@ -1,3 +1,4 @@
+import { Alert } from '@richochet/components/alert';
 import { Balances } from '@richochet/components/balances';
 import { OutlineButton } from '@richochet/components/button';
 import { Card, CardContainer, CardWithBackground, CardWithOutline, SmallCard } from '@richochet/components/cards';
@@ -47,7 +48,10 @@ export default function Home({ locale }: any): JSX.Element {
 		if (isConnected && isSuccess && tokenPrice) {
 			setUsdPrice(new Big(parseFloat(tokenPrice?.richochet?.usd)));
 		}
-	}, [isConnected, isSuccess, tokenPrice]);
+		if (isError) {
+			console.error(error);
+		}
+	}, [isConnected, tokenPrice]);
 	useEffect(() => {
 		if (isConnected) {
 			const getNetFlowRate = async () => {
@@ -60,7 +64,6 @@ export default function Home({ locale }: any): JSX.Element {
 					providerOrSigner: provider,
 				});
 				const flowRateBigNumber = new Big(flowRate);
-				console.log({ usdPrice });
 				const usdFlowRate = flowRateBigNumber
 					.times(new Big('2592000'))
 					.div(new Big('10e17'))
@@ -94,15 +97,13 @@ export default function Home({ locale }: any): JSX.Element {
 				<Navigation />
 				<main>
 					<div className='mx-auto w-screen py-6 px-8 lg:px-16'>
-						{/* {loading && <Alert type='loading' message={message} />}
-						{success && <Alert type='success' message={message} />}
-						{error && <Alert type='error' message={error?.data?.message ?? error?.message} />} */}
+						<Alert />
 						{isConnected && (
 							<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-items-stretch place-items-stretch gap-10'>
 								<SmallCard
 									content={
 										<>
-											<h6 className='font-light uppercase tracking-widest text-primary-500'>
+											<h6 className='font-light uppercase tracking-widest text-primary-500 mb-2'>
 												{t('total-in-positions')}
 											</h6>
 											<p className='text-slate-100 font-light text-2xl'>{formatCurrency(2556.789)}</p>
@@ -112,7 +113,9 @@ export default function Home({ locale }: any): JSX.Element {
 								<SmallCard
 									content={
 										<>
-											<h6 className='font-light uppercase tracking-widest text-primary-500'>{t('net-flow-rate')}</h6>
+											<h6 className='font-light uppercase tracking-widest text-primary-500 mb-2'>
+												{t('net-flow-rate')}
+											</h6>
 											<p className='text-slate-100 font-light text-2xl'>
 												{formatCurrency(parseFloat(usdFlowRate as string))} / {t('month')}
 											</p>
@@ -122,7 +125,7 @@ export default function Home({ locale }: any): JSX.Element {
 								<SmallCard
 									content={
 										<>
-											<h6 className='font-light uppercase tracking-widest text-primary-500'>{t('ric-balance')}</h6>
+											<h6 className='font-light uppercase tracking-widest text-primary-500 mb-2'>{t('ric-balance')}</h6>
 											<p className='text-slate-100 font-light text-2xl space-x-1'>
 												<span>{Number(data?.formatted).toFixed(2)}</span>
 												<span>{data?.symbol}</span>
@@ -133,7 +136,9 @@ export default function Home({ locale }: any): JSX.Element {
 								<SmallCard
 									content={
 										<>
-											<h6 className='font-light uppercase tracking-widest text-primary-500'>{t('rewards-earned')}</h6>
+											<h6 className='font-light uppercase tracking-widest text-primary-500 mb-2'>
+												{t('rewards-earned')}
+											</h6>
 											<p className='text-slate-100 font-light text-2xl'>{formatCurrency(2556.789)}</p>
 										</>
 									}

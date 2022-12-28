@@ -1,4 +1,5 @@
 import { ConnectKitProvider } from 'connectkit';
+import { AlertProvider } from 'contexts/AlertContext';
 import { appWithTranslation } from 'next-i18next';
 import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
@@ -55,8 +56,10 @@ function App({ Component, pageProps }: AppProps) {
 					'--ck-accent-text-color': '##f1f5f9',
 					'--ck-body-background': '#16212C',
 				}}>
-				<Provider store={store}>
-					<Component {...pageProps} />
+				<Provider store={store()}>
+					<AlertProvider>
+						<Component {...pageProps} />
+					</AlertProvider>
 				</Provider>
 			</ConnectKitProvider>
 		</WagmiConfig>

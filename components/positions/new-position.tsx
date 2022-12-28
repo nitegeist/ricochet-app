@@ -1,12 +1,13 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { ArrowLongRightIcon, CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
+import AlertAction from '@richochet/utils/alertAction';
 import { Coin } from 'constants/coins';
 import { FlowEnum, FlowTypes } from 'constants/flowConfig';
 import { RICAddress, twoWayMarketRICUSDCAddress, USDCxAddress } from 'constants/polygon_config';
+import { AlertContext } from 'contexts/AlertContext';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
-import { Fragment, useState } from 'react';
-import { useAppDispatch } from 'redux/hooks';
+import { Fragment, useContext, useState } from 'react';
 import streamApi from 'redux/slices/streams.slice';
 import { RoundedButton } from '../button';
 import { AreaGraph } from '../graphs';
@@ -23,10 +24,10 @@ interface Props {
 export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 	const { t } = useTranslation('home');
 	const [from, setFrom] = useState(Coin.BTC);
-	const dispatch = useAppDispatch();
 	const [to, setTo] = useState(Coin.RIC);
 	const [amount, setAmount] = useState('1');
-	const [startStreamTrigger, { isLoading, isError, data, error }] = streamApi.useLazyStartStreamQuery();
+	const [state, dispatch] = useContext(AlertContext);
+	const [startStreamTrigger, { data }] = streamApi.useLazyStartStreamQuery();
 	const [positionType, setPositionType] = useState(postionTypes[2]);
 	const handleSubmit = (event: any) => {
 		console.log('Made it to handle submit!');
@@ -41,10 +42,20 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 			flowKey: FlowEnum.twoWayRicUsdcFlowQuery,
 			type: FlowTypes.market,
 		};
+		dispatch(AlertAction.showLoadingAlert('Waiting for your transaction to be confirmed...', ''));
 		//@ts-ignore
-		const stream = startStreamTrigger({ amount, config }).then((response: any) => console.log({ response }));
+		const stream = startStreamTrigger({ amount, config });
+		stream
+			.then((response) => {
+				if (response.isSuccess) {
+					dispatch(AlertAction.showSuccessAlert('Success', 'Transaction confirmed 👌'));
+				}
+				setTimeout(() => {
+					dispatch(AlertAction.hideAlert());
+				}, 5000);
+			})
+			.catch((error) => dispatch(AlertAction.showErrorAlert('Error', `${error?.message}`)));
 		// const stream = dispatch(startStream({ type: 'start', payload: { amount, config } }));
-		console.log({ stream });
 	};
 	return (
 		<>
