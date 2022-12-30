@@ -34,7 +34,7 @@ export default function Home({ locale }: any): JSX.Element {
 	const { address, isConnected } = useAccount();
 	const [usdPrice, setUsdPrice] = useState<Big>(new Big(0));
 	const [usdFlowRate, setUsdFlowRate] = useState<string>();
-	const provider = useProvider();
+	const provider = useProvider({ chainId: chain.polygon.id });
 	const {
 		data: tokenPrice,
 		isLoading,
@@ -51,9 +51,9 @@ export default function Home({ locale }: any): JSX.Element {
 		if (isError) {
 			console.error(error);
 		}
-	}, [isConnected, tokenPrice]);
+	}, [isConnected, isSuccess, tokenPrice, isError, error]);
 	useEffect(() => {
-		if (isConnected) {
+		if (isConnected && usdPrice) {
 			const getNetFlowRate = async () => {
 				const framework = await getSFFramework();
 				//load the token you'd like to use like this
