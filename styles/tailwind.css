@@ -43,7 +43,7 @@
 	}
 
 	.navbar {
-		@apply flex items-center bg-transparent text-slate-100 font-semibold p-3 flex-wrap;
+		@apply flex items-center bg-transparent text-slate-100 font-semibold py-6 px-8 flex-wrap;
 	}
 	.mobile-links {
 		@apply lg:hidden inline-flex w-full space-y-4 lg:space-x-6 items-stretch flex-col;
