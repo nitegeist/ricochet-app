@@ -1,19 +1,20 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { ArrowLongRightIcon, CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
 import AlertAction from '@richochet/utils/alertAction';
+import { getShareScaler } from '@richochet/utils/getShareScaler';
 import { Coin } from 'constants/coins';
 import { FlowEnum, FlowTypes } from 'constants/flowConfig';
 import { RICAddress, twoWayMarketRICUSDCAddress, USDCxAddress } from 'constants/polygon_config';
 import { AlertContext } from 'contexts/AlertContext';
+import { ExchangeKeys } from 'enumerations/exchangeKeys.enum';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
-import { Fragment, useContext, useState } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
 import streamApi from 'redux/slices/streams.slice';
 import { RoundedButton } from '../button';
 import { AreaGraph } from '../graphs';
 import TokenList from '../token-list';
 
-const tokens = ['ETH', 'RIC', 'BTC'];
 const postionTypes = ['annually', 'bi-weekly', 'continuous', 'weekly'];
 
 interface Props {
@@ -27,34 +28,56 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 	const [to, setTo] = useState(Coin.RIC);
 	const [amount, setAmount] = useState('1');
 	const [state, dispatch] = useContext(AlertContext);
-	const [startStreamTrigger, { data }] = streamApi.useLazyStartStreamQuery();
+	const [shareScaler, setShareScaler] = useState(1e3);
+	const [config, setConfig] = useState({
+		superToken: twoWayMarketRICUSDCAddress,
+		tokenA: RICAddress,
+		tokenB: USDCxAddress,
+		coinA: Coin.RIC,
+		coinB: Coin.USDC,
+		flowKey: FlowEnum.twoWayRicUsdcFlowQuery,
+		type: FlowTypes.market,
+	});
+	const [startStreamTrigger] = streamApi.useLazyStartStreamQuery();
 	const [positionType, setPositionType] = useState(postionTypes[2]);
+	useEffect(() => {
+		const { tokenA, tokenB, type } = config;
+		if (type !== FlowTypes.market) return;
+		const fetchShareScaler = async () => {
+			await getShareScaler(ExchangeKeys.TWO_WAY_RIC_USDC, tokenA, tokenB).then((res) => {
+				setShareScaler(res);
+				console.log({ shareScaler });
+			});
+		};
+		fetchShareScaler();
+	}, [config]);
+
 	const handleSubmit = (event: any) => {
-		console.log('Made it to handle submit!');
 		event?.preventDefault();
 		// Need to call hook here to start a new stream.
-		const config = {
-			superToken: twoWayMarketRICUSDCAddress,
-			tokenA: RICAddress,
-			tokenB: USDCxAddress,
-			coinA: Coin.RIC,
-			coinB: Coin.USDC,
-			flowKey: FlowEnum.twoWayRicUsdcFlowQuery,
-			type: FlowTypes.market,
-		};
 		dispatch(AlertAction.showLoadingAlert('Waiting for your transaction to be confirmed...', ''));
+		const newAmount =
+			config.type === FlowTypes.market
+				? (
+						((Math.floor(((parseFloat(amount) / 2592000) * 1e18) / shareScaler) * shareScaler) / 1e18) *
+						2592000
+				  ).toString()
+				: amount;
 		//@ts-ignore
-		const stream = startStreamTrigger({ amount, config });
+		const stream = startStreamTrigger({ newAmount, config });
 		stream
 			.then((response) => {
 				if (response.isSuccess) {
 					dispatch(AlertAction.showSuccessAlert('Success', 'Transaction confirmed 👌'));
 				}
+				if (response.isError) {
+					dispatch(AlertAction.showErrorAlert('Error', `${response?.error}`));
+				}
 				setTimeout(() => {
 					dispatch(AlertAction.hideAlert());
 				}, 5000);
 			})
-			.catch((error) => dispatch(AlertAction.showErrorAlert('Error', `${error?.message}`)));
+			.catch((error) => dispatch(AlertAction.showErrorAlert('Error', `${error || error?.message}`)));
 		// const stream = dispatch(startStream({ type: 'start', payload: { amount, config } }));
 	};
 	return (

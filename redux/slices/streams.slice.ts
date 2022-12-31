@@ -29,11 +29,13 @@ const streamApi = createApi({
 			queryFn: async (payload: any): Promise<any | undefined> => {
 				try {
 					const { config, amount } = payload;
+					console.log({ config, amount });
 					// we must initialize a contract address with idaContract: getContract(idaAddress, idaABI, web3);
 					const idaContract = await getContract({ address: idaAddress, abi: idaABI });
-					console.log(idaContract);
+					console.log({ idaContract });
 					// We must normalize the payload amount for superfluid function
 					const normalizedAmount = Math.round((Number(amount) * 1e18) / 2592000);
+					console.log({ normalizedAmount });
 					// we must call the startFlow function in api/ethereum.ts with following Data
 					//
 					//idaContract: Initialized Contract Object from line 18 comment,
@@ -51,7 +53,7 @@ const streamApi = createApi({
 						normalizedAmount,
 						config.referralId
 					);
-					console.log(streamTx);
+					console.log('Transaction Results: ', streamTx);
 					return {
 						data: streamTx,
 					};
