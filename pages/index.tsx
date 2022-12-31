@@ -10,7 +10,7 @@ import { Positions } from '@richochet/components/positions';
 import { Refer } from '@richochet/components/refer';
 import { useIsMounted } from '@richochet/hooks/useIsMounted';
 import { getSFFramework } from '@richochet/utils/fluidsdkConfig';
-import { formatCurrency } from '@richochet/utils/functions';
+import { formatCurrency } from '@richochet/utils/helperFunctions';
 import Big, { BigSource } from 'big.js';
 import { ConnectKitButton } from 'connectkit';
 import { Coin } from 'constants/coins';

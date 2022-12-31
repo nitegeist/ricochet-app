@@ -1,4 +1,4 @@
-import { formatCurrency } from '@richochet/utils/functions';
+import { formatCurrency } from '@richochet/utils/helperFunctions';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';

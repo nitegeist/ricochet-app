@@ -1,5 +1,5 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
-import { formatCurrency } from '@richochet/utils/functions';
+import { formatCurrency } from '@richochet/utils/helperFunctions';
 import { useTranslation } from 'next-i18next';
 import { CardTitle } from '../cards/card-title';
 import { DataTable } from '../table/data-table';

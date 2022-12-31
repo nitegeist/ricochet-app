@@ -1,6 +1,6 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
-import { combineClasses } from '@richochet/utils/functions';
+import { combineClasses } from '@richochet/utils/helperFunctions';
 import { Coin, iconsCoin, namesCoin, namesCoinX } from 'constants/coins';
 import { NextPage } from 'next';
 import Image from 'next/image';

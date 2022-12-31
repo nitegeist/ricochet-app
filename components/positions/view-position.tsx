@@ -1,5 +1,5 @@
 import { ArrowLongRightIcon } from '@heroicons/react/24/solid';
-import { combineClasses, formatCurrency } from '@richochet/utils/functions';
+import { combineClasses, formatCurrency } from '@richochet/utils/helperFunctions';
 import RicochetLogo from 'icons/richochet-logo';
 import USDCLogo from 'icons/usdc-logo';
 import { NextPage } from 'next';

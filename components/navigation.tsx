@@ -1,6 +1,6 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { ArrowTopRightOnSquareIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
-import { combineClasses } from '@richochet/utils/functions';
+import { combineClasses } from '@richochet/utils/helperFunctions';
 import { ConnectKitButton } from 'connectkit';
 import { RICAddress } from 'constants/polygon_config';
 import RicochetLogo from 'icons/richochet-logo';

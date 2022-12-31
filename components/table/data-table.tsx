@@ -1,6 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import usePagination from '@richochet/hooks/usePagination';
-import { combineClasses, formatCurrency } from '@richochet/utils/functions';
+import { combineClasses, formatCurrency } from '@richochet/utils/helperFunctions';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { TokenData } from '../balances';

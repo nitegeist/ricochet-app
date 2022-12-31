@@ -1,5 +1,5 @@
 import { ArrowLongRightIcon } from '@heroicons/react/24/solid';
-import { combineClasses } from '@richochet/utils/functions';
+import { combineClasses } from '@richochet/utils/helperFunctions';
 import { Coin, iconsCoin } from 'constants/coins';
 import { NextPage } from 'next';
 import Image from 'next/image';
