@@ -1,4 +1,4 @@
-import { combineClasses } from '@richochet/utils/functions';
+import { combineClasses } from '@richochet/utils/helperFunctions';
 import { NextPage } from 'next';
 import { MouseEventHandler } from 'react';
 interface Props {

@@ -1,6 +1,6 @@
 import { Transition } from '@headlessui/react';
 import { InformationCircleIcon, ShieldCheckIcon, ShieldExclamationIcon, XMarkIcon } from '@heroicons/react/24/solid';
-import { combineClasses } from '@richochet/utils/functions';
+import { combineClasses } from '@richochet/utils/helperFunctions';
 import { AlertContext } from 'contexts/AlertContext';
 import { AlertTypes } from 'enumerations/alertTypes.enum';
 import { Fragment, useContext, useEffect, useState } from 'react';
