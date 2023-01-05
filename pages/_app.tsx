@@ -15,7 +15,7 @@ import '../styles/globals.css';
 
 const { chains, provider, webSocketProvider } = configureChains(
 	[...defaultChains, chain.polygon, ...defaultL2Chains],
-	[alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_ID as string }), publicProvider()]
+	[alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_ID! }), publicProvider()]
 );
 const client = createClient({
 	autoConnect: true,

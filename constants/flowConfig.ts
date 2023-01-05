@@ -1,8 +1,27 @@
 import { Coin } from './coins';
 import {
-	DAIxAddress, MATICxAddress, RexHatAddress, RexShirtAddress, RICAddress, ricRexHatLaunchpadAddress, ricRexShirtLaunchpadAddress, StIbAlluoBTCAddress, StIbAlluoETHAddress,
-	StIbAlluoUSDAddress, twoWayMarketDAIWETHAddress, twoWayMarketibAlluoUSDBTCAddress, twoWayMarketibAlluoUSDETHAddress, twoWayMarketMATICUSDCAddress, twoWayMarketRICUSDCAddress, twoWayMarketWBTCAddress, twoWayWETHMarketAddress,
-	USDCxAddress, usdcxibAlluoUSDAddress, usdcxRicExchangeAddress, WBTCxAddress, WETHxAddress
+	DAIxAddress,
+	MATICxAddress,
+	RexHatAddress,
+	RexShirtAddress,
+	RICAddress,
+	ricRexHatLaunchpadAddress,
+	ricRexShirtLaunchpadAddress,
+	StIbAlluoBTCAddress,
+	StIbAlluoETHAddress,
+	StIbAlluoUSDAddress,
+	twoWayMarketDAIWETHAddress,
+	twoWayMarketibAlluoUSDBTCAddress,
+	twoWayMarketibAlluoUSDETHAddress,
+	twoWayMarketMATICUSDCAddress,
+	twoWayMarketRICUSDCAddress,
+	twoWayMarketWBTCAddress,
+	twoWayWETHMarketAddress,
+	USDCxAddress,
+	usdcxibAlluoUSDAddress,
+	usdcxRicExchangeAddress,
+	WBTCxAddress,
+	WETHxAddress
 } from './polygon_config';
 
 // To-Do: Refactor this

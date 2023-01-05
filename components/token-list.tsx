@@ -18,7 +18,7 @@ const TokenList: NextPage<Props> = ({ classNames, value, handleChange }): JSX.El
 			<Listbox.Button className='relative w-full cursor-default rounded-lg bg-slate-700 py-2 pl-3 pr-10 text-left text-slate-200 shadow-md focus:outline-none focus-visible:border-slate-500 focus-visible:ring-2 focus-visible:ring-slate-100 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-300 sm:text-sm'>
 				<div className='flex items-center whitespace-nowrap space-x-2'>
 					<span>
-						<Image width='22' height='22' src={iconsCoin[value as Coin] as string} alt={value} />
+						<Image width='22' height='22' src={iconsCoin[value as Coin]!} alt={value} />
 					</span>
 					<span className='block truncate'>{value}</span>
 				</div>
@@ -41,7 +41,7 @@ const TokenList: NextPage<Props> = ({ classNames, value, handleChange }): JSX.El
 								<>
 									<div className='flex items-center whitespace-nowrap space-x-2'>
 										<span>
-											<Image width='22' height='22' src={iconsCoin[coin as Coin] as string} alt={coin} />
+											<Image width='22' height='22' src={iconsCoin[coin as Coin]!} alt={coin} />
 										</span>
 										<span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>{coin}</span>
 									</div>
@@ -73,7 +73,7 @@ const TokenList: NextPage<Props> = ({ classNames, value, handleChange }): JSX.El
 								<>
 									<div className='flex items-center whitespace-nowrap space-x-2'>
 										<span>
-											<Image width='22' height='22' src={iconsCoin[coin as Coin] as string} alt={coin} />
+											<Image width='22' height='22' src={iconsCoin[coin as Coin]!} alt={coin} />
 										</span>
 										<span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>{coin}</span>
 									</div>

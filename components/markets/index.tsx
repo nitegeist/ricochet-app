@@ -131,8 +131,8 @@ export const Markets = () => {
 	useEffect(() => {
 		async function getGraphData() {
 			console.log({ address });
-			const query = await queryFlows(address as string);
-			console.log({ query });
+			const response = await queryFlows(address!);
+			console.log({ response });
 			// setFlows((await queryFlows(address as string))?.data?.data.account);
 		}
 		if (isConnected) getGraphData();

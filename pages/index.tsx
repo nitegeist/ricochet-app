@@ -60,7 +60,7 @@ export default function Home({ locale }: any): JSX.Element {
 				//note that tokens may be loaded by symbol or by address
 				const ric = await framework.loadSuperToken(Coin.RIC);
 				let flowRate = await ric.getNetFlow({
-					account: address as string,
+					account: address!,
 					providerOrSigner: provider,
 				});
 				const flowRateBigNumber = new Big(flowRate);
@@ -117,7 +117,7 @@ export default function Home({ locale }: any): JSX.Element {
 												{t('net-flow-rate')}
 											</h6>
 											<p className='text-slate-100 font-light text-2xl'>
-												{formatCurrency(parseFloat(usdFlowRate as string))} / {t('month')}
+												{formatCurrency(parseFloat(usdFlowRate!))} / {t('month')}
 											</p>
 										</>
 									}

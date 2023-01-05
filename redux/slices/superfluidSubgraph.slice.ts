@@ -13,6 +13,9 @@ const superfluidSubgraphApi = createApi({
 			query: (queryAddress: string) => ({
 				url: '/superfluid-matic',
 				method: 'POST',
+				headers: new Headers({
+					'content-type': 'application/graphql',
+				}),
 				body: getQueryGrath(queryAddress),
 			}),
 		}),

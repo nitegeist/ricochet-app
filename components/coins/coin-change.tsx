@@ -21,9 +21,9 @@ export const CoinChange: NextPage<Props> = ({ coinA, coinB, token, type }) => {
 	if (type === DataType.Position && coinA && coinB) {
 		return (
 			<>
-				<Image width='24' height='24' src={iconsCoin[coinA as Coin] as string} alt={coinA} />{' '}
+				<Image width='24' height='24' src={iconsCoin[coinA as Coin]!} alt={coinA} />{' '}
 				<ArrowLongRightIcon className='h-5 w-5' />
-				<Image width='24' height='24' src={iconsCoin[coinB as Coin] as string} alt={coinB} />
+				<Image width='24' height='24' src={iconsCoin[coinB as Coin]!} alt={coinB} />
 			</>
 		);
 	}
@@ -31,11 +31,11 @@ export const CoinChange: NextPage<Props> = ({ coinA, coinB, token, type }) => {
 		return (
 			<>
 				<span className='flex items-center space-x-2'>
-					<Image width='24' height='24' src={iconsCoin[coinA as Coin] as string} alt={coinA} /> <span>{coinA}</span>
+					<Image width='24' height='24' src={iconsCoin[coinA as Coin]!} alt={coinA} /> <span>{coinA}</span>
 				</span>
 				<ArrowLongRightIcon className='h-5 w-5' />
 				<span className='flex items-center space-x-2'>
-					<Image width='24' height='24' src={iconsCoin[coinB as Coin] as string} alt={coinB} /> <span>{coinB}</span>
+					<Image width='24' height='24' src={iconsCoin[coinB as Coin]!} alt={coinB} /> <span>{coinB}</span>
 				</span>
 			</>
 		);
@@ -43,7 +43,7 @@ export const CoinChange: NextPage<Props> = ({ coinA, coinB, token, type }) => {
 	if (type === DataType.Balances && token) {
 		return (
 			<>
-				<Image width='24' height='24' src={iconsCoin[token as Coin] as string} alt={token} />
+				<Image width='24' height='24' src={iconsCoin[token as Coin]!} alt={token} />
 				<span
 					className={combineClasses(
 						token === Coin.ETH

@@ -9,9 +9,9 @@ export const gas = async () => {
 		const { maxPriorityFeePerGas, maxFeePerGas } = gasResponse.formatted || {};
 		return {
 			maxPriorityFeePerGas: ethers.utils.hexlify(
-				ethers.utils.parseUnits(maxPriorityFeePerGas as string, 'gwei')?.toNumber()
+				ethers.utils.parseUnits(maxPriorityFeePerGas!, 'gwei')?.toNumber()
 			),
-			maxFeePerGas: ethers.utils.hexlify(ethers.utils.parseUnits(maxFeePerGas as string, 'gwei')?.toNumber()),
+			maxFeePerGas: ethers.utils.hexlify(ethers.utils.parseUnits(maxFeePerGas!, 'gwei')?.toNumber()),
 		};
 	} catch (error) {
 		return {};

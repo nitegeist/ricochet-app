@@ -60,7 +60,7 @@ export const Balances = (): JSX.Element => {
 					const tokens = await Promise.all(
 						sortedUpgradeTokensList.map(async (token) => {
 							const balance = await fetchBalance({
-								addressOrName: address as string,
+								addressOrName: address!,
 								chainId: chain.polygon.id,
 								token: token.coin !== Coin.RIC ? (token.tokenAddress as `0x${string}`) : undefined,
 							});
