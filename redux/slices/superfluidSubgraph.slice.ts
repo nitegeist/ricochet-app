@@ -14,30 +14,30 @@ const superfluidSubgraphApi = createApi({
 				url: '/superfluid-matic',
 				method: 'POST',
 				headers: new Headers({
-					'content-type': 'application/graphql',
+					'content-type': 'application/json ',
 				}),
-				body: getQueryGrath(queryAddress),
+				body: { query: getQueryGrath(queryAddress) },
 			}),
 		}),
 		queryDistributions: builder.mutation({
 			query: (subscriber: string) => ({
 				url: '/protocol-v1-matic',
 				method: 'POST',
-				body: getQueryDistributions(subscriber),
+				body: { query: getQueryDistributions(subscriber) },
 			}),
 		}),
 		queryStreams: builder.mutation({
 			query: (address: string) => ({
 				url: '/protocol-v1-matic',
 				method: 'POST',
-				body: getQueryStreams(address),
+				body: { query: getQueryStreams(address) },
 			}),
 		}),
 		queryReceived: builder.mutation({
 			query: (receiver: string) => ({
 				url: '/protocol-v1-matic',
 				method: 'POST',
-				body: getQueryReceived(receiver),
+				body: { query: getQueryReceived(receiver) },
 			}),
 		}),
 	}),

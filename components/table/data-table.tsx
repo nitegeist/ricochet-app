@@ -74,7 +74,9 @@ export const DataTable: NextPage<Props> = ({
 											<td className='flex items-center px-6 py-4 whitespace-nowrap space-x-2'>
 												<CoinChange coinA={data.from} coinB={data.to} type={DataType.Market} />
 											</td>
-											<td className='px-6 py-4 whitespace-nowrap'>{data.total}</td>
+											<td className='px-6 py-4 whitespace-nowrap'>
+												{formatCurrency(data.total)} / {t('month')}
+											</td>
 											<td className='px-6 py-4 whitespace-nowrap'>{data.posAmt}</td>
 										</>
 									) : isTokenData(data) ? (

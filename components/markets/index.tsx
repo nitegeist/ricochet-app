@@ -1,6 +1,5 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
-import { formatCurrency } from '@richochet/utils/helperFunctions';
-import { flowConfig } from 'constants/flowConfig';
+import { flowConfig, FlowTypes, InvestmentFlow } from 'constants/flowConfig';
 import {
 	DAIxAddress,
 	MATICxAddress,
@@ -24,84 +23,10 @@ import { DataTable } from '../table/data-table';
 export interface MarketData {
 	from: string;
 	to: string;
-	total: string;
-	posAmt: string;
+	total: number;
+	posAmt: number;
 }
 
-const marketData: MarketData[] = [
-	{
-		from: 'BTC',
-		to: 'RIC',
-		total: `${formatCurrency(40012.65)} / month`,
-		posAmt: '15 positions',
-	},
-	{
-		from: 'BTC',
-		to: 'RIC',
-		total: `${formatCurrency(40012.65)} / month`,
-		posAmt: '15 positions',
-	},
-	{
-		from: 'BTC',
-		to: 'RIC',
-		total: `${formatCurrency(40012.65)} / month`,
-		posAmt: '15 positions',
-	},
-	{
-		from: 'BTC',
-		to: 'RIC',
-		total: `${formatCurrency(40012.65)} / month`,
-		posAmt: '15 positions',
-	},
-	{
-		from: 'BTC',
-		to: 'RIC',
-		total: `${formatCurrency(40012.65)} / month`,
-		posAmt: '15 positions',
-	},
-	{
-		from: 'BTC',
-		to: 'RIC',
-		total: `${formatCurrency(40012.65)} / month`,
-		posAmt: '15 positions',
-	},
-	{
-		from: 'BTC',
-		to: 'RIC',
-		total: `${formatCurrency(40012.65)} / month`,
-		posAmt: '15 positions',
-	},
-	{
-		from: 'BTC',
-		to: 'RIC',
-		total: `${formatCurrency(40012.65)} / month`,
-		posAmt: '15 positions',
-	},
-	{
-		from: 'BTC',
-		to: 'RIC',
-		total: `${formatCurrency(40012.65)} / month`,
-		posAmt: '15 positions',
-	},
-	{
-		from: 'BTC',
-		to: 'RIC',
-		total: `${formatCurrency(40012.65)} / month`,
-		posAmt: '15 positions',
-	},
-	{
-		from: 'BTC',
-		to: 'RIC',
-		total: `${formatCurrency(40012.65)} / month`,
-		posAmt: '15 positions',
-	},
-	{
-		from: 'BTC',
-		to: 'RIC',
-		total: `${formatCurrency(40012.65)} / month`,
-		posAmt: '15 positions',
-	},
-];
 const marketTitles = ['market', 'total', 'amount of positions'];
 const coingeckoIds = new Map<string, string>([
 	[DAIxAddress, 'dai'],
@@ -120,7 +45,7 @@ const ids = [...coingeckoIds.values()];
 
 export const Markets = () => {
 	const { t } = useTranslation('home');
-	const [filteredList, setFilteredList] = useState(flowConfig);
+	const [marketList, setMarketList] = useState<MarketData[]>([]);
 	const [flows, setFlows] = useState<{
 		flowsOwned: Flow[];
 		flowsReceived: Flow[];
@@ -130,32 +55,41 @@ export const Markets = () => {
 	const [queryFlows, { isLoading }] = superfluidSubgraphApi.useQueryFlowsMutation();
 	useEffect(() => {
 		async function getGraphData() {
-			console.log({ address });
-			const response = await queryFlows(address!);
-			console.log({ response });
-			// setFlows((await queryFlows(address as string))?.data?.data.account);
+			await queryFlows(address!).then((response) => {
+				console.log({ response });
+				if (response?.data) setFlows(response?.data?.data?.account);
+			});
 		}
 		if (isConnected) getGraphData();
 	}, [address, isConnected]);
 
-	// useEffect(() => {
-	// 	if (isSuccess && coingeckoPrices) {
-	// 		let sortedList = flowConfig.filter((each) => each.type === FlowTypes.market);
-	// 		sortedList = sortedList.sort((a, b) => {
-	// 			const totalVolumeA = parseFloat(getFlowUSDValue(a));
-	// 			const totalVolumeB = parseFloat(getFlowUSDValue(b));
-	// 			return totalVolumeB - totalVolumeA;
-	// 		});
-	// 		console.log('sorted List', sortedList);
-	// 		setFilteredList(sortedList);
-	// 	}
-	// }, [coingeckoPrices]);
+	useEffect(() => {
+		if (isSuccess && coingeckoPrices) {
+			let sortedList = flowConfig.filter((each) => each.type === FlowTypes.market);
+			sortedList = sortedList.sort((a, b) => {
+				const totalVolumeA = parseFloat(getFlowUSDValue(a));
+				const totalVolumeB = parseFloat(getFlowUSDValue(b));
+				return totalVolumeB - totalVolumeA;
+			});
+			console.log({ sortedList });
+			const marketData: MarketData[] = [];
+			sortedList.map((item) =>
+				marketData.push({
+					from: item.coinA,
+					to: item.coinB,
+					total: parseFloat(flows?.flowsOwned[0]?.flowRate!),
+					posAmt: flows?.flowsOwned.length!,
+				})
+			);
+			setMarketList(marketData);
+		}
+	}, [flows, coingeckoPrices]);
 
-	// const getFlowUSDValue = (flow: InvestmentFlow, toFixed: number = 0) => {
-	// 	return (
-	// 		coingeckoPrices ? parseFloat(state[flow.flowKey]?.flowsOwned as string) * coingeckoPrices[flow.tokenA] : 0
-	// 	).toFixed(toFixed);
-	// };
+	const getFlowUSDValue = (flow: InvestmentFlow, toFixed: number = 0) => {
+		return (coingeckoPrices ? parseFloat(flows?.flowsOwned[0]?.sum!) * coingeckoPrices[flow.tokenA] : 0).toFixed(
+			toFixed
+		);
+	};
 	return (
 		<>
 			<CardTitle
@@ -172,7 +106,7 @@ export const Markets = () => {
 					</div>
 				}
 			/>
-			<DataTable headers={marketTitles} rowData={marketData} tableLoaderRows={12} />
+			<DataTable headers={marketTitles} rowData={marketList} tableLoaderRows={12} />
 		</>
 	);
 };
