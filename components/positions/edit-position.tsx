@@ -13,7 +13,7 @@ export const EditPosition: NextPage<Props> = ({ setClose, position }) => {
 	const { t } = useTranslation('home');
 	const [action, setAction] = useState('');
 	const [amount, setAmount] = useState('');
-	const handleSubmit = (event) => {
+	const handleSubmit = (event: any) => {
 		event.preventDefault();
 	};
 	return (

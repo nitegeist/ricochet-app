@@ -4,7 +4,14 @@ import { appWithTranslation } from 'next-i18next';
 import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import { store } from 'redux/store';
-import { chain, configureChains, createClient, defaultChains, defaultL2Chains, WagmiConfig } from 'wagmi';
+import { configureChains, createClient, WagmiConfig } from 'wagmi';
+import {
+	arbitrum,
+	arbitrumGoerli, goerli, mainnet, optimism,
+	optimismGoerli,
+	polygon,
+	polygonMumbai
+} from 'wagmi/chains';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
@@ -14,7 +21,7 @@ import { publicProvider } from 'wagmi/providers/public';
 import '../styles/globals.css';
 
 const { chains, provider, webSocketProvider } = configureChains(
-	[...defaultChains, chain.polygon, ...defaultL2Chains],
+	[mainnet, goerli, arbitrum, arbitrumGoerli, polygon, polygonMumbai, optimism, optimismGoerli],
 	[alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_ID! }), publicProvider()]
 );
 const client = createClient({

@@ -7,15 +7,16 @@ import RicochetLogo from 'icons/richochet-logo';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { Fragment } from 'react';
-import { chain, useAccount, useBalance, useDisconnect } from 'wagmi';
+import { useAccount, useBalance, useDisconnect } from 'wagmi';
+import { polygon } from 'wagmi/chains';
 import { RoundedButton } from './button';
 
 export default function Navigation(): JSX.Element {
 	const { disconnect } = useDisconnect();
 	const { address, isConnected } = useAccount();
 	const { data, isError, isLoading } = useBalance({
-		addressOrName: address,
-		chainId: chain.polygon.id,
+		address: address,
+		chainId: polygon.id,
 		token: RICAddress,
 	});
 	const { t } = useTranslation('home');

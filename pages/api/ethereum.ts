@@ -4,7 +4,7 @@ import { Signer } from '@ethersproject/abstract-signer';
 import { getSFFramework } from '@richochet/utils/fluidsdkConfig';
 import { Framework } from '@superfluid-finance/sdk-core';
 import Operation from '@superfluid-finance/sdk-core/dist/main/Operation';
-import { chain, fetchSigner, getAccount, getProvider } from '@wagmi/core';
+import { fetchSigner, getAccount, getProvider } from '@wagmi/core';
 import { indexIDA } from 'constants/flowConfig';
 import {
 	MATICxAddress,
@@ -15,6 +15,7 @@ import {
 	usdcxRicExchangeAddress
 } from 'constants/polygon_config';
 import { ethers } from 'ethers';
+import { polygon } from 'wagmi/chains';
 import { gas } from './gasEstimator';
 
 export const downgrade = async (contract: any, amount: string, address: string) =>
@@ -56,10 +57,10 @@ export const upgradeMatic = async (contract: any, amount: string, address: strin
 export const stopFlow = async (exchangeAddress: string, inputTokenAddress: string) => {
 	try {
 		const { address } = await getAccount();
-		const provider = await getProvider({ chainId: chain.polygon.id });
+		const provider = await getProvider({ chainId: polygon.id });
 		const framework = await getSFFramework();
 		const signer = await fetchSigner({
-			chainId: chain.polygon.id,
+			chainId: polygon.id,
 		});
 		const { maxFeePerGas, maxPriorityFeePerGas } = await gas();
 		await framework.cfaV1
@@ -110,8 +111,8 @@ export const startFlow = async (
 				`No config found for this pair: , ${inputTokenAddress}, ${outputTokenAddress}, ${exchangeAddress}`
 			);
 		}
-		const provider = getProvider({ chainId: chain.polygon.id });
-		const signer = await fetchSigner({ chainId: chain.polygon.id });
+		const provider = getProvider({ chainId: polygon.id });
+		const signer = await fetchSigner({ chainId: polygon.id });
 		const web3Subscription = await framework.idaV1.getSubscription({
 			superToken: config.output,
 			publisher: exchangeAddress,

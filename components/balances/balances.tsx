@@ -1,4 +1,4 @@
-import { chain, fetchBalance } from '@wagmi/core';
+import { fetchBalance } from '@wagmi/core';
 import { Coin } from 'constants/coins';
 import { upgradeTokensList } from 'constants/upgradeConfig';
 import { colors } from 'enumerations/colors.enum';
@@ -6,6 +6,7 @@ import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import coingeckoApi from 'redux/slices/coingecko.slice';
 import { useAccount } from 'wagmi';
+import { polygon } from 'wagmi/chains';
 import { OutlineButton, SolidButton } from '../button';
 import { DoughnutChart } from '../graphs';
 import { DataTable } from '../table';
@@ -60,8 +61,8 @@ export const Balances = (): JSX.Element => {
 					const tokens = await Promise.all(
 						sortedUpgradeTokensList.map(async (token) => {
 							const balance = await fetchBalance({
-								addressOrName: address!,
-								chainId: chain.polygon.id,
+								address: address!,
+								chainId: polygon.id,
 								token: token.coin !== Coin.RIC ? (token.tokenAddress as `0x${string}`) : undefined,
 							});
 							return {

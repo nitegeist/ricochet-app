@@ -167,7 +167,7 @@ export const Markets = () => {
 							<span className='absolute inset-y-0 right-0 flex items-center pr-2'>
 								<MagnifyingGlassIcon className='h-4 w-4 fill-slate-400' viewBox='0 0 20 20' />
 							</span>
-							<input className='input-search' placeholder={t('search')} type='text' name='search' />
+							<input className='input-search' placeholder={t('search')!} type='text' name='search' />
 						</label>
 					</div>
 				}

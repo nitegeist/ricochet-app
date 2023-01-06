@@ -23,7 +23,7 @@ export const Transactions: NextPage<Props> = ({ type, close, setClose }) => {
 	const [swapTo, setSwapTo] = useState(Coin.RIC);
 	const [amount, setAmount] = useState('');
 	const [slippageTolerance, setSlippageTolerance] = useState(tolerance[0]);
-	const handleSubmit = (event) => {
+	const handleSubmit = (event: any) => {
 		event?.preventDefault();
 	};
 	return (
@@ -61,7 +61,7 @@ export const Transactions: NextPage<Props> = ({ type, close, setClose }) => {
 					value={amount}
 					step='any'
 					onChange={(e) => setAmount(e.target.value)}
-					placeholder={type === BalanceAction.Swap ? `${t('amount-in')} ${swapFrom}` : t('amount')}
+					placeholder={type === BalanceAction.Swap ? `${t('amount-in')!} ${swapFrom}` : t('amount')!}
 				/>
 				{type === BalanceAction.Swap && (
 					<>

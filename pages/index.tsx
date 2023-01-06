@@ -20,7 +20,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import coingeckoApi from 'redux/slices/coingecko.slice';
-import { chain, useAccount, useBalance, useProvider } from 'wagmi';
+import { useAccount, useBalance, useProvider } from 'wagmi';
+import { polygon } from 'wagmi/chains';
 
 export async function getStaticProps({ locale }: any): Promise<Object> {
 	return {
@@ -34,7 +35,7 @@ export default function Home({ locale }: any): JSX.Element {
 	const { address, isConnected } = useAccount();
 	const [usdPrice, setUsdPrice] = useState<Big>(new Big(0));
 	const [usdFlowRate, setUsdFlowRate] = useState<string>();
-	const provider = useProvider({ chainId: chain.polygon.id });
+	const provider = useProvider({ chainId: polygon.id });
 	const {
 		data: tokenPrice,
 		isLoading,
@@ -75,8 +76,8 @@ export default function Home({ locale }: any): JSX.Element {
 		}
 	}, [isConnected, usdPrice]);
 	const { data } = useBalance({
-		addressOrName: address,
-		chainId: chain.polygon.id,
+		address: address,
+		chainId: polygon.id,
 		token: RICAddress,
 	});
 	const isMounted = useIsMounted();
