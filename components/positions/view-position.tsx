@@ -1,10 +1,8 @@
-import { ArrowLongRightIcon } from '@heroicons/react/24/solid';
 import { combineClasses, formatCurrency } from '@richochet/utils/helperFunctions';
-import RicochetLogo from 'icons/richochet-logo';
-import USDCLogo from 'icons/usdc-logo';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
+import { CoinChange, DataType } from '../coins/coin-change';
 import { AreaGraph } from '../graphs/area-graph';
 import { EditPosition } from './edit-position';
 import { PositionData } from './positions';
@@ -40,9 +38,7 @@ export const ViewPosition: NextPage<Props> = ({ setClose, position }) => {
 			<div className='flex flex-wrap items-start justify-between space-y-4 md:space-y-0'>
 				<div className='w-full md:w-1/2'>
 					<span className='flex items-center justify-start'>
-						{position.from === 'RIC' ? <RicochetLogo width='40' height='40' /> : ''}{' '}
-						<ArrowLongRightIcon className='h-10 w-16' />
-						{position.to === 'USDC' ? <USDCLogo width='30' height='30' /> : ''}
+						<CoinChange coinA={position.from} coinB={position.to} type={DataType.ViewPosition} />
 					</span>
 					<p className='text-slate-100 my-2'>
 						<span className='text-slate-400'>{t('input')}:</span> {position.input}

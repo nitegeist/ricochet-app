@@ -8,6 +8,7 @@ export enum DataType {
 	Position = 'Position',
 	Market = 'Market',
 	Balances = 'Balances',
+	ViewPosition = 'View Position',
 }
 
 interface Props {
@@ -60,6 +61,15 @@ export const CoinChange: NextPage<Props> = ({ coinA, coinB, token, type }) => {
 					)}>
 					{token}
 				</span>
+			</>
+		);
+	}
+	if (type === DataType.ViewPosition && coinA && coinB) {
+		return (
+			<>
+				<Image width='40' height='40' src={iconsCoin[coinA as Coin]!} alt={coinA} />
+				<ArrowLongRightIcon className='h-10 w-16' />
+				<Image width='30' height='30' src={iconsCoin[coinB as Coin]!} alt={coinB} />
 			</>
 		);
 	}
