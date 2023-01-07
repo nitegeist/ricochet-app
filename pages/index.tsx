@@ -53,25 +53,25 @@ export default function Home({ locale }: any): JSX.Element {
 			console.error(error);
 		}
 	}, [isConnected, isSuccess, tokenPrice, isError, error]);
+	const getNetFlowRate = async () => {
+		const framework = await getSFFramework();
+		//load the token you'd like to use like this
+		//note that tokens may be loaded by symbol or by address
+		const ric = await framework.loadSuperToken(Coin.RIC);
+		let flowRate = await ric.getNetFlow({
+			account: address!,
+			providerOrSigner: provider,
+		});
+		const flowRateBigNumber = new Big(flowRate);
+		const usdFlowRate = flowRateBigNumber
+			.times(new Big('2592000'))
+			.div(new Big('10e17'))
+			.times(usdPrice as BigSource)
+			.toFixed(2);
+		setUsdFlowRate(usdFlowRate);
+	};
 	useEffect(() => {
 		if (isConnected && usdPrice) {
-			const getNetFlowRate = async () => {
-				const framework = await getSFFramework();
-				//load the token you'd like to use like this
-				//note that tokens may be loaded by symbol or by address
-				const ric = await framework.loadSuperToken(Coin.RIC);
-				let flowRate = await ric.getNetFlow({
-					account: address!,
-					providerOrSigner: provider,
-				});
-				const flowRateBigNumber = new Big(flowRate);
-				const usdFlowRate = flowRateBigNumber
-					.times(new Big('2592000'))
-					.div(new Big('10e17'))
-					.times(usdPrice as BigSource)
-					.toFixed(2);
-				setUsdFlowRate(usdFlowRate);
-			};
 			getNetFlowRate();
 		}
 	}, [isConnected, usdPrice]);

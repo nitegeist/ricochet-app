@@ -26,7 +26,7 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 	const { t } = useTranslation('home');
 	const [from, setFrom] = useState(Coin.BTC);
 	const [to, setTo] = useState(Coin.RIC);
-	const [amount, setAmount] = useState('1');
+	const [amount, setAmount] = useState('2000');
 	const [state, dispatch] = useContext(AlertContext);
 	const [shareScaler, setShareScaler] = useState(1e3);
 	const [config, setConfig] = useState({
@@ -40,19 +40,19 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 	});
 	const [startStreamTrigger] = streamApi.useLazyStartStreamQuery();
 	const [positionType, setPositionType] = useState(postionTypes[2]);
+	const fetchShareScaler = async () => {
+		await getShareScaler(ExchangeKeys.TWO_WAY_RIC_USDC, config.tokenA, config.tokenB).then((res) => {
+			setShareScaler(res);
+			console.log({ shareScaler });
+		});
+	};
+
 	useEffect(() => {
-		const { tokenA, tokenB, type } = config;
-		if (type !== FlowTypes.market) return;
-		const fetchShareScaler = async () => {
-			await getShareScaler(ExchangeKeys.TWO_WAY_RIC_USDC, tokenA, tokenB).then((res) => {
-				setShareScaler(res);
-				console.log({ shareScaler });
-			});
-		};
 		fetchShareScaler();
-	}, [config]);
+	}, []);
 
 	const handleSubmit = (event: any) => {
+		//to do: figure out how to pass down the correct values.
 		event?.preventDefault();
 		// Need to call hook here to start a new stream.
 		dispatch(AlertAction.showLoadingAlert('Waiting for your transaction to be confirmed...', ''));
@@ -63,8 +63,9 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 						2592000
 				  ).toString()
 				: amount;
+		console.log({ newAmount, config });
 		//@ts-ignore
-		const stream = startStreamTrigger({ newAmount, config });
+		const stream = startStreamTrigger({ amount: newAmount, config });
 		stream
 			.then((response) => {
 				if (response.isSuccess) {
@@ -78,7 +79,6 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 				}, 5000);
 			})
 			.catch((error) => dispatch(AlertAction.showErrorAlert('Error', `${error || error?.message}`)));
-		// const stream = dispatch(startStream({ type: 'start', payload: { amount, config } }));
 	};
 	return (
 		<>
