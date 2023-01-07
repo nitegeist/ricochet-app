@@ -1,7 +1,7 @@
 import { Flow } from 'types/flow';
 
 export const getOwnedFlows = (flows: Flow[], tokenAddress: string) => {
-	const sum = flows.reduce((acc, flow) => {
+	const sum = flows?.reduce((acc, flow) => {
 		if (flow.token.id === tokenAddress.toLowerCase()) {
 			return acc + parseInt(flow.flowRate, 10);
 		}
