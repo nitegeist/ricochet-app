@@ -10,15 +10,11 @@ export const buildFlowQuery = (
 	streamedSoFarMap: Record<string, number>,
 	receivedSoFarMap: Record<string, number>
 ) => {
-	console.log({ flowKey, address, flows, streamedSoFarMap, receivedSoFarMap });
 	const flowConfigObject = flowConfig.find((o) => o.flowKey === flowKey);
-	console.log({ flowConfigObject });
 	const exchangeAddress = flowConfigObject?.superToken || '';
 	const tokenAxAddress = flowConfigObject?.tokenA || '';
 	const tokenAtokenBFlows = flows[exchangeAddress];
-	console.log({ tokenAtokenBFlows });
 	const tokenAtokenBFlowsReceived = getReceviedFlows(tokenAtokenBFlows?.flowsReceived, tokenAxAddress, address);
-
 	let streamedSoFar;
 	let receivedSoFar;
 
@@ -38,16 +34,14 @@ export const buildFlowQuery = (
 		.then((p) => { subsidyRate = p; });
 	*/
 	return {
-		[flowKey]: {
-			flowKey,
-			flowsReceived: tokenAtokenBFlowsReceived,
-			flowsOwned,
-			totalFlows: tokenAtokenBFlows?.flowsReceived.length,
-			placeholder: tokenAtokenBPlaceholder,
-			streamedSoFar,
-			receivedSoFar,
-			subsidyRate, // await getSubsidyRate(FlowEnum.daiMkrFlowQuery,
-			// usdcRicPlaceholder, flowsOwned),
-		},
+		flowKey,
+		flowsReceived: tokenAtokenBFlowsReceived,
+		flowsOwned,
+		totalFlows: tokenAtokenBFlows?.flowsReceived.length,
+		placeholder: tokenAtokenBPlaceholder,
+		streamedSoFar,
+		receivedSoFar,
+		subsidyRate, // await getSubsidyRate(FlowEnum.daiMkrFlowQuery,
+		// usdcRicPlaceholder, flowsOwned),
 	};
 };
