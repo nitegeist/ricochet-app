@@ -12,7 +12,11 @@ export const getShareScaler = async (exchangeKey: ExchangeKeys, tokenA: string, 
 		functionName: 'getOutputPool',
 		args: [outputIndex],
 	};
+	console.log({ config });
 	const outputPool: any = await readContract(config);
+	console.log({ outputPool });
+	const shareScaler = outputPool?.shareScaler! * 1e3;
 	// contract.methods.getOutputPool(outputIndex).call();
-	return outputPool?.shareScaler * 1e3;
+	console.log(outputPool?.shareScaler * 1e3);
+	return shareScaler;
 };

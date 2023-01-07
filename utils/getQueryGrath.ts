@@ -1,5 +1,5 @@
 export const getQueryGrath = (queryAddress: string) => `{
-  account(id: ${JSON.stringify(queryAddress.toLowerCase())}) {
+  account(id: "${queryAddress.toLowerCase()}") {
     flowsOwned(first: 1000) {
       lastUpdate
       flowRate
