@@ -9,17 +9,32 @@ import Navigation from '@richochet/components/navigation';
 import { Positions } from '@richochet/components/positions';
 import { Refer } from '@richochet/components/refer';
 import { useIsMounted } from '@richochet/hooks/useIsMounted';
+import { buildFlowQuery } from '@richochet/utils/buildFlowQuery';
+import calculateStreamedSoFar from '@richochet/utils/calculateStreamedSoFar';
 import { getSFFramework } from '@richochet/utils/fluidsdkConfig';
 import { formatCurrency } from '@richochet/utils/helperFunctions';
 import Big, { BigSource } from 'big.js';
 import { ConnectKitButton } from 'connectkit';
 import { Coin } from 'constants/coins';
-import { RICAddress } from 'constants/polygon_config';
+import { flowConfig, FlowEnum, FlowTypes, InvestmentFlow } from 'constants/flowConfig';
+import {
+	DAIxAddress,
+	MATICxAddress,
+	RICAddress,
+	StIbAlluoBTCAddress,
+	StIbAlluoETHAddress,
+	StIbAlluoUSDAddress,
+	USDCxAddress,
+	WBTCxAddress,
+	WETHxAddress
+} from 'constants/polygon_config';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import coingeckoApi from 'redux/slices/coingecko.slice';
+import superfluidSubgraphApi from 'redux/slices/superfluidSubgraph.slice';
+import { Flow } from 'types/flow';
 import { useAccount, useBalance, useProvider } from 'wagmi';
 import { polygon } from 'wagmi/chains';
 
@@ -30,29 +45,152 @@ export async function getStaticProps({ locale }: any): Promise<Object> {
 		},
 	};
 }
+const coingeckoIds = new Map<string, string>([
+	[DAIxAddress, 'dai'],
+	[USDCxAddress, 'usd-coin'],
+	[WETHxAddress, 'weth'],
+	[WBTCxAddress, 'wrapped-bitcoin'],
+	[MATICxAddress, 'matic-network'],
+	[RICAddress, 'richochet'],
+	// TODO: These prices need to be multiplied by the growingRatio
+	// from these contracts since 1 ibAlluoUSD > 1 USD
+	[StIbAlluoETHAddress, 'weth'],
+	[StIbAlluoUSDAddress, 'usd-coin'],
+	[StIbAlluoBTCAddress, 'wrapped-bitcoin'],
+]);
+const ids = [...coingeckoIds.values()];
+
 export default function Home({ locale }: any): JSX.Element {
 	const { t } = useTranslation('home');
 	const { address, isConnected } = useAccount();
 	const [usdPrice, setUsdPrice] = useState<Big>(new Big(0));
 	const [usdFlowRate, setUsdFlowRate] = useState<string>();
 	const provider = useProvider({ chainId: polygon.id });
-	const {
-		data: tokenPrice,
-		isLoading,
-		isFetching,
-		isSuccess,
-		isError,
-		error,
-		refetch,
-	} = coingeckoApi.useGetTokenPriceQuery('richochet');
+	const { data: tokenPrice, isError, error } = coingeckoApi.useGetTokenPriceQuery('richochet');
+	const [queries, setQueries] = useState<
+		Map<
+			string,
+			{
+				flowKey: string;
+				flowsReceived: number;
+				flowsOwned: string;
+				totalFlows: number;
+				placeholder: string;
+				subsidyRate: { perso: number; total: number; endDate: string };
+				streamedSoFar?: number;
+				receivedSoFar?: number;
+			}
+		>
+	>(new Map());
+	const [sortedList, setSortedList] = useState<InvestmentFlow[]>([]);
+	const [positions, setPositions] = useState<InvestmentFlow[]>([]);
+	const [positionTotal, setPositionTotal] = useState<number>(0);
+	const { data: coingeckoPrices } = coingeckoApi.useGetPricesQuery(ids.join(','));
+	const [queryFlows] = superfluidSubgraphApi.useQueryFlowsMutation();
+	const [queryStreams] = superfluidSubgraphApi.useQueryStreamsMutation();
+	const [queryReceived] = superfluidSubgraphApi.useQueryReceivedMutation();
+	const sweepQueryFlows = async () => {
+		const exchangeContractsAddresses = flowConfig.map((f) => f.superToken);
+		let results: any[] = [];
+		exchangeContractsAddresses.map(async (addr) => {
+			if (addr) {
+				results.push(await queryFlows(addr).then((res: any) => res?.data?.data?.account));
+			}
+		});
+		const streamedSoFarMap: Record<string, number> = {};
+		const receivedSoFarMap: Record<string, number> = {};
+		if (address) {
+			const streamed = await queryStreams(address).then((res: any) => res?.data?.data?.streams);
+			const received = await queryReceived(address).then((res: any) => res?.data?.data?.streams);
+			(streamed || []).forEach((stream: any) => {
+				const streamedSoFar = streamedSoFarMap[`${stream.token.id}-${stream.receiver.id}`] || 0;
+				Object.assign(streamedSoFarMap, {
+					[`${stream.token.id}-${stream.receiver.id}`]:
+						Number(streamedSoFar) +
+						Number(
+							calculateStreamedSoFar(stream.streamedUntilUpdatedAt, stream.updatedAtTimestamp, stream.currentFlowRate)
+						),
+				});
+			});
+			(received || []).forEach((stream: any) => {
+				const receivedSoFar = receivedSoFarMap[`${stream.token.id}-${stream.sender.id}`] || 0;
+				Object.assign(receivedSoFarMap, {
+					[`${stream.token.id}-${stream.sender.id}`]:
+						Number(receivedSoFar) +
+						Number(
+							calculateStreamedSoFar(stream.streamedUntilUpdatedAt, stream.updatedAtTimestamp, stream.currentFlowRate)
+						),
+				});
+			});
+		}
+		const flows: { [key: string]: { flowsOwned: Flow[]; flowsReceived: Flow[] } } = {};
+		exchangeContractsAddresses.forEach((el, i) => {
+			if (results.length) {
+				if (results[i] !== null) {
+					flows[el] = results[i];
+				} else {
+					flows[el] = { flowsOwned: [], flowsReceived: [] };
+				}
+			}
+		});
+		let flowQueries: Map<
+			string,
+			{
+				flowKey: string;
+				flowsReceived: number;
+				flowsOwned: string;
+				totalFlows: number;
+				placeholder: string;
+				subsidyRate: { perso: number; total: number; endDate: string };
+				streamedSoFar?: number;
+				receivedSoFar?: number;
+			}
+		> = new Map();
+		if (flows !== null) {
+			for (const [key, value] of Object.entries(FlowEnum)) {
+				flowQueries.set(value, buildFlowQuery(value, address!, flows, streamedSoFarMap, receivedSoFarMap));
+			}
+		}
+		console.log({ flowQueries });
+		setQueries(flowQueries);
+	};
 	useEffect(() => {
-		if (isConnected && isSuccess && tokenPrice) {
+		sweepQueryFlows();
+	}, []);
+	useEffect(() => {
+		const positions = flowConfig.filter(({ flowKey }) => parseFloat(queries.get(flowKey)?.placeholder || '0') > 0);
+		setPositions(positions);
+		const totalInPos = positions.reduce((acc, curr) => acc + parseFloat(queries.get(curr.flowKey)?.flowsOwned!), 0);
+		setPositionTotal(totalInPos);
+	}, [queries]);
+	useEffect(() => {
+		if (coingeckoPrices && queries) {
+			let list = flowConfig.filter((each) => each.type === FlowTypes.market);
+			setSortedList(
+				list.sort((a, b) => {
+					const totalVolumeA = parseFloat(getFlowUSDValue(a));
+					const totalVolumeB = parseFloat(getFlowUSDValue(b));
+					return totalVolumeB - totalVolumeA;
+				})
+			);
+			console.log({ sortedList });
+		}
+	}, [queries, coingeckoPrices]);
+
+	const getFlowUSDValue = (flow: InvestmentFlow, toFixed: number = 0) => {
+		return (
+			coingeckoPrices ? parseFloat(queries.get(flow.flowKey)?.flowsOwned!) * coingeckoPrices[flow.tokenA] : 0
+		).toFixed(toFixed);
+	};
+
+	useEffect(() => {
+		if (isConnected && tokenPrice) {
 			setUsdPrice(new Big(parseFloat(tokenPrice?.richochet?.usd)));
 		}
 		if (isError) {
 			console.error(error);
 		}
-	}, [isConnected, isSuccess, tokenPrice, isError, error]);
+	}, [isConnected, tokenPrice]);
 	const getNetFlowRate = async () => {
 		const framework = await getSFFramework();
 		//load the token you'd like to use like this
@@ -107,7 +245,7 @@ export default function Home({ locale }: any): JSX.Element {
 											<h6 className='font-light uppercase tracking-widest text-primary-500 mb-2'>
 												{t('total-in-positions')}
 											</h6>
-											<p className='text-slate-100 font-light text-2xl'>{formatCurrency(2556.789)}</p>
+											<p className='text-slate-100 font-light text-2xl'>{formatCurrency(positionTotal)}</p>
 										</>
 									}
 								/>
@@ -151,7 +289,7 @@ export default function Home({ locale }: any): JSX.Element {
 								<CardContainer
 									content={
 										isConnected ? (
-											<Positions />
+											<Positions positions={positions} queries={queries} />
 										) : (
 											<div className='flex flex-col items-center justify-center space-y-4 h-96'>
 												<p className='text-primary-500'>{t('connect-for-positions')}.</p>
@@ -171,7 +309,7 @@ export default function Home({ locale }: any): JSX.Element {
 										)
 									}
 								/>
-								<CardContainer content={<Markets />} />
+								<CardContainer content={<Markets sortedList={sortedList} queries={queries} />} />
 							</div>
 							<div className='space-y-10'>
 								<Card

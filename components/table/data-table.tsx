@@ -18,7 +18,7 @@ interface Props {
 }
 
 const isPositionData = (data: PositionData | MarketData | TokenData): data is PositionData =>
-	!!(data as PositionData).position;
+	!!(data as PositionData).positions;
 const isMarketData = (data: PositionData | MarketData | TokenData): data is MarketData => !!(data as MarketData).posAmt;
 const isTokenData = (data: PositionData | MarketData | TokenData): data is TokenData => !!(data as TokenData).token;
 
@@ -57,17 +57,19 @@ export const DataTable: NextPage<Props> = ({
 										selectable ? 'cursor-pointer' : 'cursor-auto',
 										'text-slate-200 border-b border-slate-600'
 									)}
-									onClick={() => (selectable ? selectData?.(data) : null)}>
+									onClick={() => (selectable && isPositionData(data) ? selectData?.(data) : null)}>
 									{isPositionData(data) ? (
 										<>
 											<td className='flex items-center px-6 py-4 whitespace-nowrap space-x-2'>
 												<CoinChange coinA={data.from} coinB={data.to} type={DataType.Position} />
 											</td>
-											<td className='px-6 py-4 whitespace-nowrap'>{data.position}</td>
-											<td className='px-6 py-4 whitespace-nowrap'>{data.timeLeft}</td>
+											<td className='px-6 py-4 whitespace-nowrap'>{data.positions}</td>
+											<td className='px-6 py-4 whitespace-nowrap'>
+												{data.timeLeft} {t('days')}
+											</td>
 											<td className='px-6 py-4 whitespace-nowrap'>{data.input}</td>
 											<td className='px-6 py-4 whitespace-nowrap'>{data.output}</td>
-											<td className='px-6 py-4 whitespace-nowrap'>{data.avgPrice}</td>
+											<td className='px-6 py-4 whitespace-nowrap'>{formatCurrency(data.avgPrice)}</td>
 										</>
 									) : isMarketData(data) ? (
 										<>
