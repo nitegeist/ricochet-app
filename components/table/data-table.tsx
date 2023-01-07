@@ -67,8 +67,8 @@ export const DataTable: NextPage<Props> = ({
 											<td className='px-6 py-4 whitespace-nowrap'>
 												{data.timeLeft} {t('days')}
 											</td>
-											<td className='px-6 py-4 whitespace-nowrap'>{data.input}</td>
-											<td className='px-6 py-4 whitespace-nowrap'>{data.output}</td>
+											<td className='px-6 py-4 whitespace-nowrap'>{formatCurrency(parseFloat(data.input))}</td>
+											<td className='px-6 py-4 whitespace-nowrap'>{formatCurrency(data.output)}</td>
 											<td className='px-6 py-4 whitespace-nowrap'>{formatCurrency(data.avgPrice)}</td>
 										</>
 									) : isMarketData(data) ? (

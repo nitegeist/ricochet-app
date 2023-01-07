@@ -152,7 +152,7 @@ export const Positions: NextPage<Props> = ({ positions, queries }) => {
 					input: queries.get(position.flowKey)?.placeholder || '0',
 					output: queries.get(position.flowKey)?.streamedSoFar || 0,
 					timeLeft: timeLeft.days,
-					avgPrice: parseFloat(avgPrice),
+					avgPrice: parseFloat(avgPrice) || 0,
 				});
 			});
 			console.log({ positionData });
