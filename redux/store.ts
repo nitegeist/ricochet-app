@@ -14,7 +14,6 @@ export const sfSubgraph = initializeSubgraphApiSlice(createApiWithReactHooks).in
 export const rpcApi = initializeRpcApiSlice(createApiWithReactHooks).injectEndpoints(balanceRpcApiEndpoints);
 
 const reducer = {
-	// [streams.name]: streams.reducer,
 	[rpcApi.reducerPath]: rpcApi.reducer,
 	[streamApi.reducerPath]: streamApi.reducer,
 	[sfSubgraph.reducerPath]: sfSubgraph.reducer,

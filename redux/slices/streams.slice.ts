@@ -28,7 +28,7 @@ const streamApi = createApi({
 
 			queryFn: async (payload: any): Promise<any | undefined> => {
 				try {
-					const { config, amount } = payload;
+					const { amount, config } = payload;
 					console.log({ config, amount });
 					// we must initialize a contract address with idaContract: getContract(idaAddress, idaABI, web3);
 					const idaContract = await getContract({ address: idaAddress, abi: idaABI });
