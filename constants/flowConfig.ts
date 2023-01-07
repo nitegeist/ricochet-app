@@ -18,7 +18,7 @@ import {
 	twoWayMarketWBTCAddress,
 	twoWayWETHMarketAddress,
 	USDCxAddress,
-	usdcxibAlluoUSDAddress,
+	// usdcxibAlluoUSDAddress,
 	usdcxRicExchangeAddress,
 	WBTCxAddress,
 	WETHxAddress
@@ -48,7 +48,7 @@ export enum FlowEnum {
 	usdcRicFlowQuery = 'usdcRicFlowQuery',
 	ricRexShirtFlowQuery = 'ricRexShirtFlowQuery',
 	ricRexHatFlowQuery = 'ricRexHatFlowQuery',
-	usdcxibAlluoUSDFlowQuery = 'usdcxibAlluoUSDFlowQuery',
+	// usdcxibAlluoUSDFlowQuery = 'usdcxibAlluoUSDFlowQuery',
 }
 
 type IndexIDAType = {
@@ -248,15 +248,15 @@ export const indexIDA: IndexIDAType = [
 		inputIndex: 0, // just a placeholder, not used
 		outputIndex: 0,
 	},
-	{
-		exchangeAddress: usdcxibAlluoUSDAddress,
-		input: USDCxAddress,
-		output: StIbAlluoUSDAddress,
-		subsidy: RICAddress,
-		subsidyIndex: 1,
-		inputIndex: 0,
-		outputIndex: 0,
-	},
+	// {
+	// 	exchangeAddress: usdcxibAlluoUSDAddress,
+	// 	input: USDCxAddress,
+	// 	output: StIbAlluoUSDAddress,
+	// 	subsidy: RICAddress,
+	// 	subsidyIndex: 1,
+	// 	inputIndex: 0,
+	// 	outputIndex: 0,
+	// },
 ];
 
 export enum FlowTypes {
@@ -321,15 +321,15 @@ const markets: InvestmentFlow[] = [
 		flowKey: FlowEnum.twoWayUsdcRicFlowQuery,
 		type: FlowTypes.market,
 	},
-	{
-		superToken: usdcxibAlluoUSDAddress,
-		tokenA: USDCxAddress,
-		tokenB: StIbAlluoUSDAddress,
-		coinA: Coin.USDC,
-		coinB: Coin.IbAlluoUSD,
-		flowKey: FlowEnum.usdcxibAlluoUSDFlowQuery,
-		type: FlowTypes.market,
-	},
+	// {
+	// 	superToken: usdcxibAlluoUSDAddress,
+	// 	tokenA: USDCxAddress,
+	// 	tokenB: StIbAlluoUSDAddress,
+	// 	coinA: Coin.USDC,
+	// 	coinB: Coin.IbAlluoUSD,
+	// 	flowKey: FlowEnum.usdcxibAlluoUSDFlowQuery,
+	// 	type: FlowTypes.market,
+	// },
 	{
 		superToken: twoWayWETHMarketAddress,
 		tokenA: USDCxAddress,
