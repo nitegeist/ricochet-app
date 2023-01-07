@@ -9,6 +9,7 @@ import { balanceRpcApiEndpoints } from './balanceRpcApiEndpoints';
 import coingeckoApi from './slices/coingecko.slice';
 import streamApi from './slices/streams.slice';
 import superfluidSubgraphApi from './slices/superfluidSubgraph.slice';
+import sushiswapSubgraphApi from './slices/sushiswapSubgraph.slice';
 
 export const sfSubgraph = initializeSubgraphApiSlice(createApiWithReactHooks).injectEndpoints(allSubgraphEndpoints);
 export const rpcApi = initializeRpcApiSlice(createApiWithReactHooks).injectEndpoints(balanceRpcApiEndpoints);
@@ -18,6 +19,7 @@ const reducer = {
 	[streamApi.reducerPath]: streamApi.reducer,
 	[sfSubgraph.reducerPath]: sfSubgraph.reducer,
 	[coingeckoApi.reducerPath]: coingeckoApi.reducer,
+	[sushiswapSubgraphApi.reducerPath]: sushiswapSubgraphApi.reducer,
 	[superfluidSubgraphApi.reducerPath]: superfluidSubgraphApi.reducer,
 };
 
@@ -32,6 +34,7 @@ export const store = (preloadedState?: PreloadedState<AppState>) =>
 				.concat(streamApi.middleware)
 				.concat(sfSubgraph.middleware)
 				.concat(coingeckoApi.middleware)
+				.concat(sushiswapSubgraphApi.middleware)
 				.concat(superfluidSubgraphApi.middleware),
 		preloadedState,
 	});
