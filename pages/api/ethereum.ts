@@ -137,8 +137,7 @@ export const startFlow = async (
 				receiver: exchangeAddress,
 				flowRate: amount.toString(),
 				overrides: {
-					maxFeePerGas,
-					maxPriorityFeePerGas,
+					gasLimit: 6000000,
 				},
 			};
 			console.log({ transactionData });
