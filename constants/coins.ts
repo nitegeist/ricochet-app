@@ -59,6 +59,7 @@ export const namesCoin = [
 	Coin.WETH,
 	Coin.WBTC,
 	Coin.SLP,
+	Coin.RIC,
 	Coin.MATIC,
 	Coin.SUSHI,
 	Coin.IDLE,

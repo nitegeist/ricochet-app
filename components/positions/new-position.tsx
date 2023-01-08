@@ -3,13 +3,12 @@ import { ArrowLongRightIcon, CheckIcon, ChevronUpDownIcon } from '@heroicons/rea
 import AlertAction from '@richochet/utils/alertAction';
 import { getShareScaler } from '@richochet/utils/getShareScaler';
 import { Coin } from 'constants/coins';
-import { FlowEnum, FlowTypes } from 'constants/flowConfig';
-import { RICAddress, twoWayMarketRICUSDCAddress, USDCxAddress } from 'constants/polygon_config';
+import { flowConfig, FlowTypes } from 'constants/flowConfig';
 import { AlertContext } from 'contexts/AlertContext';
 import { ExchangeKeys } from 'enumerations/exchangeKeys.enum';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
-import { Fragment, useContext, useEffect, useState } from 'react';
+import { Fragment, useContext, useState } from 'react';
 import streamApi from 'redux/slices/streams.slice';
 import { RoundedButton } from '../button';
 import { AreaGraph } from '../graphs';
@@ -26,59 +25,59 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 	const { t } = useTranslation('home');
 	const [from, setFrom] = useState(Coin.BTC);
 	const [to, setTo] = useState(Coin.RIC);
-	const [amount, setAmount] = useState('2000');
+	const [amount, setAmount] = useState('0');
 	const [state, dispatch] = useContext(AlertContext);
 	const [shareScaler, setShareScaler] = useState(1e3);
-	const [config, setConfig] = useState({
-		superToken: twoWayMarketRICUSDCAddress,
-		tokenA: RICAddress,
-		tokenB: USDCxAddress,
-		coinA: Coin.RIC,
-		coinB: Coin.USDC,
-		flowKey: FlowEnum.twoWayRicUsdcFlowQuery,
-		type: FlowTypes.market,
-	});
 	const [startStreamTrigger] = streamApi.useLazyStartStreamQuery();
 	const [positionType, setPositionType] = useState(postionTypes[2]);
-	const fetchShareScaler = async () => {
-		await getShareScaler(ExchangeKeys.TWO_WAY_RIC_USDC, config.tokenA, config.tokenB).then((res) => {
+	const fetchShareScaler = async (exchangeKey: ExchangeKeys, tokenA: string, tokenB: string) => {
+		await getShareScaler(exchangeKey, tokenA, tokenB).then((res) => {
 			setShareScaler(res);
 			console.log({ shareScaler });
 		});
 	};
 
-	useEffect(() => {
-		fetchShareScaler();
-	}, []);
-
 	const handleSubmit = (event: any) => {
 		//to do: figure out how to pass down the correct values.
 		event?.preventDefault();
-		// Need to call hook here to start a new stream.
-		dispatch(AlertAction.showLoadingAlert('Waiting for your transaction to be confirmed...', ''));
-		const newAmount =
-			config.type === FlowTypes.market
-				? (
-						((Math.floor(((parseFloat(amount) / 2592000) * 1e18) / shareScaler) * shareScaler) / 1e18) *
-						2592000
-				  ).toString()
-				: amount;
-		console.log({ newAmount, config });
-		//@ts-ignore
-		const stream = startStreamTrigger({ amount: newAmount, config });
-		stream
-			.then((response) => {
-				if (response.isSuccess) {
-					dispatch(AlertAction.showSuccessAlert('Success', 'Transaction confirmed 👌'));
-				}
-				if (response.isError) {
-					dispatch(AlertAction.showErrorAlert('Error', `${response?.error}`));
-				}
-				setTimeout(() => {
-					dispatch(AlertAction.hideAlert());
-				}, 5000);
-			})
-			.catch((error) => dispatch(AlertAction.showErrorAlert('Error', `${error || error?.message}`)));
+		const config = flowConfig.find((flow) => flow.coinA === from && flow.coinB === to);
+		if (config) {
+			console.log({ config });
+			const exchangeKey = config?.flowKey?.replace('FlowQuery', '') as ExchangeKeys;
+			fetchShareScaler(exchangeKey, config.tokenA, config.tokenB);
+			// Need to call hook here to start a new stream.
+			dispatch(AlertAction.showLoadingAlert('Waiting for your transaction to be confirmed...', ''));
+			const newAmount =
+				config?.type === FlowTypes.market
+					? (
+							((Math.floor(((parseFloat(amount) / 2592000) * 1e18) / shareScaler) * shareScaler) / 1e18) *
+							2592000
+					  ).toString()
+					: amount;
+			console.log({ newAmount, config });
+			//@ts-ignore
+			const stream = startStreamTrigger({ amount: newAmount, config });
+			stream
+				.then((response) => {
+					if (response.isSuccess) {
+						dispatch(AlertAction.showSuccessAlert('Success', 'Transaction confirmed 👌'));
+					}
+					if (response.isError) {
+						dispatch(AlertAction.showErrorAlert('Error', `${response?.error}`));
+					}
+					setTimeout(() => {
+						dispatch(AlertAction.hideAlert());
+					}, 5000);
+				})
+				.catch((error) => dispatch(AlertAction.showErrorAlert('Error', `${error || error?.message}`)));
+		} else {
+			dispatch(
+				AlertAction.showErrorAlert('Oops!', 'We were unable to find the selected position. Please try another one.')
+			);
+			setTimeout(() => {
+				dispatch(AlertAction.hideAlert());
+			}, 5000);
+		}
 	};
 	return (
 		<>
