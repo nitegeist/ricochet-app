@@ -6,14 +6,14 @@ import { getReceviedFlows } from './getReceviedFlows';
 export const buildFlowQuery = (
 	flowKey: string,
 	address: string,
-	flows: { [key: string]: { flowsOwned: Flow[]; flowsReceived: Flow[] } },
+	flows: Map<string, { flowsOwned: Flow[]; flowsReceived: Flow[] }>,
 	streamedSoFarMap: Record<string, number>,
 	receivedSoFarMap: Record<string, number>
 ) => {
 	const flowConfigObject = flowConfig.find((o) => o.flowKey === flowKey);
 	const exchangeAddress = flowConfigObject?.superToken || '';
 	const tokenAxAddress = flowConfigObject?.tokenA || '';
-	const tokenAtokenBFlows = flows[exchangeAddress];
+	const tokenAtokenBFlows = flows.get(exchangeAddress)!;
 	const tokenAtokenBFlowsReceived = getReceviedFlows(tokenAtokenBFlows?.flowsReceived, tokenAxAddress, address);
 	let streamedSoFar;
 	let receivedSoFar;

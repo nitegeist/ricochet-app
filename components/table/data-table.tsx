@@ -18,8 +18,9 @@ interface Props {
 }
 
 const isPositionData = (data: PositionData | MarketData | TokenData): data is PositionData =>
-	!!(data as PositionData).positions;
-const isMarketData = (data: PositionData | MarketData | TokenData): data is MarketData => !!(data as MarketData).posAmt;
+	!!(data as PositionData).positions || (data as PositionData).positions === 0;
+const isMarketData = (data: PositionData | MarketData | TokenData): data is MarketData =>
+	!!(data as MarketData).posAmt || (data as MarketData).posAmt === 0;
 const isTokenData = (data: PositionData | MarketData | TokenData): data is TokenData => !!(data as TokenData).token;
 
 export const DataTable: NextPage<Props> = ({
@@ -38,7 +39,7 @@ export const DataTable: NextPage<Props> = ({
 		<>
 			<div className='overflow-auto'>
 				{!rowData.length && <TableLoader headers={headers} rowNumber={tableLoaderRows} />}
-				{!!rowData.length && (
+				{rowData.length && (
 					<table className='table-fixed min-w-full'>
 						<thead>
 							<tr>
@@ -98,7 +99,7 @@ export const DataTable: NextPage<Props> = ({
 					</table>
 				)}
 			</div>
-			{!!rowData.length && (
+			{rowData.length && (
 				<div className='flex justify-end text-slate-500 space-x-2 mt-4'>
 					<button
 						onClick={prevPage}

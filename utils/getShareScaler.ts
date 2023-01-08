@@ -6,14 +6,12 @@ import { getExchangeAddressFromKey } from './getExchangeAddress';
 
 export const getShareScaler = async (exchangeKey: ExchangeKeys, tokenA: string, tokenB: string): Promise<number> => {
 	const { outputIndex } = indexIDA.filter((data) => data.input === tokenA && data.output === tokenB)[0];
-	const config = {
-		address: getExchangeAddressFromKey(exchangeKey),
+	const outputPool: any = await readContract({
+		address: getExchangeAddressFromKey(exchangeKey) as `0x${string}`,
 		abi: streamExchangeABI,
 		functionName: 'getOutputPool',
 		args: [outputIndex],
-	};
-	console.log({ config });
-	const outputPool: any = await readContract(config);
+	});
 	console.log({ outputPool });
 	const shareScaler = outputPool?.shareScaler! * 1e3;
 	// contract.methods.getOutputPool(outputIndex).call();

@@ -136,7 +136,7 @@ export const Positions: NextPage<Props> = ({ positions, queries }) => {
 		setBalances(currBalances);
 	}, [address, isConnected]);
 	useEffect(() => {
-		if (isConnected && queries && positions.length) {
+		if (isConnected && queries.size !== 0 && positions.length) {
 			const positionData: PositionData[] = [];
 			const streamEnds = computeStreamEnds(queries, balances);
 			positions.map(async (position) => {

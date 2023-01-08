@@ -59,6 +59,7 @@ const coingeckoIds = new Map<string, string>([
 	[StIbAlluoBTCAddress, 'wrapped-bitcoin'],
 ]);
 const ids = [...coingeckoIds.values()];
+const exchangeContractsAddresses = flowConfig.map((f) => f.superToken);
 
 export default function Home({ locale }: any): JSX.Element {
 	const { t } = useTranslation('home');
@@ -85,18 +86,22 @@ export default function Home({ locale }: any): JSX.Element {
 	const [sortedList, setSortedList] = useState<InvestmentFlow[]>([]);
 	const [positions, setPositions] = useState<InvestmentFlow[]>([]);
 	const [positionTotal, setPositionTotal] = useState<number>(0);
+	const [results, setResults] = useState<any[]>([]);
 	const { data: coingeckoPrices } = coingeckoApi.useGetPricesQuery(ids.join(','));
 	const [queryFlows] = superfluidSubgraphApi.useQueryFlowsMutation();
 	const [queryStreams] = superfluidSubgraphApi.useQueryStreamsMutation();
 	const [queryReceived] = superfluidSubgraphApi.useQueryReceivedMutation();
-	const sweepQueryFlows = async () => {
-		const exchangeContractsAddresses = flowConfig.map((f) => f.superToken);
+	useEffect(() => {
 		let results: any[] = [];
 		exchangeContractsAddresses.map(async (addr) => {
 			if (addr) {
 				results.push(await queryFlows(addr).then((res: any) => res?.data?.data?.account));
 			}
 		});
+		console.log({ results });
+		setResults(results);
+	}, [exchangeContractsAddresses]);
+	const sweepQueryFlows = async () => {
 		const streamedSoFarMap: Record<string, number> = {};
 		const receivedSoFarMap: Record<string, number> = {};
 		if (address) {
@@ -123,16 +128,17 @@ export default function Home({ locale }: any): JSX.Element {
 				});
 			});
 		}
-		const flows: { [key: string]: { flowsOwned: Flow[]; flowsReceived: Flow[] } } = {};
+		const flows: Map<string, { flowsOwned: Flow[]; flowsReceived: Flow[] }> = new Map();
 		exchangeContractsAddresses.forEach((el, i) => {
 			if (results.length) {
 				if (results[i] !== null) {
-					flows[el] = results[i];
+					flows.set(el, results[i]);
 				} else {
-					flows[el] = { flowsOwned: [], flowsReceived: [] };
+					flows.set(el, { flowsOwned: [], flowsReceived: [] });
 				}
 			}
 		});
+		console.log({ flows });
 		let flowQueries: Map<
 			string,
 			{
@@ -146,7 +152,7 @@ export default function Home({ locale }: any): JSX.Element {
 				receivedSoFar?: number;
 			}
 		> = new Map();
-		if (flows !== null) {
+		if (flows.size !== 0) {
 			for (const [key, value] of Object.entries(FlowEnum)) {
 				flowQueries.set(value, buildFlowQuery(value, address!, flows, streamedSoFarMap, receivedSoFarMap));
 			}
@@ -155,24 +161,26 @@ export default function Home({ locale }: any): JSX.Element {
 		setQueries(flowQueries);
 	};
 	useEffect(() => {
-		sweepQueryFlows();
-	}, []);
+		if (results.length) sweepQueryFlows();
+	}, [results]);
 	useEffect(() => {
-		const positions = flowConfig.filter(({ flowKey }) => parseFloat(queries.get(flowKey)?.placeholder || '0') > 0);
-		setPositions(positions);
-		const totalInPos = positions.reduce((acc, curr) => acc + parseFloat(queries.get(curr.flowKey)?.flowsOwned!), 0);
-		setPositionTotal(totalInPos);
+		if (queries.size !== 0) {
+			const positions = flowConfig.filter(({ flowKey }) => parseFloat(queries.get(flowKey)?.placeholder || '0') > 0);
+			console.log({ positions });
+			setPositions(positions);
+			const totalInPos = positions.reduce((acc, curr) => acc + parseFloat(queries.get(curr.flowKey)?.flowsOwned!), 0);
+			setPositionTotal(totalInPos);
+		}
 	}, [queries]);
 	useEffect(() => {
-		if (coingeckoPrices && queries) {
+		if (coingeckoPrices && queries.size !== 0) {
 			let list = flowConfig.filter((each) => each.type === FlowTypes.market);
-			setSortedList(
-				list.sort((a, b) => {
-					const totalVolumeA = parseFloat(getFlowUSDValue(a));
-					const totalVolumeB = parseFloat(getFlowUSDValue(b));
-					return totalVolumeB - totalVolumeA;
-				})
-			);
+			let sortList = list.sort((a, b) => {
+				const totalVolumeA = parseFloat(getFlowUSDValue(a));
+				const totalVolumeB = parseFloat(getFlowUSDValue(b));
+				return totalVolumeB - totalVolumeA;
+			});
+			setSortedList(sortList);
 			console.log({ sortedList });
 		}
 	}, [queries, coingeckoPrices]);
