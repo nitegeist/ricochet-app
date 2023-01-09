@@ -15,9 +15,7 @@ import { DataTable } from '../table';
 import { NewPosition } from './new-position';
 import { ViewPosition } from './view-position';
 
-export interface PositionData {
-	from: string;
-	to: string;
+export interface PositionData extends InvestmentFlow {
 	positions: number;
 	timeLeft: number;
 	input: string;
@@ -102,13 +100,14 @@ export const Positions: NextPage<Props> = ({ positions, queries }) => {
 		>,
 		currentBalances: any
 	) => {
-		const streamEnds: { [id: string]: string } = {};
+		const streamEnds: Map<string, string> = new Map();
 		Object.values(FlowEnum).forEach((flowEnum: FlowEnum) => {
-			streamEnds[flowEnum] = retrieveEndDate(flowEnum, queries, currentBalances);
+			streamEnds.set(flowEnum, retrieveEndDate(flowEnum, queries, currentBalances));
 		});
 		return streamEnds;
 	};
 	const getTimeRemaining = (endDate: string) => {
+		console.log({ endDate });
 		const total = Date.parse(endDate) - Date.parse(new Date().toLocaleDateString());
 		const seconds = Math.floor((total / 1000) % 60);
 		const minutes = Math.floor((total / 1000 / 60) % 60);
@@ -140,16 +139,15 @@ export const Positions: NextPage<Props> = ({ positions, queries }) => {
 			const positionData: PositionData[] = [];
 			const streamEnds = computeStreamEnds(queries, balances);
 			positions.map(async (position) => {
-				const timeLeft = getTimeRemaining(streamEnds[position.flowKey]);
+				const timeLeft = getTimeRemaining(streamEnds.get(position.flowKey)!);
 				const avgPrice = await querySushiPoolPrices(sushiSwapPools[`${position.coinA}-${position.coinB}`]).then(
 					(res: any) => res?.data?.data?.pair?.token0Price
 				);
 				console.log({ avgPrice });
 				positionData.push({
-					from: position.coinA,
-					to: position.coinB,
+					...position,
 					positions: queries.get(position.flowKey)?.totalFlows || 0,
-					input: queries.get(position.flowKey)?.placeholder || '0',
+					input: queries.get(position.flowKey)?.placeholder!,
 					output: queries.get(position.flowKey)?.streamedSoFar || 0,
 					timeLeft: timeLeft.days,
 					avgPrice: parseFloat(avgPrice) || 0,

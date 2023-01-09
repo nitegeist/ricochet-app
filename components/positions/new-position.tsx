@@ -23,18 +23,15 @@ interface Props {
 
 export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 	const { t } = useTranslation('home');
-	const [from, setFrom] = useState(Coin.BTC);
-	const [to, setTo] = useState(Coin.RIC);
-	const [amount, setAmount] = useState('0');
+	const [from, setFrom] = useState<Coin>(Coin.BTC);
+	const [to, setTo] = useState<Coin>(Coin.RIC);
+	const [amount, setAmount] = useState<string>('0');
 	const [state, dispatch] = useContext(AlertContext);
 	const [shareScaler, setShareScaler] = useState(1e3);
 	const [startStreamTrigger] = streamApi.useLazyStartStreamQuery();
 	const [positionType, setPositionType] = useState(postionTypes[2]);
 	const fetchShareScaler = async (exchangeKey: ExchangeKeys, tokenA: string, tokenB: string) => {
-		await getShareScaler(exchangeKey, tokenA, tokenB).then((res) => {
-			setShareScaler(res);
-			console.log({ shareScaler });
-		});
+		return await getShareScaler(exchangeKey, tokenA, tokenB).then((res) => res);
 	};
 
 	const handleSubmit = (event: any) => {
@@ -47,29 +44,31 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 			fetchShareScaler(exchangeKey, config.tokenA, config.tokenB);
 			// Need to call hook here to start a new stream.
 			dispatch(AlertAction.showLoadingAlert('Waiting for your transaction to be confirmed...', ''));
-			const newAmount =
-				config?.type === FlowTypes.market
-					? (
-							((Math.floor(((parseFloat(amount) / 2592000) * 1e18) / shareScaler) * shareScaler) / 1e18) *
-							2592000
-					  ).toString()
-					: amount;
-			console.log({ newAmount, config });
-			//@ts-ignore
-			const stream = startStreamTrigger({ amount: newAmount, config });
-			stream
-				.then((response) => {
-					if (response.isSuccess) {
-						dispatch(AlertAction.showSuccessAlert('Success', 'Transaction confirmed 👌'));
-					}
-					if (response.isError) {
-						dispatch(AlertAction.showErrorAlert('Error', `${response?.error}`));
-					}
-					setTimeout(() => {
-						dispatch(AlertAction.hideAlert());
-					}, 5000);
-				})
-				.catch((error) => dispatch(AlertAction.showErrorAlert('Error', `${error || error?.message}`)));
+			if (shareScaler) {
+				const newAmount =
+					config?.type === FlowTypes.market
+						? (
+								((Math.floor(((parseFloat(amount) / 2592000) * 1e18) / shareScaler) * shareScaler) / 1e18) *
+								2592000
+						  ).toString()
+						: amount;
+				console.log({ newAmount, config });
+				//@ts-ignore
+				const stream = startStreamTrigger({ amount: newAmount, config });
+				stream
+					.then((response) => {
+						if (response.isSuccess) {
+							dispatch(AlertAction.showSuccessAlert('Success', 'Transaction confirmed 👌'));
+						}
+						if (response.isError) {
+							dispatch(AlertAction.showErrorAlert('Error', `${response?.error}`));
+						}
+						setTimeout(() => {
+							dispatch(AlertAction.hideAlert());
+						}, 5000);
+					})
+					.catch((error) => dispatch(AlertAction.showErrorAlert('Error', `${error || error?.message}`)));
+			}
 		} else {
 			dispatch(
 				AlertAction.showErrorAlert('Oops!', 'We were unable to find the selected position. Please try another one.')

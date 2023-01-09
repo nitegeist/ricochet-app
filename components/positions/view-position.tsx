@@ -38,7 +38,7 @@ export const ViewPosition: NextPage<Props> = ({ setClose, position }) => {
 			<div className='flex flex-wrap items-start justify-between space-y-4 md:space-y-0'>
 				<div className='w-full md:w-1/2'>
 					<span className='flex items-center justify-start'>
-						<CoinChange coinA={position.from} coinB={position.to} type={DataType.ViewPosition} />
+						<CoinChange coinA={position.coinA} coinB={position.coinB} type={DataType.ViewPosition} />
 					</span>
 					<p className='text-slate-100 my-2'>
 						<span className='text-slate-400'>{t('input')}:</span> {position.input}

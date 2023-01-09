@@ -6,9 +6,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { CardTitle } from '../cards/card-title';
 import { DataTable } from '../table/data-table';
 
-export interface MarketData {
-	from: string;
-	to: string;
+export interface MarketData extends InvestmentFlow {
 	total: number;
 	posAmt: number;
 }
@@ -41,8 +39,7 @@ export const Markets: NextPage<Props> = ({ sortedList, queries }) => {
 			const marketData: MarketData[] = [];
 			sortedList.map((item) =>
 				marketData.push({
-					from: item.coinA,
-					to: item.coinB,
+					...item,
 					total: parseFloat(queries.get(item.flowKey)?.flowsOwned!) || 0,
 					posAmt: queries.get(item.flowKey)?.totalFlows || 0,
 				})
@@ -55,7 +52,8 @@ export const Markets: NextPage<Props> = ({ sortedList, queries }) => {
 		const { value } = event.target;
 		setSearch(value);
 		const filtered = marketList.filter(
-			(el) => el.from.toUpperCase().includes(value.toUpperCase()) || el.to.toUpperCase().includes(value.toUpperCase())
+			(el) =>
+				el.coinA.toUpperCase().includes(value.toUpperCase()) || el.coinB.toUpperCase().includes(value.toUpperCase())
 		);
 		setFilteredList(filtered);
 	};

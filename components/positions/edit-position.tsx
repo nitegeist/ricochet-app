@@ -22,7 +22,7 @@ export const EditPosition: NextPage<Props> = ({ setClose, position }) => {
 				<>
 					<h6 className='text-slate-100'>{t('position-action')}?</h6>
 					<OutlineButton action={`${t('change-swap-amount')}`} type='button' handleClick={() => setAction('change')} />
-					<OutlineButton action={`${t('deposit')} ${position.from}`} type='button' />
+					<OutlineButton action={`${t('deposit')} ${position.coinA}`} type='button' />
 					<RoundedButton action={`${t('stop-position')}`} type='button' />
 					<hr className='border-slate-500' />
 					<div className='flex justify-end'>
