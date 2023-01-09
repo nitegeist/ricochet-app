@@ -26,7 +26,7 @@ import {
 	StIbAlluoUSDAddress,
 	USDCxAddress,
 	WBTCxAddress,
-	WETHxAddress
+	WETHxAddress,
 } from 'constants/polygon_config';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -84,18 +84,20 @@ export default function Home({ locale }: any): JSX.Element {
 			}
 		>
 	>(new Map());
+
 	const [sortedList, setSortedList] = useState<InvestmentFlow[]>([]);
 	const [positions, setPositions] = useState<InvestmentFlow[]>([]);
 	const [positionTotal, setPositionTotal] = useState<number>(0);
 	const [results, setResults] = useState<any[]>([]);
-	const { data: coingeckoPrices } = coingeckoApi.useGetPricesQuery(ids.join(','));
+	const { data: coingeckoPrices, isLoading, isSuccess } = coingeckoApi.useGetPricesQuery(ids.join(','));
 	const [queryFlows] = superfluidSubgraphApi.useQueryFlowsMutation();
 	const [queryStreams] = superfluidSubgraphApi.useQueryStreamsMutation();
 	const [queryReceived] = superfluidSubgraphApi.useQueryReceivedMutation();
+
 	useEffect(() => {
 		if (isMounted) {
 			let results: any[] = [];
-			exchangeContractsAddresses.map(async (addr) => {
+			exchangeContractsAddresses.map(async (addr, i) => {
 				if (addr) {
 					results.push(await queryFlows(addr).then((res: any) => res?.data?.data?.account));
 				}
@@ -104,33 +106,35 @@ export default function Home({ locale }: any): JSX.Element {
 			setResults(results);
 		}
 	}, [isMounted]);
-	const sweepQueryFlows = async () => {
-		const streamedSoFarMap: Record<string, number> = {};
-		const receivedSoFarMap: Record<string, number> = {};
-		if (address) {
-			const streamed = await queryStreams(address).then((res: any) => res?.data?.data?.streams);
-			const received = await queryReceived(address).then((res: any) => res?.data?.data?.streams);
-			(streamed || []).forEach((stream: any) => {
-				const streamedSoFar = streamedSoFarMap[`${stream.token.id}-${stream.receiver.id}`] || 0;
-				Object.assign(streamedSoFarMap, {
-					[`${stream.token.id}-${stream.receiver.id}`]:
-						Number(streamedSoFar) +
-						Number(
-							calculateStreamedSoFar(stream.streamedUntilUpdatedAt, stream.updatedAtTimestamp, stream.currentFlowRate)
-						),
-				});
+
+	const getStreams = (streams: any[], streamedSoFarMap: Record<string, number>) => {
+		(streams || []).forEach((stream: any) => {
+			const streamedSoFar = streamedSoFarMap[`${stream.token.id}-${stream.receiver.id}`] || 0;
+			Object.assign(streamedSoFarMap, {
+				[`${stream.token.id}-${stream.receiver.id}`]:
+					Number(streamedSoFar) +
+					Number(
+						calculateStreamedSoFar(stream.streamedUntilUpdatedAt, stream.updatedAtTimestamp, stream.currentFlowRate)
+					),
 			});
-			(received || []).forEach((stream: any) => {
-				const receivedSoFar = receivedSoFarMap[`${stream.token.id}-${stream.sender.id}`] || 0;
-				Object.assign(receivedSoFarMap, {
-					[`${stream.token.id}-${stream.sender.id}`]:
-						Number(receivedSoFar) +
-						Number(
-							calculateStreamedSoFar(stream.streamedUntilUpdatedAt, stream.updatedAtTimestamp, stream.currentFlowRate)
-						),
-				});
+		});
+	};
+
+	const getReceived = (received: any[], receivedSoFarMap: Record<string, number>) => {
+		(received || []).forEach((stream: any) => {
+			const receivedSoFar = receivedSoFarMap[`${stream.token.id}-${stream.sender.id}`] || 0;
+			Object.assign(receivedSoFarMap, {
+				[`${stream.token.id}-${stream.sender.id}`]:
+					Number(receivedSoFar) +
+					Number(
+						calculateStreamedSoFar(stream.streamedUntilUpdatedAt, stream.updatedAtTimestamp, stream.currentFlowRate)
+					),
 			});
-		}
+		});
+	};
+
+	const getFlows = (streamedSoFarMap: Record<string, number>, receivedSoFarMap: Record<string, number>) => {
+		console.log('made it to set flow queries');
 		const flows: Map<string, { flowsOwned: Flow[]; flowsReceived: Flow[] }> = new Map();
 		exchangeContractsAddresses.forEach((el, i) => {
 			if (results.length) {
@@ -158,26 +162,46 @@ export default function Home({ locale }: any): JSX.Element {
 		if (flows.size !== 0) {
 			for (const [key, value] of Object.entries(FlowEnum)) {
 				flowQueries.set(value, buildFlowQuery(value, address!, flows, streamedSoFarMap, receivedSoFarMap));
+				console.log(flowQueries.set(value, buildFlowQuery(value, address!, flows, streamedSoFarMap, receivedSoFarMap)));
 			}
 		}
-		console.log({ flowQueries });
+		console.log('flow queries set', { flowQueries });
 		setQueries(flowQueries);
 	};
-	useEffect(() => {
-		if (results.length) sweepQueryFlows();
-	}, [results]);
-	useEffect(() => {
-		if (queries.size !== 0) {
-			console.log({ queries });
-			const positions = flowConfig.filter(({ flowKey }) => parseFloat(queries.get(flowKey)?.placeholder!) > 0);
-			console.log({ positions });
-			setPositions(positions);
-			const totalInPos = positions.reduce((acc, curr) => acc + parseFloat(queries.get(curr.flowKey)?.flowsOwned!), 0);
-			setPositionTotal(totalInPos);
+
+	const sweepQueryFlows = async () => {
+		console.log('made it to sweep query flows!');
+		const streamedSoFarMap: Record<string, number> = {};
+		const receivedSoFarMap: Record<string, number> = {};
+		if (address) {
+			await queryStreams(address).then((res: any) => getStreams(res?.data?.data?.streams, streamedSoFarMap));
+			await queryReceived(address).then((res: any) => getReceived(res?.data?.data?.streams, receivedSoFarMap));
 		}
-	}, [queries]);
+		getFlows(streamedSoFarMap, receivedSoFarMap);
+	};
+
 	useEffect(() => {
-		if (coingeckoPrices && queries.size !== 0) {
+		console.log('results length', results.length);
+		console.log('results: ', results);
+		sweepQueryFlows();
+	}, [results]);
+
+	useEffect(() => {
+		const positions = flowConfig.filter(({ flowKey }) => parseFloat(queries.get(flowKey)?.placeholder!) > 0);
+		setPositions(positions);
+		const totalInPos = positions.reduce((acc, curr) => acc + parseFloat(queries.get(curr.flowKey)?.flowsOwned!), 0);
+		setPositionTotal(totalInPos);
+	}, [queries]);
+
+	useEffect(() => {
+		console.log('query size', queries.size, 'coin gecko prices', coingeckoPrices);
+		console.log('made it to sorted list');
+		if (!isSuccess) {
+			console.log('not loaded yet');
+			return;
+		}
+		if (isSuccess && coingeckoPrices && queries.size !== 0) {
+			console.log('prices', coingeckoPrices);
 			let list = flowConfig.filter((each) => each.type === FlowTypes.market);
 			let sortList = list.sort((a, b) => {
 				const totalVolumeA = parseFloat(getFlowUSDValue(a));
@@ -187,7 +211,8 @@ export default function Home({ locale }: any): JSX.Element {
 			setSortedList(sortList);
 			console.log({ sortedList });
 		}
-	}, [queries, coingeckoPrices]);
+		console.log('made past if statement');
+	}, [queries, coingeckoPrices, isSuccess, isLoading]);
 
 	const getFlowUSDValue = (flow: InvestmentFlow, toFixed: number = 0) => {
 		return (
@@ -203,6 +228,7 @@ export default function Home({ locale }: any): JSX.Element {
 			console.error(error);
 		}
 	}, [isConnected, tokenPrice]);
+
 	const getNetFlowRate = async () => {
 		const framework = await getSFFramework();
 		//load the token you'd like to use like this
@@ -225,7 +251,7 @@ export default function Home({ locale }: any): JSX.Element {
 			getNetFlowRate();
 		}
 	}, [isConnected, usdPrice]);
-	const { data } = useBalance({
+	const { data: balance } = useBalance({
 		address: address,
 		chainId: polygon.id,
 		token: RICAddress,
@@ -277,8 +303,8 @@ export default function Home({ locale }: any): JSX.Element {
 										<>
 											<h6 className='font-light uppercase tracking-widest text-primary-500 mb-2'>{t('ric-balance')}</h6>
 											<p className='text-slate-100 font-light text-2xl space-x-1'>
-												<span>{Number(data?.formatted).toFixed(2)}</span>
-												<span>{data?.symbol}</span>
+												<span>{Number(balance?.formatted).toFixed(2)}</span>
+												<span>{balance?.symbol}</span>
 											</p>
 										</>
 									}
@@ -320,7 +346,13 @@ export default function Home({ locale }: any): JSX.Element {
 										)
 									}
 								/>
-								<CardContainer content={<Markets sortedList={sortedList} queries={queries} />} />
+								{sortedList.length > 0 && queries.size > 0 ? (
+									<CardContainer content={<Markets sortedList={sortedList} queries={queries} />} />
+								) : (
+									// @ts-ignore
+									//  prettier-ignore
+									<button onClick={() => console.log('queries', queries, 'sorted', sortedList)}>get data</button>
+								)}
 							</div>
 							<div className='space-y-10'>
 								<Card
