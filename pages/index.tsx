@@ -62,6 +62,7 @@ const ids = [...coingeckoIds.values()];
 const exchangeContractsAddresses = flowConfig.map((f) => f.superToken);
 
 export default function Home({ locale }: any): JSX.Element {
+	const isMounted = useIsMounted();
 	const { t } = useTranslation('home');
 	const { address, isConnected } = useAccount();
 	const [usdPrice, setUsdPrice] = useState<Big>(new Big(0));
@@ -92,15 +93,17 @@ export default function Home({ locale }: any): JSX.Element {
 	const [queryStreams] = superfluidSubgraphApi.useQueryStreamsMutation();
 	const [queryReceived] = superfluidSubgraphApi.useQueryReceivedMutation();
 	useEffect(() => {
-		let results: any[] = [];
-		exchangeContractsAddresses.map(async (addr) => {
-			if (addr) {
-				results.push(await queryFlows(addr).then((res: any) => res?.data?.data?.account));
-			}
-		});
-		console.log({ results });
-		setResults(results);
-	}, [exchangeContractsAddresses]);
+		if (isMounted) {
+			let results: any[] = [];
+			exchangeContractsAddresses.map(async (addr) => {
+				if (addr) {
+					results.push(await queryFlows(addr).then((res: any) => res?.data?.data?.account));
+				}
+			});
+			console.log({ results });
+			setResults(results);
+		}
+	}, [isMounted]);
 	const sweepQueryFlows = async () => {
 		const streamedSoFarMap: Record<string, number> = {};
 		const receivedSoFarMap: Record<string, number> = {};
@@ -165,7 +168,8 @@ export default function Home({ locale }: any): JSX.Element {
 	}, [results]);
 	useEffect(() => {
 		if (queries.size !== 0) {
-			const positions = flowConfig.filter(({ flowKey }) => parseFloat(queries.get(flowKey)?.placeholder || '0') > 0);
+			console.log({ queries });
+			const positions = flowConfig.filter(({ flowKey }) => parseFloat(queries.get(flowKey)?.placeholder!) > 0);
 			console.log({ positions });
 			setPositions(positions);
 			const totalInPos = positions.reduce((acc, curr) => acc + parseFloat(queries.get(curr.flowKey)?.flowsOwned!), 0);
@@ -226,7 +230,6 @@ export default function Home({ locale }: any): JSX.Element {
 		chainId: polygon.id,
 		token: RICAddress,
 	});
-	const isMounted = useIsMounted();
 
 	if (!isMounted) {
 		return <></>;
