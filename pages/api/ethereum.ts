@@ -251,8 +251,7 @@ export const startFlow = async (
 						publisher: exchangeAddress,
 						userData,
 						overrides: {
-							maxFeePerGas,
-							maxPriorityFeePerGas,
+							gasLimit: 6000000,
 						},
 					}),
 					await framework.idaV1.approveSubscription({
@@ -261,8 +260,7 @@ export const startFlow = async (
 						publisher: exchangeAddress,
 						userData,
 						overrides: {
-							maxFeePerGas,
-							maxPriorityFeePerGas,
+							gasLimit: 6000000,
 						},
 					}),
 					await framework.cfaV1.createFlow({
@@ -272,8 +270,7 @@ export const startFlow = async (
 						flowRate: amount.toString(),
 						userData,
 						overrides: {
-							maxFeePerGas,
-							maxPriorityFeePerGas,
+							gasLimit: 6000000,
 						},
 					}),
 				];
