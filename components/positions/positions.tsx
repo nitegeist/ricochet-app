@@ -20,7 +20,7 @@ export interface PositionData extends InvestmentFlow {
 	timeLeft: number;
 	input: string;
 	output: number;
-	avgPrice: number;
+	avgPrice: string;
 }
 
 interface Props {
@@ -123,38 +123,43 @@ export const Positions: NextPage<Props> = ({ positions, queries }) => {
 		};
 	};
 	useEffect(() => {
-		let currBalances: string[] = [];
-		tokenArray.map(async (token) => {
-			const res = await fetchBalance({
-				address: address!,
-				chainId: polygon.id,
-				token: token as `0x${string}`,
-			});
-			currBalances.push(res.formatted);
+		const currBalances = tokenArray.map(
+			async (token) =>
+				await fetchBalance({
+					address: address!,
+					chainId: polygon.id,
+					token: token as `0x${string}`,
+				})
+		);
+		Promise.all(currBalances).then((res) => {
+			const balances = res.map((r) => r?.formatted);
+			setBalances(balances);
 		});
-		setBalances(currBalances);
 	}, [address, isConnected]);
 	useEffect(() => {
-		if (isConnected && queries.size !== 0 && positions.length) {
-			const positionData: PositionData[] = [];
+		if (isConnected && queries.size > 0 && positions.length > 0) {
 			const streamEnds = computeStreamEnds(queries, balances);
-			positions.map(async (position) => {
-				const timeLeft = getTimeRemaining(streamEnds.get(position.flowKey)!);
-				const avgPrice = await querySushiPoolPrices(sushiSwapPools[`${position.coinA}-${position.coinB}`]).then(
+			const avgPrices = positions.map(async (position) => {
+				const sushiPrice = await querySushiPoolPrices(sushiSwapPools[`${position.coinA}-${position.coinB}`]).then(
 					(res: any) => res?.data?.data?.pair?.token0Price
 				);
-				console.log({ avgPrice });
-				positionData.push({
-					...position,
-					positions: queries.get(position.flowKey)?.totalFlows || 0,
-					input: queries.get(position.flowKey)?.placeholder!,
-					output: queries.get(position.flowKey)?.streamedSoFar || 0,
-					timeLeft: timeLeft.days,
-					avgPrice: parseFloat(avgPrice) || 0,
-				});
+				return { position, sushiPrice };
 			});
-			console.log({ positionData });
-			setPositionList(positionData);
+			Promise.all(avgPrices).then((res) => {
+				const positions: PositionData[] = [];
+				res.map((r) => {
+					const timeLeft = getTimeRemaining(streamEnds.get(r?.position?.flowKey)!);
+					positions.push({
+						...r?.position,
+						positions: queries.get(r?.position?.flowKey)?.totalFlows || 0,
+						input: queries.get(r?.position?.flowKey)?.placeholder!,
+						output: queries.get(r?.position?.flowKey)?.streamedSoFar || 0,
+						timeLeft: timeLeft.days,
+						avgPrice: r?.sushiPrice || '0',
+					});
+				});
+				setPositionList(positions);
+			});
 		}
 	}, [isConnected, queries, balances, positions]);
 	return (

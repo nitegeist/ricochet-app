@@ -26,7 +26,7 @@ import {
 	StIbAlluoUSDAddress,
 	USDCxAddress,
 	WBTCxAddress,
-	WETHxAddress,
+	WETHxAddress
 } from 'constants/polygon_config';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -95,17 +95,11 @@ export default function Home({ locale }: any): JSX.Element {
 	const [queryReceived] = superfluidSubgraphApi.useQueryReceivedMutation();
 
 	useEffect(() => {
-		if (isMounted) {
-			let results: any[] = [];
-			exchangeContractsAddresses.map(async (addr, i) => {
-				if (addr) {
-					results.push(await queryFlows(addr).then((res: any) => res?.data?.data?.account));
-				}
-			});
-			console.log({ results });
-			setResults(results);
-		}
-	}, [isMounted]);
+		const results = exchangeContractsAddresses.map(
+			async (addr) => await queryFlows(addr).then((res: any) => res?.data?.data?.account)
+		);
+		Promise.all(results).then((res) => setResults(res));
+	}, [isMounted, isConnected]);
 
 	const getStreams = (streams: any[], streamedSoFarMap: Record<string, number>) => {
 		(streams || []).forEach((stream: any) => {
@@ -137,7 +131,7 @@ export default function Home({ locale }: any): JSX.Element {
 		console.log('made it to set flow queries');
 		const flows: Map<string, { flowsOwned: Flow[]; flowsReceived: Flow[] }> = new Map();
 		exchangeContractsAddresses.forEach((el, i) => {
-			if (results.length) {
+			if (results.length > 0) {
 				if (results[i] !== null) {
 					flows.set(el, results[i]);
 				} else {
@@ -162,7 +156,6 @@ export default function Home({ locale }: any): JSX.Element {
 		if (flows.size !== 0) {
 			for (const [key, value] of Object.entries(FlowEnum)) {
 				flowQueries.set(value, buildFlowQuery(value, address!, flows, streamedSoFarMap, receivedSoFarMap));
-				console.log(flowQueries.set(value, buildFlowQuery(value, address!, flows, streamedSoFarMap, receivedSoFarMap)));
 			}
 		}
 		console.log('flow queries set', { flowQueries });
@@ -170,7 +163,6 @@ export default function Home({ locale }: any): JSX.Element {
 	};
 
 	const sweepQueryFlows = async () => {
-		console.log('made it to sweep query flows!');
 		const streamedSoFarMap: Record<string, number> = {};
 		const receivedSoFarMap: Record<string, number> = {};
 		if (address) {
@@ -181,27 +173,24 @@ export default function Home({ locale }: any): JSX.Element {
 	};
 
 	useEffect(() => {
-		console.log('results length', results.length);
-		console.log('results: ', results);
-		sweepQueryFlows();
+		if (results.length > 0) sweepQueryFlows();
 	}, [results]);
 
 	useEffect(() => {
 		const positions = flowConfig.filter(({ flowKey }) => parseFloat(queries.get(flowKey)?.placeholder!) > 0);
 		setPositions(positions);
-		const totalInPos = positions.reduce((acc, curr) => acc + parseFloat(queries.get(curr.flowKey)?.flowsOwned!), 0);
-		setPositionTotal(totalInPos);
-	}, [queries]);
+		const totalInPositions = positions.reduce(
+			(acc, curr) => acc + parseFloat(queries.get(curr.flowKey)?.flowsOwned!),
+			0
+		);
+		setPositionTotal(totalInPositions);
+	}, [queries, isConnected]);
 
 	useEffect(() => {
-		console.log('query size', queries.size, 'coin gecko prices', coingeckoPrices);
-		console.log('made it to sorted list');
 		if (!isSuccess) {
-			console.log('not loaded yet');
 			return;
 		}
-		if (isSuccess && coingeckoPrices && queries.size !== 0) {
-			console.log('prices', coingeckoPrices);
+		if (isSuccess && coingeckoPrices && queries.size > 0) {
 			let list = flowConfig.filter((each) => each.type === FlowTypes.market);
 			let sortList = list.sort((a, b) => {
 				const totalVolumeA = parseFloat(getFlowUSDValue(a));
@@ -211,7 +200,6 @@ export default function Home({ locale }: any): JSX.Element {
 			setSortedList(sortList);
 			console.log({ sortedList });
 		}
-		console.log('made past if statement');
 	}, [queries, coingeckoPrices, isSuccess, isLoading]);
 
 	const getFlowUSDValue = (flow: InvestmentFlow, toFixed: number = 0) => {
@@ -346,13 +334,7 @@ export default function Home({ locale }: any): JSX.Element {
 										)
 									}
 								/>
-								{sortedList.length > 0 && queries.size > 0 ? (
-									<CardContainer content={<Markets sortedList={sortedList} queries={queries} />} />
-								) : (
-									// @ts-ignore
-									//  prettier-ignore
-									<button onClick={() => console.log('queries', queries, 'sorted', sortedList)}>get data</button>
-								)}
+								<CardContainer content={<Markets sortedList={sortedList} queries={queries} />} />
 							</div>
 							<div className='space-y-10'>
 								<Card

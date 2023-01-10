@@ -35,7 +35,7 @@ export const Markets: NextPage<Props> = ({ sortedList, queries }) => {
 	const [marketList, setMarketList] = useState<MarketData[]>([]);
 	const [filteredList, setFilteredList] = useState<MarketData[]>([]);
 	useEffect(() => {
-		if (sortedList.length && queries.size !== 0) {
+		if (sortedList.length > 0 && queries.size > 0) {
 			const marketData: MarketData[] = [];
 			sortedList.map((item) =>
 				marketData.push({

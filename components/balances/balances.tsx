@@ -75,7 +75,7 @@ export const Balances = (): JSX.Element => {
 					);
 					// sort array by dollar value in descending order
 					const sortedTokens = tokens.sort((a, b) => b.dollarVal - a.dollarVal);
-					if (sortedTokens.length) setTokenList(sortedTokens);
+					if (sortedTokens.length > 0) setTokenList(sortedTokens);
 				}
 			};
 			getTokenData();

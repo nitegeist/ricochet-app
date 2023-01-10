@@ -18,11 +18,11 @@ export const buildFlowQuery = (
 	let streamedSoFar;
 	let receivedSoFar;
 
-	if (Object.keys(streamedSoFarMap).length) {
+	if (Object.keys(streamedSoFarMap).length > 0) {
 		streamedSoFar = streamedSoFarMap[`${tokenAxAddress.toLowerCase()}-${exchangeAddress.toLowerCase()}`];
 	}
 
-	if (Object.keys(receivedSoFarMap).length) {
+	if (Object.keys(receivedSoFarMap).length > 0) {
 		receivedSoFar = receivedSoFarMap[`${tokenAxAddress.toLowerCase()}-${exchangeAddress.toLowerCase()}`];
 	}
 

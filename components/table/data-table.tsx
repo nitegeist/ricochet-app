@@ -38,8 +38,8 @@ export const DataTable: NextPage<Props> = ({
 	return (
 		<>
 			<div className='overflow-auto'>
-				{!rowData.length && <TableLoader headers={headers} rowNumber={tableLoaderRows} />}
-				{rowData.length && (
+				{rowData.length === 0 && <TableLoader headers={headers} rowNumber={tableLoaderRows} />}
+				{rowData.length > 0 && (
 					<table className='table-fixed min-w-full'>
 						<thead>
 							<tr>
@@ -70,7 +70,7 @@ export const DataTable: NextPage<Props> = ({
 											</td>
 											<td className='px-6 py-4 whitespace-nowrap'>{formatCurrency(parseFloat(data.input))}</td>
 											<td className='px-6 py-4 whitespace-nowrap'>{formatCurrency(data.output)}</td>
-											<td className='px-6 py-4 whitespace-nowrap'>{formatCurrency(data.avgPrice)}</td>
+											<td className='px-6 py-4 whitespace-nowrap'>{formatCurrency(parseFloat(data.avgPrice))}</td>
 										</>
 									) : isMarketData(data) ? (
 										<>
@@ -99,7 +99,7 @@ export const DataTable: NextPage<Props> = ({
 					</table>
 				)}
 			</div>
-			{rowData.length && (
+			{rowData.length > 0 && (
 				<div className='flex justify-end text-slate-500 space-x-2 mt-4'>
 					<button
 						onClick={prevPage}
