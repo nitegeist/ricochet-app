@@ -68,7 +68,13 @@ export default function Home({ locale }: any): JSX.Element {
 	const [usdPrice, setUsdPrice] = useState<Big>(new Big(0));
 	const [usdFlowRate, setUsdFlowRate] = useState<string>();
 	const provider = useProvider({ chainId: polygon.id });
-	const { data: tokenPrice, isError, error } = coingeckoApi.useGetTokenPriceQuery('richochet');
+	const {
+		data: tokenPrice,
+		isLoading: tokenPriceIsLoading,
+		isSuccess: tokenPriceIsSuccess,
+		isError: tokenPriceIsError,
+		error: tokenPriceError,
+	} = coingeckoApi.useGetTokenPriceQuery('richochet');
 	const [queries, setQueries] = useState<
 		Map<
 			string,
@@ -88,8 +94,12 @@ export default function Home({ locale }: any): JSX.Element {
 	const [sortedList, setSortedList] = useState<InvestmentFlow[]>([]);
 	const [positions, setPositions] = useState<InvestmentFlow[]>([]);
 	const [positionTotal, setPositionTotal] = useState<number>(0);
-	const [results, setResults] = useState<any[]>([]);
-	const { data: coingeckoPrices, isLoading, isSuccess } = coingeckoApi.useGetPricesQuery(ids.join(','));
+	const [results, setResults] = useState<{ flowsOwned: Flow[]; flowsReceived: Flow[] }[]>([]);
+	const {
+		data: coingeckoPrices,
+		isLoading: coingeckoIsLoading,
+		isSuccess: coingeckoIsSuccess,
+	} = coingeckoApi.useGetPricesQuery(ids.join(','));
 	const [queryFlows] = superfluidSubgraphApi.useQueryFlowsMutation();
 	const [queryStreams] = superfluidSubgraphApi.useQueryStreamsMutation();
 	const [queryReceived] = superfluidSubgraphApi.useQueryReceivedMutation();
@@ -128,7 +138,6 @@ export default function Home({ locale }: any): JSX.Element {
 	};
 
 	const getFlows = (streamedSoFarMap: Record<string, number>, receivedSoFarMap: Record<string, number>) => {
-		console.log('made it to set flow queries');
 		const flows: Map<string, { flowsOwned: Flow[]; flowsReceived: Flow[] }> = new Map();
 		exchangeContractsAddresses.forEach((el, i) => {
 			if (results.length > 0) {
@@ -139,7 +148,6 @@ export default function Home({ locale }: any): JSX.Element {
 				}
 			}
 		});
-		console.log({ flows });
 		let flowQueries: Map<
 			string,
 			{
@@ -158,7 +166,6 @@ export default function Home({ locale }: any): JSX.Element {
 				flowQueries.set(value, buildFlowQuery(value, address!, flows, streamedSoFarMap, receivedSoFarMap));
 			}
 		}
-		console.log('flow queries set', { flowQueries });
 		setQueries(flowQueries);
 	};
 
@@ -187,10 +194,10 @@ export default function Home({ locale }: any): JSX.Element {
 	}, [queries, isConnected]);
 
 	useEffect(() => {
-		if (!isSuccess) {
+		if (!coingeckoIsSuccess) {
 			return;
 		}
-		if (isSuccess && coingeckoPrices && queries.size > 0) {
+		if (coingeckoIsSuccess && coingeckoPrices && queries.size > 0) {
 			let list = flowConfig.filter((each) => each.type === FlowTypes.market);
 			let sortList = list.sort((a, b) => {
 				const totalVolumeA = parseFloat(getFlowUSDValue(a));
@@ -198,9 +205,8 @@ export default function Home({ locale }: any): JSX.Element {
 				return totalVolumeB - totalVolumeA;
 			});
 			setSortedList(sortList);
-			console.log({ sortedList });
 		}
-	}, [queries, coingeckoPrices, isSuccess, isLoading]);
+	}, [queries, coingeckoPrices, coingeckoIsLoading, coingeckoIsSuccess]);
 
 	const getFlowUSDValue = (flow: InvestmentFlow, toFixed: number = 0) => {
 		return (
@@ -209,13 +215,13 @@ export default function Home({ locale }: any): JSX.Element {
 	};
 
 	useEffect(() => {
-		if (isConnected && tokenPrice) {
+		if (isConnected && tokenPrice && tokenPriceIsSuccess) {
 			setUsdPrice(new Big(parseFloat(tokenPrice?.richochet?.usd)));
 		}
-		if (isError) {
-			console.error(error);
+		if (tokenPriceIsError) {
+			console.error(tokenPriceError);
 		}
-	}, [isConnected, tokenPrice]);
+	}, [isConnected, tokenPrice, tokenPriceIsLoading, tokenPriceIsSuccess]);
 
 	const getNetFlowRate = async () => {
 		const framework = await getSFFramework();
@@ -238,7 +244,7 @@ export default function Home({ locale }: any): JSX.Element {
 		if (isConnected && usdPrice) {
 			getNetFlowRate();
 		}
-	}, [isConnected, usdPrice]);
+	}, [isConnected, usdPrice, tokenPriceIsLoading, tokenPriceIsSuccess]);
 	const { data: balance } = useBalance({
 		address: address,
 		chainId: polygon.id,
