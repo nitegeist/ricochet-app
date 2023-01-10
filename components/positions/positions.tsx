@@ -107,7 +107,6 @@ export const Positions: NextPage<Props> = ({ positions, queries }) => {
 		return streamEnds;
 	};
 	const getTimeRemaining = (endDate: string) => {
-		console.log({ endDate });
 		const total = Date.parse(endDate) - Date.parse(new Date().toLocaleDateString());
 		const seconds = Math.floor((total / 1000) % 60);
 		const minutes = Math.floor((total / 1000 / 60) % 60);
