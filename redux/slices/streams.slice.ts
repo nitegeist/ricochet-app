@@ -1,24 +1,26 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
-import { startFlow } from '@richochet/api/ethereum';
+import { startFlow, upgrade } from '@richochet/api/ethereum';
 import { transformError } from '@richochet/utils/transformError';
-import { getContract } from '@wagmi/core';
-import { idaABI } from 'constants/abis';
-import { idaAddress } from 'constants/polygon_config';
-
-export interface Payload {
-	amount: string;
-	config: {
-		[key: string]: string;
-	};
-	callback: (e?: string) => void;
-}
+import { getAccount, getContract } from '@wagmi/core';
+import { idaABI, superTokenABI } from 'constants/abis';
+import { idaAddress, MATICxAddress } from 'constants/polygon_config';
+import { ethers } from 'ethers';
+import { downgrade, downgradeMatic, upgradeMatic } from './../../pages/api/ethereum';
 
 const streamApi = createApi({
 	keepUnusedDataFor: 60, // 60 seconds (default)
 	reducerPath: 'streams',
 	baseQuery: fetchBaseQuery(),
 	endpoints: (builder) => ({
-		startStream: builder.query<Payload | null, string>({
+		startStream: builder.query<
+			{
+				amount: string;
+				config: {
+					[key: string]: string;
+				};
+			} | null,
+			string
+		>({
 			//Payload type:
 			//config.superToken,
 			//config.tokenA,
@@ -57,12 +59,54 @@ const streamApi = createApi({
 					return {
 						data: streamTx,
 					};
-					// payload.callback();
 				} catch (e) {
 					console.error(e);
 					const error = transformError(e);
 					return { error };
-					// payload.callback(error);
+				}
+			},
+		}),
+		downgrade: builder.query<{ value: string; tokenAddress: string } | null, { value: string; tokenAddress: string }>({
+			queryFn: async (payload: any): Promise<any | undefined> => {
+				try {
+					console.log({ payload });
+					const { tokenAddress, value } = payload;
+					const amount = Math.round(Number(value) * 10e18).toString();
+					console.log({ amount });
+					const { address } = getAccount();
+					const contract = await getContract({ address: tokenAddress, abi: superTokenABI });
+					console.log({ contract });
+					const tx =
+						tokenAddress === MATICxAddress
+							? await downgradeMatic(contract, amount, address!)
+							: await downgrade(contract, amount, address!);
+					console.log({ tx });
+					return { data: tx };
+				} catch (e) {
+					console.error(e);
+					const error = transformError(e);
+					return { error };
+				}
+			},
+		}),
+		upgrade: builder.query<{ value: string; tokenAddress: string } | null, { value: string; tokenAddress: string }>({
+			queryFn: async (payload: any): Promise<any | undefined> => {
+				try {
+					const { tokenAddress, value } = payload;
+					const amountBigNumber = ethers.utils.parseUnits(value, 'wei');
+					const amount = ethers.utils.formatUnits(amountBigNumber, 'ether');
+					const { address } = getAccount();
+					const contract = await getContract({ address: tokenAddress, abi: superTokenABI });
+					const tx =
+						tokenAddress === MATICxAddress
+							? await upgradeMatic(contract, amount, address!)
+							: await upgrade(contract, amount, address!);
+					console.log({ tx });
+					return { data: tx };
+				} catch (e) {
+					console.error(e);
+					const error = transformError(e);
+					return { error };
 				}
 			},
 		}),

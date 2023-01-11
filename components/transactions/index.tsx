@@ -1,10 +1,15 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
-import { Coin } from 'constants/coins';
+import AlertAction from '@richochet/utils/alertAction';
+import { Coin, namesCoin, namesCoinX } from 'constants/coins';
+import { downgradeTokensList } from 'constants/downgradeConfig';
+import { upgradeTokensList } from 'constants/upgradeConfig';
+import { AlertContext } from 'contexts/AlertContext';
 import { BalanceAction } from 'enumerations/balanceActions.enum';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
-import { Fragment, useState } from 'react';
+import { Fragment, useContext, useState } from 'react';
+import streamApi from 'redux/slices/streams.slice';
 import { RoundedButton } from '../button';
 import TokenList from '../token-list';
 
@@ -16,15 +21,60 @@ interface Props {
 	setClose: Function;
 }
 
+const downgradeTokens = downgradeTokensList.map((token) => token.coin);
+const upgradeTokens = upgradeTokensList.map((token) => token.coin);
+const coins = [...namesCoin, ...namesCoinX];
+
 export const Transactions: NextPage<Props> = ({ type, close, setClose }) => {
 	const { t } = useTranslation('home');
-	const [selectedToken, setSelectedToken] = useState(Coin.ETH);
-	const [swapFrom, setSwapFrom] = useState(Coin.ETH);
-	const [swapTo, setSwapTo] = useState(Coin.RIC);
+	const [state, dispatch] = useContext(AlertContext);
+	const [selectedToken, setSelectedToken] = useState<Coin>(type === BalanceAction.Withdraw ? Coin.WETHx : Coin.ETH);
+	const [swapFrom, setSwapFrom] = useState<Coin>(Coin.BTC);
+	const [swapTo, setSwapTo] = useState<Coin>(Coin.ETH);
 	const [amount, setAmount] = useState('');
 	const [slippageTolerance, setSlippageTolerance] = useState(tolerance[0]);
+	const [upgradeTrigger] = streamApi.useLazyUpgradeQuery();
+	const [downgradeTrigger] = streamApi.useLazyDowngradeQuery();
 	const handleSubmit = (event: any) => {
 		event?.preventDefault();
+		dispatch(AlertAction.showLoadingAlert('Waiting for your transaction to be confirmed...', ''));
+		if (type === BalanceAction.Withdraw) {
+			const token = downgradeTokensList.find((token) => token.coin === selectedToken);
+			console.log({ token });
+			const downgrade = downgradeTrigger({ value: amount, tokenAddress: token?.tokenAddress! });
+			console.log({ downgrade });
+			downgrade
+				.then((response) => {
+					if (response.isSuccess) {
+						dispatch(AlertAction.showSuccessAlert('Success', 'Transaction confirmed 👌'));
+					}
+					if (response.isError) {
+						dispatch(AlertAction.showErrorAlert('Error', `${response?.error}`));
+					}
+					setTimeout(() => {
+						dispatch(AlertAction.hideAlert());
+					}, 5000);
+				})
+				.catch((error) => dispatch(AlertAction.showErrorAlert('Error', `${error || error?.message}`)));
+		} else if (type === BalanceAction.Deposit) {
+			const token = upgradeTokensList.find((token) => token.coin === selectedToken);
+			console.log({ token });
+			const upgrade = upgradeTrigger({ value: amount, tokenAddress: token?.tokenAddress! });
+			console.log({ upgrade });
+			upgrade
+				.then((response) => {
+					if (response.isSuccess) {
+						dispatch(AlertAction.showSuccessAlert('Success', 'Transaction confirmed 👌'));
+					}
+					if (response.isError) {
+						dispatch(AlertAction.showErrorAlert('Error', `${response?.error}`));
+					}
+					setTimeout(() => {
+						dispatch(AlertAction.hideAlert());
+					}, 5000);
+				})
+				.catch((error) => dispatch(AlertAction.showErrorAlert('Error', `${error || error?.message}`)));
+		}
 	};
 	return (
 		<div className='flex flex-col items-start'>
@@ -34,7 +84,13 @@ export const Transactions: NextPage<Props> = ({ type, close, setClose }) => {
 						<label className='text-slate-100'>
 							{t('token-action')} {t(type)}?
 						</label>
-						<TokenList value={selectedToken} handleChange={setSelectedToken} />
+						<TokenList
+							value={selectedToken}
+							coins={
+								type === BalanceAction.Withdraw ? downgradeTokens : type === BalanceAction.Deposit ? upgradeTokens : []
+							}
+							handleChange={setSelectedToken}
+						/>
 					</>
 				)}
 				{type === BalanceAction.Swap && (
@@ -44,11 +100,11 @@ export const Transactions: NextPage<Props> = ({ type, close, setClose }) => {
 						</label>
 						<div className='flex items-center space-x-2 w-full'>
 							<span className='text-slate-100'>{t('from')}: </span>
-							<TokenList classNames='relative w-full z-30' value={swapFrom} handleChange={setSwapFrom} />
+							<TokenList classNames='relative w-full z-30' value={swapFrom} coins={coins} handleChange={setSwapFrom} />
 						</div>
 						<div className='flex items-center space-x-2 w-full'>
 							<span className='text-slate-100'>{t('to')}: </span>
-							<TokenList classNames='relative w-full z-20' value={swapTo} handleChange={setSwapTo} />
+							<TokenList classNames='relative w-full z-20' value={swapTo} coins={coins} handleChange={setSwapTo} />
 						</div>
 					</>
 				)}

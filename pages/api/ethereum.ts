@@ -4,7 +4,8 @@ import { Signer } from '@ethersproject/abstract-signer';
 import { getSFFramework } from '@richochet/utils/fluidsdkConfig';
 import { Framework } from '@superfluid-finance/sdk-core';
 import Operation from '@superfluid-finance/sdk-core/dist/main/Operation';
-import { fetchSigner, getAccount, getProvider } from '@wagmi/core';
+import { fetchSigner, getAccount, getProvider, prepareWriteContract, writeContract } from '@wagmi/core';
+import { superTokenABI } from 'constants/abis';
 import { indexIDA } from 'constants/flowConfig';
 import {
 	MATICxAddress,
@@ -18,18 +19,35 @@ import { ethers } from 'ethers';
 import { polygon } from 'wagmi/chains';
 import { gas } from './gasEstimator';
 
-export const downgrade = async (contract: any, amount: string, address: string) =>
-	contract.methods.downgrade(amount).send({
-		from: address,
-		...(await gas()),
+export const downgrade = async (contract: any, amount: string, address: string) => {
+	const config = await prepareWriteContract({
+		address: contract?.address as `0x${string}`,
+		abi: superTokenABI,
+		functionName: 'downgrade',
+		args: [amount],
+		overrides: {
+			from: address as `0x${string}`,
+		},
 	});
+	console.log({ config });
+	const data = await writeContract(config);
+	console.log({ data });
+	return data;
+};
 
-export const downgradeMatic = async (contract: any, amount: string, address: string) =>
-	contract.methods.downgradeToETH(amount).send({
-		from: address,
-		// value: amount,
-		...(await gas()),
+export const downgradeMatic = async (contract: any, amount: string, address: string) => {
+	const config = await prepareWriteContract({
+		address: contract?.address as `0x${string}`,
+		abi: superTokenABI,
+		functionName: 'downgradeToETH',
+		args: [amount],
+		overrides: {
+			from: address as `0x${string}`,
+		},
 	});
+	const data = await writeContract(config);
+	return data;
+};
 
 export const allowance = (contract: any, address: string, superTokenAddress: string) =>
 	contract.methods.allowance(address, superTokenAddress).call();

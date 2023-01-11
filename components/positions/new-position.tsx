@@ -2,7 +2,7 @@ import { Listbox, Transition } from '@headlessui/react';
 import { ArrowLongRightIcon, CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
 import AlertAction from '@richochet/utils/alertAction';
 import { getShareScaler } from '@richochet/utils/getShareScaler';
-import { Coin } from 'constants/coins';
+import { Coin, namesCoin, namesCoinX } from 'constants/coins';
 import { flowConfig, FlowTypes } from 'constants/flowConfig';
 import { AlertContext } from 'contexts/AlertContext';
 import { ExchangeKeys } from 'enumerations/exchangeKeys.enum';
@@ -20,6 +20,8 @@ interface Props {
 	close: boolean;
 	setClose: Function;
 }
+
+const coins = [...namesCoin, ...namesCoinX];
 
 export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 	const { t } = useTranslation('home');
@@ -88,9 +90,9 @@ export const NewPosition: NextPage<Props> = ({ close, setClose }) => {
 					onSubmit={handleSubmit}>
 					<label className='text-slate-100'>{t('token-action')}?</label>
 					<div className='flex items-center space-x-4 w-full lg:w-auto'>
-						<TokenList value={from} handleChange={setFrom} />
+						<TokenList value={from} coins={coins} handleChange={setFrom} />
 						<ArrowLongRightIcon className='h-10 w-16' />
-						<TokenList value={to} handleChange={setTo} />
+						<TokenList value={to} coins={coins} handleChange={setTo} />
 					</div>
 					<label className='text-slate-100'>{t('position-amount')}?</label>
 					<input
